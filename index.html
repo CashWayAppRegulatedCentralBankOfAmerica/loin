@@ -5,18 +5,72 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>WorkHub | Login & Signup</title>
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
   <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      emailjs.init("YOUR_EMAILJS_PUBLIC_KEY");
+    });
+
+    const approvedUsers = {
+      "jackfayama@gmail.com": "123",
+      "yvonneakinyiouma@gmail.co": "1234",
+      "alice@gmail.com": "alice123",
+      "brian@gmail.com": "brian123",
+      "carol@gmail.com": "carol123",
+      "daniel@gmail.com": "dan123",
+      "eliza@gmail.com": "eliza123"
+    };
+
+    const registeredUsers = { ...approvedUsers };
+
     function toggleForm() {
-      const loginForm = document.getElementById('login-form');
-      const signupForm = document.getElementById('signup-form');
-      loginForm.classList.toggle('hidden');
-      signupForm.classList.toggle('hidden');
+      document.getElementById('login-form').classList.toggle('hidden');
+      document.getElementById('signup-form').classList.toggle('hidden');
+      document.getElementById('modal').classList.add('hidden');
+    }
+
+    function handleLogin(event) {
+      event.preventDefault();
+      const email = document.getElementById('login-email').value.trim();
+      const password = document.getElementById('login-password').value.trim();
+
+      if (registeredUsers[email] === password) {
+        alert("Login successful! Redirecting...");
+      } else {
+        showModal("Login failed. Please check your credentials.");
+      }
     }
 
     function handleSignup(event) {
       event.preventDefault();
-      alert('Account created successfully! Redirecting to login...');
-      toggleForm();
+      const name = document.getElementById('signup-name').value.trim();
+      const email = document.getElementById('signup-email').value.trim();
+      const password = document.getElementById('signup-password').value.trim();
+
+      if (registeredUsers[email]) {
+        showModal("This email is already registered. Please use a different one.");
+        return;
+      }
+
+      const templateParams = {
+        name,
+        email,
+        password
+      };
+
+      emailjs.send("YOUR_SERVICE_ID", "YOUR_TEMPLATE_ID", templateParams)
+        .then(() => {
+          showModal("Registration successful! Please wait for approval.");
+        })
+        .catch(() => {
+          showModal("Error submitting registration. Please try again.");
+        });
+    }
+
+    function showModal(message) {
+      const modal = document.getElementById('modal');
+      document.getElementById('modal-message').innerText = message;
+      modal.classList.remove('hidden');
     }
   </script>
 </head>
@@ -25,14 +79,14 @@
     <!-- Login Form -->
     <div id="login-form" class="bg-white p-8 shadow-md rounded-lg">
       <h2 class="text-2xl font-bold text-green-600 mb-4">Login to WorkHub</h2>
-      <form class="space-y-4">
+      <form class="space-y-4" onsubmit="handleLogin(event)">
         <div>
           <label class="block text-sm font-medium">Email</label>
-          <input type="email" class="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-green-500" placeholder="Enter your email" required>
+          <input id="login-email" type="email" class="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-green-500" placeholder="Enter your email" required>
         </div>
         <div>
           <label class="block text-sm font-medium">Password</label>
-          <input type="password" class="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-green-500" placeholder="Enter your password" required>
+          <input id="login-password" type="password" class="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-green-500" placeholder="Enter your password" required>
         </div>
         <button type="submit" class="w-full bg-green-600 text-white py-2 rounded hover:bg-green-700 transition">Login</button>
       </form>
@@ -45,19 +99,27 @@
       <form class="space-y-4" onsubmit="handleSignup(event)">
         <div>
           <label class="block text-sm font-medium">Full Name</label>
-          <input type="text" class="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-green-500" placeholder="Your full name" required>
+          <input id="signup-name" type="text" class="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-green-500" placeholder="Your full name" required>
         </div>
         <div>
           <label class="block text-sm font-medium">Email</label>
-          <input type="email" class="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-green-500" placeholder="Your email" required>
+          <input id="signup-email" type="email" class="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-green-500" placeholder="Your email" required>
         </div>
         <div>
           <label class="block text-sm font-medium">Password</label>
-          <input type="password" class="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-green-500" placeholder="Choose a password" required>
+          <input id="signup-password" type="password" class="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-green-500" placeholder="Choose a password" required>
         </div>
         <button type="submit" class="w-full bg-green-600 text-white py-2 rounded hover:bg-green-700 transition">Sign Up</button>
       </form>
       <p class="text-sm mt-4 text-center">Already have an account? <button onclick="toggleForm()" class="text-green-600 hover:underline">Sign in</button></p>
+    </div>
+
+    <!-- Modal -->
+    <div id="modal" class="hidden fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center z-50">
+      <div class="bg-white rounded-lg p-6 shadow-lg max-w-sm text-center">
+        <p id="modal-message" class="text-gray-800 mb-4"></p>
+        <button onclick="document.getElementById('modal').classList.add('hidden')" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition">OK</button>
+      </div>
     </div>
   </div>
 </body>
