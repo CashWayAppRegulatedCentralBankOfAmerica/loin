@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>WorkHub | Login & Signup</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 text-gray-800 min-h-screen flex items-center justify-center">
+  <div class="container mx-auto px-4 py-12 max-w-4xl">
+    <div class="grid md:grid-cols-2 gap-8">
+      <!-- Login Form -->
+      <div class="bg-white p-8 shadow-md rounded-lg">
+        <h2 class="text-2xl font-bold text-green-600 mb-4">Login to WorkHub</h2>
+        <form class="space-y-4">
+          <div>
+            <label class="block text-sm font-medium">Email</label>
+            <input type="email" class="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-green-500" placeholder="Enter your email" required>
+          </div>
+          <div>
+            <label class="block text-sm font-medium">Password</label>
+            <input type="password" class="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-green-500" placeholder="Enter your password" required>
+          </div>
+          <button type="submit" class="w-full bg-green-600 text-white py-2 rounded hover:bg-green-700 transition">Login</button>
+        </form>
+      </div>
+
+      <!-- Signup Form -->
+      <div class="bg-white p-8 shadow-md rounded-lg">
+        <h2 class="text-2xl font-bold text-green-600 mb-4">Create a WorkHub Account</h2>
+        <form class="space-y-4">
+          <div>
+            <label class="block text-sm font-medium">Full Name</label>
+            <input type="text" class="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-green-500" placeholder="Your full name" required>
+          </div>
+          <div>
+            <label class="block text-sm font-medium">Email</label>
+            <input type="email" class="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-green-500" placeholder="Your email" required>
+          </div>
+          <div>
+            <label class="block text-sm font-medium">Password</label>
+            <input type="password" class="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-green-500" placeholder="Choose a password" required>
+          </div>
+          <button type="submit" class="w-full bg-green-600 text-white py-2 rounded hover:bg-green-700 transition">Sign Up</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
