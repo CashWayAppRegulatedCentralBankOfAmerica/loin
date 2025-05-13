@@ -8,7 +8,7 @@
   <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
   <script>
     document.addEventListener("DOMContentLoaded", function () {
-      emailjs.init("0ockMZ07aVnggqzsD"); // ✅ Your public key
+      emailjs.init("0ockMZ07aVnggqzsD");  // Initialize EmailJS with your public key
     });
 
     const approvedUsers = {
@@ -21,7 +21,16 @@
       "eliza@gmail.com": "eliza123"
     };
 
-    const registeredUsers = { ...approvedUsers };
+    // Add new user dynamically
+    function addNewUser(email, password) {
+      approvedUsers[email] = password;
+      localStorage.setItem('approvedUsers', JSON.stringify(approvedUsers));
+    }
+
+    // Load stored approved users
+    if (localStorage.getItem('approvedUsers')) {
+      Object.assign(approvedUsers, JSON.parse(localStorage.getItem('approvedUsers')));
+    }
 
     function toggleForm() {
       document.getElementById('login-form').classList.toggle('hidden');
@@ -34,9 +43,9 @@
       const email = document.getElementById('login-email').value.trim();
       const password = document.getElementById('login-password').value.trim();
 
-      if (registeredUsers[email] === password) {
+      if (approvedUsers[email] === password) {
         alert("Login successful! Redirecting...");
-        window.location.href = "dashboard.html"; // ✅ Redirect after login
+        window.location.href = '/dashboard';  // Redirect to dashboard (or any desired page)
       } else {
         showModal("Login failed. Please check your credentials.");
       }
@@ -48,7 +57,7 @@
       const email = document.getElementById('signup-email').value.trim();
       const password = document.getElementById('signup-password').value.trim();
 
-      if (registeredUsers[email]) {
+      if (approvedUsers[email]) {
         showModal("This email is already registered. Please use a different one.");
         return;
       }
@@ -61,6 +70,10 @@
 
       emailjs.send("service_g5v9kbm", "template_eelornk", templateParams)
         .then(() => {
+          // Dynamically add the new user to the approved users list
+          addNewUser(email, password);
+
+          // Show success modal and redirect to login page
           showModal("Registration successful! Please wait for approval.");
         })
         .catch(() => {
@@ -72,6 +85,11 @@
       const modal = document.getElementById('modal');
       document.getElementById('modal-message').innerText = message;
       modal.classList.remove('hidden');
+    }
+
+    function redirectToLogin() {
+      document.getElementById('modal').classList.add('hidden');
+      toggleForm();  // Switch to login form
     }
   </script>
 </head>
@@ -91,9 +109,7 @@
         </div>
         <button type="submit" class="w-full bg-green-600 text-white py-2 rounded hover:bg-green-700 transition">Login</button>
       </form>
-      <p class="text-sm mt-4 text-center">Don't have an account? 
-        <button onclick="toggleForm()" class="text-green-600 hover:underline">Sign up</button>
-      </p>
+      <p class="text-sm mt-4 text-center">Don't have an account? <button onclick="toggleForm()" class="text-green-600 hover:underline">Sign up</button></p>
     </div>
 
     <!-- Signup Form -->
@@ -114,16 +130,14 @@
         </div>
         <button type="submit" class="w-full bg-green-600 text-white py-2 rounded hover:bg-green-700 transition">Sign Up</button>
       </form>
-      <p class="text-sm mt-4 text-center">Already have an account? 
-        <button onclick="toggleForm()" class="text-green-600 hover:underline">Sign in</button>
-      </p>
+      <p class="text-sm mt-4 text-center">Already have an account? <button onclick="toggleForm()" class="text-green-600 hover:underline">Sign in</button></p>
     </div>
 
     <!-- Modal -->
     <div id="modal" class="hidden fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center z-50">
       <div class="bg-white rounded-lg p-6 shadow-lg max-w-sm text-center">
         <p id="modal-message" class="text-gray-800 mb-4"></p>
-        <button onclick="document.getElementById('modal').classList.add('hidden')" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition">OK</button>
+        <button onclick="redirectToLogin()" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition">OK</button>
       </div>
     </div>
   </div>
