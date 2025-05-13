@@ -59,10 +59,11 @@
         return;
       }
 
+      // Check if the email exists in registered users
       if (registeredUsers[email] === password) {
         showModal("Login successful! Redirecting...");
         setTimeout(() => {
-          window.location.href = "dashboard.html";
+          window.location.href = "dashboard.html"; // Redirect to dashboard
         }, 1500);
       } else {
         showModal("Login failed. Please check your credentials.");
@@ -98,9 +99,11 @@
         return;
       }
 
+      // Register the user
       registeredUsers[email] = password;
       saveRegisteredUsers();
 
+      // Send the registration email
       const templateParams = {
         name,
         email,
