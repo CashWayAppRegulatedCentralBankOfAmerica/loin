@@ -1,145 +1,133 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>WorkHub | Login & Signup</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nova Prime Sign Up</title>
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
-  <script>
-    document.addEventListener("DOMContentLoaded", function () {
-      emailjs.init("0ockMZ07aVnggqzsD");  // Initialize EmailJS with your public key
-    });
-
-    const approvedUsers = {
-      "jackfayama@gmail.com": "123",
-      "yvonneakinyiouma@gmail.co": "1234",
-      "alice@gmail.com": "alice123",
-      "brian@gmail.com": "brian123",
-      "carol@gmail.com": "carol123",
-      "daniel@gmail.com": "dan123",
-      "eliza@gmail.com": "eliza123"
-    };
-
-    // Add new user dynamically
-    function addNewUser(email, password) {
-      approvedUsers[email] = password;
-      localStorage.setItem('approvedUsers', JSON.stringify(approvedUsers));
-    }
-
-    // Load stored approved users
-    if (localStorage.getItem('approvedUsers')) {
-      Object.assign(approvedUsers, JSON.parse(localStorage.getItem('approvedUsers')));
-    }
-
-    function toggleForm() {
-      document.getElementById('login-form').classList.toggle('hidden');
-      document.getElementById('signup-form').classList.toggle('hidden');
-      document.getElementById('modal').classList.add('hidden');
-    }
-
-    function handleLogin(event) {
-      event.preventDefault();
-      const email = document.getElementById('login-email').value.trim();
-      const password = document.getElementById('login-password').value.trim();
-
-      if (approvedUsers[email] === password) {
-        alert("Login successful! Redirecting...");
-        window.location.href = '/dashboard';  // Redirect to dashboard (or any desired page)
-      } else {
-        showModal("Login failed. Please check your credentials.");
-      }
-    }
-
-    function handleSignup(event) {
-      event.preventDefault();
-      const name = document.getElementById('signup-name').value.trim();
-      const email = document.getElementById('signup-email').value.trim();
-      const password = document.getElementById('signup-password').value.trim();
-
-      if (approvedUsers[email]) {
-        showModal("This email is already registered. Please use a different one.");
-        return;
-      }
-
-      const templateParams = {
-        name,
-        email,
-        password
-      };
-
-      emailjs.send("service_g5v9kbm", "template_eelornk", templateParams)
-        .then(() => {
-          // Dynamically add the new user to the approved users list
-          addNewUser(email, password);
-
-          // Show success modal and redirect to login page
-          showModal("Registration successful! Please wait for approval.");
-        })
-        .catch(() => {
-          showModal("Error submitting registration. Please try again.");
-        });
-    }
-
-    function showModal(message) {
-      const modal = document.getElementById('modal');
-      document.getElementById('modal-message').innerText = message;
-      modal.classList.remove('hidden');
-    }
-
-    function redirectToLogin() {
-      document.getElementById('modal').classList.add('hidden');
-      toggleForm();  // Switch to login form
-    }
-  </script>
 </head>
-<body class="bg-gray-100 text-gray-800 min-h-screen flex items-center justify-center">
-  <div class="container mx-auto px-4 py-12 max-w-md">
-    <!-- Login Form -->
-    <div id="login-form" class="bg-white p-8 shadow-md rounded-lg">
-      <h2 class="text-2xl font-bold text-green-600 mb-4">Login to WorkHub</h2>
-      <form class="space-y-4" onsubmit="handleLogin(event)">
-        <div>
-          <label class="block text-sm font-medium">Email</label>
-          <input id="login-email" type="email" class="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-green-500" placeholder="Enter your email" required>
-        </div>
-        <div>
-          <label class="block text-sm font-medium">Password</label>
-          <input id="login-password" type="password" class="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-green-500" placeholder="Enter your password" required>
-        </div>
-        <button type="submit" class="w-full bg-green-600 text-white py-2 rounded hover:bg-green-700 transition">Login</button>
-      </form>
-      <p class="text-sm mt-4 text-center">Don't have an account? <button onclick="toggleForm()" class="text-green-600 hover:underline">Sign up</button></p>
-    </div>
 
-    <!-- Signup Form -->
-    <div id="signup-form" class="bg-white p-8 shadow-md rounded-lg hidden">
-      <h2 class="text-2xl font-bold text-green-600 mb-4">Create a WorkHub Account</h2>
-      <form class="space-y-4" onsubmit="handleSignup(event)">
-        <div>
-          <label class="block text-sm font-medium">Full Name</label>
-          <input id="signup-name" type="text" class="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-green-500" placeholder="Your full name" required>
-        </div>
-        <div>
-          <label class="block text-sm font-medium">Email</label>
-          <input id="signup-email" type="email" class="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-green-500" placeholder="Your email" required>
-        </div>
-        <div>
-          <label class="block text-sm font-medium">Password</label>
-          <input id="signup-password" type="password" class="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-green-500" placeholder="Choose a password" required>
-        </div>
-        <button type="submit" class="w-full bg-green-600 text-white py-2 rounded hover:bg-green-700 transition">Sign Up</button>
-      </form>
-      <p class="text-sm mt-4 text-center">Already have an account? <button onclick="toggleForm()" class="text-green-600 hover:underline">Sign in</button></p>
-    </div>
+<body class="bg-green-50 font-sans">
+  <div class="min-h-screen flex items-center justify-center px-4">
+    <div class="max-w-md w-full bg-white p-8 rounded shadow">
+      <h2 class="text-2xl font-bold text-green-700 mb-6 text-center">Nova Prime Sign Up</h2>
+      <form id="signup-form" class="space-y-4">
 
-    <!-- Modal -->
-    <div id="modal" class="hidden fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center z-50">
-      <div class="bg-white rounded-lg p-6 shadow-lg max-w-sm text-center">
-        <p id="modal-message" class="text-gray-800 mb-4"></p>
-        <button onclick="redirectToLogin()" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition">OK</button>
-      </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700">Full Name</label>
+          <input type="text" name="full-name" required class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-green-500 focus:border-green-500">
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700">Email address</label>
+          <input id="email" type="email" required class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-green-500 focus:border-green-500">
+          <p id="email-error" class="text-sm text-red-500 hidden">Invalid email format.</p>
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700">Password</label>
+          <input id="password" type="password" required minlength="8" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-green-500 focus:border-green-500">
+          <div id="password-strength" class="h-2 mt-1 rounded bg-gray-200">
+            <div class="h-full bg-red-500 rounded transition-all" style="width: 0%"></div>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700">Confirm Password</label>
+          <input id="confirm-password" type="password" required class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-green-500 focus:border-green-500">
+          <p id="password-match-error" class="text-sm text-red-500 hidden">Passwords do not match.</p>
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700">Mobile Number</label>
+          <div class="flex gap-2">
+            <select id="country-code" class="border-gray-300 rounded-md focus:ring-green-500 focus:border-green-500">
+              <option value="+254">Kenya (+254)</option>
+              <option value="+1">USA (+1)</option>
+              <option value="+44">UK (+44)</option>
+              <option value="+91">India (+91)</option>
+              <!-- Add more country codes here -->
+            </select>
+            <input type="tel" id="mobile-number" required placeholder="712345678" class="flex-1 border-gray-300 rounded-md focus:ring-green-500 focus:border-green-500">
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700">Nationality</label>
+          <select required class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-green-500 focus:border-green-500">
+            <option disabled selected>Select your nationality</option>
+            <option value="Kenyan">Kenyan</option>
+            <option value="American">American</option>
+            <option value="British">British</option>
+            <option value="Indian">Indian</option>
+            <!-- Add more nationalities here -->
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700">County</label>
+          <input type="text" required class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-green-500 focus:border-green-500">
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700">Postal Address</label>
+          <input type="text" required class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-green-500 focus:border-green-500">
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700">Sex</label>
+          <select required class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-green-500 focus:border-green-500">
+            <option value="">Select</option>
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+          </select>
+        </div>
+
+        <div class="flex items-center">
+          <input id="terms" type="checkbox" required class="h-4 w-4 text-green-600 border-gray-300 rounded">
+          <label for="terms" class="ml-2 block text-sm text-gray-900">
+            I agree to the <a href="#" class="text-green-600 hover:underline">Terms and Conditions</a>
+          </label>
+        </div>
+
+        <button type="submit" class="w-full bg-green-600 text-white py-2 px-4 rounded hover:bg-green-700 transition">
+          Sign Up
+        </button>
+      </form>
     </div>
   </div>
+
+  <script>
+    const emailInput = document.getElementById("email");
+    const emailError = document.getElementById("email-error");
+    const passwordInput = document.getElementById("password");
+    const confirmPasswordInput = document.getElementById("confirm-password");
+    const passwordMatchError = document.getElementById("password-match-error");
+    const passwordStrengthBar = document.querySelector("#password-strength div");
+
+    emailInput.addEventListener("input", () => {
+      const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      emailError.classList.toggle("hidden", emailPattern.test(emailInput.value));
+    });
+
+    passwordInput.addEventListener("input", () => {
+      const value = passwordInput.value;
+      let strength = 0;
+      if (value.length >= 8) strength++;
+      if (/[A-Z]/.test(value)) strength++;
+      if (/[a-z]/.test(value)) strength++;
+      if (/\d/.test(value)) strength++;
+      if (/[!@#$%^&*]/.test(value)) strength++;
+      const percent = (strength / 5) * 100;
+      passwordStrengthBar.style.width = `${percent}%`;
+      passwordStrengthBar.style.backgroundColor = percent >= 80 ? "green" : percent >= 50 ? "yellow" : "red";
+    });
+
+    confirmPasswordInput.addEventListener("input", () => {
+      passwordMatchError.classList.toggle("hidden", passwordInput.value === confirmPasswordInput.value);
+    });
+  </script>
 </body>
+
 </html>
