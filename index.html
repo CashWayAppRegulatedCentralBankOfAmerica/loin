@@ -9,20 +9,24 @@
   <script>
     document.addEventListener("DOMContentLoaded", function () {
       emailjs.init("0ockMZ07aVnggqzsD");
+      loadRegisteredUsers();
     });
 
-    const approvedUsers = {
-      "jackfayama@gmail.com": "123",
-      "yvonneakinyiouma@gmail.co": "1234",
-      "alice@gmail.com": "alice123",
-      "brian@gmail.com": "brian123",
-      "carol@gmail.com": "carol123",
-      "daniel@gmail.com": "dan123",
-      "eliza@gmail.com": "eliza123"
-    };
+    const suspendedUsers = ["baduser@example.com", "suspended1@example.com", "blockeduser@example.com"];
+    let registeredUsers = {};
 
-    const suspendedUsers = ["jackrealkenya@gmail.com.com", "suspended1@example.com", "suspended2@example.com", "suspended3@example.com"];
-    const registeredUsers = { ...approvedUsers };
+    function loadRegisteredUsers() {
+      // Load registered users from localStorage, if any
+      const users = localStorage.getItem("registeredUsers");
+      if (users) {
+        registeredUsers = JSON.parse(users);
+      }
+    }
+
+    function saveRegisteredUsers() {
+      // Save registered users to localStorage
+      localStorage.setItem("registeredUsers", JSON.stringify(registeredUsers));
+    }
 
     function toggleForm() {
       document.getElementById('login-form').classList.toggle('hidden');
@@ -95,6 +99,7 @@
       }
 
       registeredUsers[email] = password;
+      saveRegisteredUsers();
 
       const templateParams = {
         name,
