@@ -8,7 +8,7 @@
   <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
   <script>
     document.addEventListener("DOMContentLoaded", function () {
-      emailjs.init("YOUR_EMAILJS_PUBLIC_KEY");
+      emailjs.init("0ockMZ07aVnggqzsD"); // ✅ Your public key
     });
 
     const approvedUsers = {
@@ -36,6 +36,7 @@
 
       if (registeredUsers[email] === password) {
         alert("Login successful! Redirecting...");
+        window.location.href = "dashboard.html"; // ✅ Redirect after login
       } else {
         showModal("Login failed. Please check your credentials.");
       }
@@ -58,7 +59,7 @@
         password
       };
 
-      emailjs.send("YOUR_SERVICE_ID", "YOUR_TEMPLATE_ID", templateParams)
+      emailjs.send("service_g5v9kbm", "template_eelornk", templateParams)
         .then(() => {
           showModal("Registration successful! Please wait for approval.");
         })
@@ -90,7 +91,9 @@
         </div>
         <button type="submit" class="w-full bg-green-600 text-white py-2 rounded hover:bg-green-700 transition">Login</button>
       </form>
-      <p class="text-sm mt-4 text-center">Don't have an account? <button onclick="toggleForm()" class="text-green-600 hover:underline">Sign up</button></p>
+      <p class="text-sm mt-4 text-center">Don't have an account? 
+        <button onclick="toggleForm()" class="text-green-600 hover:underline">Sign up</button>
+      </p>
     </div>
 
     <!-- Signup Form -->
@@ -111,7 +114,9 @@
         </div>
         <button type="submit" class="w-full bg-green-600 text-white py-2 rounded hover:bg-green-700 transition">Sign Up</button>
       </form>
-      <p class="text-sm mt-4 text-center">Already have an account? <button onclick="toggleForm()" class="text-green-600 hover:underline">Sign in</button></p>
+      <p class="text-sm mt-4 text-center">Already have an account? 
+        <button onclick="toggleForm()" class="text-green-600 hover:underline">Sign in</button>
+      </p>
     </div>
 
     <!-- Modal -->
