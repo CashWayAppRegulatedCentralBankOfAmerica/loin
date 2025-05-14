@@ -5,111 +5,50 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>WorkHub - Account Overview</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    // Function to get the user information (user ID and name) from localStorage
-    window.onload = () => {
-      const userId = localStorage.getItem("userId") || "User123"; // Default value if not set
-      const userName = localStorage.getItem("userName") || "John Doe"; // Default value if not set
-      document.getElementById("user-name").textContent = userName;
-      document.getElementById("user-id").textContent = `User ID: ${userId}`;
-    };
-
-    // Function for search bar
-    function handleSearch() {
-      const searchQuery = document.getElementById("search-input").value.toLowerCase();
-      const allPages = [
-        { name: "Find Talent", url: "find_talent.html" },
-        { name: "Find Work", url: "find_work.html" },
-        { name: "Why WorkHub", url: "why_workhub.html" },
-        { name: "Account", url: "account.html" }
-      ];
-
-      const results = allPages.filter(page => page.name.toLowerCase().includes(searchQuery));
-      const resultsContainer = document.getElementById("search-results");
-      resultsContainer.innerHTML = '';
-
-      results.forEach(result => {
-        const resultElement = document.createElement("div");
-        resultElement.className = "p-2 cursor-pointer hover:bg-gray-200";
-        resultElement.textContent = result.name;
-        resultElement.onclick = () => window.location.href = result.url;
-        resultsContainer.appendChild(resultElement);
-      });
-    }
-  </script>
 </head>
 <body class="bg-gray-100 font-sans">
   <!-- Top Bar -->
   <header class="bg-white shadow p-4 flex justify-between items-center">
     <h1 class="text-2xl font-semibold text-gray-800">WorkHub Account</h1>
-    <div class="text-sm text-gray-600" id="user-name">Welcome, John Doe</div>
-    <div id="user-id" class="text-xs text-gray-500">User ID: User123</div>
+    <div class="text-sm text-gray-600">Welcome, <span id="username">John Doe</span></div>
   </header>
-
-  <!-- Search Bar -->
-  <section class="mt-4 p-4">
-    <input 
-      type="text" 
-      id="search-input" 
-      class="w-full p-2 rounded-lg border border-gray-300"
-      placeholder="Search across WorkHub..." 
-      oninput="handleSearch()" 
-    />
-    <div id="search-results" class="mt-4 bg-white rounded-lg shadow">
-      <!-- Search results will appear here -->
-    </div>
-  </section>
 
   <!-- Main Section -->
   <main class="max-w-5xl mx-auto mt-8 p-4">
     <!-- Balance Overview -->
-    <section class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+    <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
       <div class="bg-white p-6 rounded-xl shadow text-center">
         <p class="text-gray-500">Total Balance</p>
-        <h2 class="text-2xl font-bold text-green-600">$1,250.00</h2>
+        <h2 class="text-2xl font-bold text-green-600" id="total-balance">$1,250.00</h2>
       </div>
       <div class="bg-white p-6 rounded-xl shadow text-center">
         <p class="text-gray-500">Available</p>
-        <h2 class="text-xl font-semibold">$1,000.00</h2>
+        <h2 class="text-xl font-semibold" id="available-balance">$1,000.00</h2>
       </div>
       <div class="bg-white p-6 rounded-xl shadow text-center">
         <p class="text-gray-500">Pending</p>
-        <h2 class="text-xl font-semibold">$250.00</h2>
+        <h2 class="text-xl font-semibold" id="pending-balance">$250.00</h2>
       </div>
       <div class="bg-white p-6 rounded-xl shadow text-center">
         <p class="text-gray-500">Credits</p>
-        <h2 class="text-xl font-semibold">$50.00</h2>
+        <h2 class="text-xl font-semibold" id="credits-balance">$50.00</h2>
       </div>
     </section>
 
     <!-- Action Buttons -->
-    <section class="flex gap-4 mb-6">
-      <button class="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg">Deposit</button>
-      <button class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg">Withdraw</button>
-      <button class="bg-gray-600 hover:bg-gray-700 text-white px-6 py-2 rounded-lg">Transfer</button>
-      <button class="bg-white border border-gray-300 hover:bg-gray-100 text-gray-700 px-6 py-2 rounded-lg">Statements</button>
+    <section class="flex gap-4 mb-6 flex-wrap">
+      <button class="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg w-full sm:w-auto" onclick="window.location.href='deposit.html'">Deposit</button>
+      <button class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg w-full sm:w-auto" onclick="window.location.href='withdraw.html'">Withdraw</button>
+      <button class="bg-gray-600 hover:bg-gray-700 text-white px-6 py-2 rounded-lg w-full sm:w-auto" onclick="window.location.href='transfer.html'">Transfer</button>
+      <button class="bg-white border border-gray-300 hover:bg-gray-100 text-gray-700 px-6 py-2 rounded-lg w-full sm:w-auto" onclick="window.location.href='statements.html'">Statements</button>
     </section>
 
     <!-- Recent Transactions -->
     <section class="bg-white p-6 rounded-xl shadow">
       <h3 class="text-xl font-semibold mb-4 text-gray-800">Recent Transactions</h3>
-      <ul class="divide-y divide-gray-200">
-        <li class="flex justify-between py-3">
-          <span>Withdrawal to MPESA</span>
-          <span class="text-red-500">- $100.00</span>
-        </li>
-        <li class="flex justify-between py-3">
-          <span>Deposit from MPESA</span>
-          <span class="text-green-500">+ $300.00</span>
-        </li>
-        <li class="flex justify-between py-3">
-          <span>Freelance Job Payment</span>
-          <span class="text-green-500">+ $750.00</span>
-        </li>
-        <li class="flex justify-between py-3">
-          <span>Platform Fee</span>
-          <span class="text-red-500">- $20.00</span>
-        </li>
+      <ul class="divide-y divide-gray-200" id="transactions-list">
+        <!-- Transactions will dynamically appear here -->
+        <!-- New users will see this section empty -->
       </ul>
     </section>
   </main>
@@ -117,5 +56,35 @@
   <footer class="text-center py-4 text-gray-500 text-sm">
     © 2025 WorkHub. All rights reserved.
   </footer>
+
+  <script>
+    // Here, you would fetch the user details dynamically, example:
+    const userName = localStorage.getItem("fullName"); // Retrieve full name from localStorage
+    const userId = localStorage.getItem("mobileNumber"); // Retrieve mobile number from localStorage
+
+    // Display user name and ID on page
+    document.getElementById('username').textContent = userName;
+
+    // Dynamically handle transactions for new users
+    const transactions = JSON.parse(localStorage.getItem("transactions")) || []; // Retrieve transactions from localStorage
+
+    const transactionsList = document.getElementById('transactions-list');
+    
+    // If there are no transactions, show a default message
+    if (transactions.length === 0) {
+      transactionsList.innerHTML = '<li class="text-gray-500 py-3">No recent transactions.</li>';
+    } else {
+      // If there are transactions, display them
+      transactions.forEach(transaction => {
+        const transactionItem = document.createElement('li');
+        transactionItem.classList.add('flex', 'justify-between', 'py-3');
+        transactionItem.innerHTML = `
+          <span>${transaction.description}</span>
+          <span class="${transaction.amount < 0 ? 'text-red-500' : 'text-green-500'}">${transaction.amount < 0 ? '-' : '+'} $${Math.abs(transaction.amount).toFixed(2)}</span>
+        `;
+        transactionsList.appendChild(transactionItem);
+      });
+    }
+  </script>
 </body>
 </html>
