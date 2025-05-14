@@ -100,7 +100,7 @@
       }
 
       // Register the user
-      registeredUsers[email] = password;
+      registeredUsers[email] = { password, name, phone };
       saveRegisteredUsers();
 
       // Send the registration email
