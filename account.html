@@ -48,7 +48,7 @@
     <!-- Recent Transactions -->
     <section class="bg-white p-6 rounded-xl shadow min-h-[200px]">
       <h3 class="text-xl font-semibold mb-4 text-gray-800">Recent Transactions</h3>
-      <ul class="divide-y divide-gray-200" id="transactionList">
+      <ul class="space-y-4" id="transactionList">
         <!-- Transactions will appear here -->
       </ul>
     </section>
@@ -79,8 +79,21 @@
     } else {
       transactions.reverse().forEach(tx => {
         const li = document.createElement('li');
-        li.className = 'py-2';
-        li.innerHTML = `<span class="text-gray-700">${tx.type}</span> - <span class="text-green-600">$${parseFloat(tx.amount).toFixed(2)}</span> on <span class="text-gray-500 text-xs">${tx.date}</span>`;
+        li.className = `p-4 rounded-lg shadow border-l-4 ${tx.type === 'Deposit' ? 'border-green-500 bg-green-50' : 'border-blue-500 bg-blue-50'}`;
+        li.innerHTML = `
+          <div class="flex justify-between items-center">
+            <div>
+              <p class="font-semibold text-gray-800">${tx.type}</p>
+              <p class="text-xs text-gray-500">${tx.date} at ${tx.time}</p>
+            </div>
+            <div class="text-right">
+              <p class="text-lg font-bold ${tx.type === 'Deposit' ? 'text-green-600' : 'text-blue-600'}">
+                ${tx.type === 'Deposit' ? '+' : '-'}$${parseFloat(tx.amount).toFixed(2)}
+              </p>
+              <p class="text-xs text-gray-400 mt-1">${tx.status || 'Completed'}</p>
+            </div>
+          </div>
+        `;
         transactionList.appendChild(li);
       });
     }
