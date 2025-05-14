@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>WorkHub - Place a Bid</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Place a Bid</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-100 font-sans min-h-screen flex flex-col items-center justify-center p-4">
@@ -13,8 +13,8 @@
     <p class="text-sm text-gray-500 mb-2">Current Credits: <span id="currentCredits">0.00</span></p>
 
     <form onsubmit="handleBidSubmit(event)" class="space-y-4">
-      <input type="text" id="taskId" name="taskId" placeholder="Task ID" required class="border border-gray-300 p-2 rounded w-full" readonly />
-      <input type="number" id="bidAmount" name="bidAmount" placeholder="Bid Amount (USD)" required class="border border-gray-300 p-2 rounded w-full" readonly />
+      <input type="text" name="taskId" id="taskId" placeholder="Task ID" required class="border border-gray-300 p-2 rounded w-full" readonly />
+      <input type="number" name="bidAmount" id="bidAmount" placeholder="Bid Amount (USD)" required class="border border-gray-300 p-2 rounded w-full" readonly />
       <button type="submit" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded w-full">
         Submit Bid (Cost: 1 Credit)
       </button>
@@ -32,24 +32,20 @@
   </div>
 
   <script>
-    // Fetch credit balance from localStorage
+    // Fetch task details from URL parameters
+    const urlParams = new URLSearchParams(window.location.search);
+    const taskId = urlParams.get('taskId');
+    const taskAmount = urlParams.get('amount');
+
+    document.getElementById('taskId').value = taskId;
+    document.getElementById('bidAmount').value = taskAmount;
+
+    // Fetch current credits
     let credits = parseFloat(localStorage.getItem('credits') || '0');
 
     // Show credit balance on load
     document.addEventListener('DOMContentLoaded', () => {
-      const creditDisplay = document.getElementById('currentCredits');
-      if (creditDisplay) {
-        creditDisplay.textContent = credits.toFixed(2);
-      }
-
-      // Fetch task details from sessionStorage
-      const taskId = sessionStorage.getItem('selectedTaskId');
-      const bidAmount = parseFloat(sessionStorage.getItem('selectedTaskAmount'));
-
-      if (taskId && bidAmount) {
-        document.getElementById('taskId').value = taskId;
-        document.getElementById('bidAmount').value = bidAmount.toFixed(2);
-      }
+      document.getElementById('currentCredits').textContent = credits.toFixed(2);
     });
 
     // Handle bid submission
@@ -62,25 +58,8 @@
 
         alert('Bid submitted successfully. 1 credit deducted.');
 
-        // Save bid details to localStorage or send to server
-        const taskId = document.getElementById('taskId').value;
-        const bidAmount = document.getElementById('bidAmount').value;
-
-        const bidDetails = {
-          taskId: taskId,
-          bidAmount: bidAmount,
-          creditsUsed: 1,
-          date: new Date().toLocaleDateString(),
-          time: new Date().toLocaleTimeString(),
-          status: 'Submitted'
-        };
-
-        let bids = JSON.parse(localStorage.getItem('bids') || '[]');
-        bids.push(bidDetails);
-        localStorage.setItem('bids', JSON.stringify(bids));
-
-        // Redirect to project page
-        window.location.href = 'project.html';
+        // Update displayed credits
+        document.getElementById('currentCredits').textContent = credits.toFixed(2);
       } else {
         document.getElementById('creditModal').classList.remove('hidden');
       }
