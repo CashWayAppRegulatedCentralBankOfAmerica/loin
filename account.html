@@ -1,72 +1,217 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>WorkHub - Account Overview</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>WorkHub Login</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/emailjs-com@2.6.4/dist/email.min.js"></script>
+  <script>
+    (function(){
+      emailjs.init("0ockMZ07aVnggqzsD");
+    })();
+  </script>
 </head>
-<body class="bg-gray-100 font-sans">
-  <!-- Top Bar -->
-  <header class="bg-white shadow p-4 flex justify-between items-center">
-    <h1 class="text-2xl font-semibold text-gray-800">WorkHub Account</h1>
-    <div class="text-sm text-gray-600">
-      Welcome, <span id="welcomeName">User</span><br>
-      <span class="text-xs text-gray-500">User ID: <span id="userId">0000000000</span></span>
+<body class="bg-green-50 font-sans">
+  <div class="min-h-screen flex items-center justify-center">
+    <div class="bg-white p-8 rounded-xl shadow-lg w-full max-w-4xl grid grid-cols-1 md:grid-cols-2 gap-6">
+      <!-- Login Section -->
+      <div>
+        <h2 class="text-2xl font-bold text-green-600 mb-4">Login to WorkHub</h2>
+        <form id="login-form" class="space-y-4">
+          <div>
+            <label class="block mb-1 text-gray-600">Email</label>
+            <input type="email" id="login-email" required class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-400">
+          </div>
+          <div>
+            <label class="block mb-1 text-gray-600">Password</label>
+            <input type="password" id="login-password" required class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-400">
+          </div>
+          <button type="submit" class="w-full bg-green-600 text-white py-2 rounded-md hover:bg-green-700 transition">Login</button>
+        </form>
+      </div>
+
+      <!-- Registration Section -->
+      <div>
+        <h2 class="text-2xl font-bold text-green-600 mb-4">Register for WorkHub</h2>
+        <form id="signup-form" class="space-y-3">
+          <div>
+            <label class="block mb-1 text-gray-600">Full Name</label>
+            <input type="text" id="signup-name" required class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-400">
+          </div>
+          <div>
+            <label class="block mb-1 text-gray-600">Email</label>
+            <input type="email" id="signup-email" required class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-400">
+          </div>
+          <div>
+            <label class="block mb-1 text-gray-600">Password</label>
+            <input type="password" id="signup-password" required class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-400">
+          </div>
+          <div>
+            <label class="block mb-1 text-gray-600">Confirm Password</label>
+            <input type="password" id="signup-confirm-password" required class="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-400">
+          </div>
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <label class="block mb-1 text-gray-600">Mobile Code</label>
+              <select id="signup-code" class="w-full px-2 py-1 border rounded-md">
+                <option>+254</option>
+                <option>+255</option>
+                <option>+256</option>
+              </select>
+            </div>
+            <div>
+              <label class="block mb-1 text-gray-600">Mobile Number</label>
+              <input type="text" id="signup-phone" required class="w-full px-2 py-1 border rounded-md">
+            </div>
+          </div>
+          <div>
+            <label class="block mb-1 text-gray-600">Nationality</label>
+            <select id="signup-nationality" class="w-full px-3 py-2 border rounded-md">
+              <option>Kenyan</option>
+              <option>Tanzanian</option>
+              <option>Ugandan</option>
+            </select>
+          </div>
+          <div>
+            <label class="block mb-1 text-gray-600">County</label>
+            <input type="text" id="signup-county" required class="w-full px-3 py-2 border rounded-md">
+          </div>
+          <div>
+            <label class="block mb-1 text-gray-600">Postal Address</label>
+            <input type="text" id="signup-postal" required class="w-full px-3 py-2 border rounded-md">
+          </div>
+          <div>
+            <label class="block mb-1 text-gray-600">Gender</label>
+            <select id="signup-gender" class="w-full px-3 py-2 border rounded-md">
+              <option>Male</option>
+              <option>Female</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <div class="flex items-center">
+            <input type="checkbox" id="signup-terms" class="mr-2">
+            <label for="signup-terms" class="text-sm text-gray-600">I agree to the <a href="terms.html" class="text-green-600 underline">Terms & Conditions</a></label>
+          </div>
+          <button type="submit" class="w-full bg-green-600 text-white py-2 rounded-md hover:bg-green-700 transition">Register</button>
+        </form>
+      </div>
     </div>
-  </header>
+  </div>
 
-  <!-- Main Section -->
-  <main class="max-w-5xl mx-auto mt-8 p-4">
-    <!-- Balance Overview -->
-    <section class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-      <div class="bg-white p-4 sm:p-6 rounded-xl shadow text-center">
-        <p class="text-gray-500 text-sm sm:text-base">Total Balance</p>
-        <h2 class="text-xl sm:text-2xl font-bold text-green-600">$1,250.00</h2>
-      </div>
-      <div class="bg-white p-4 sm:p-6 rounded-xl shadow text-center">
-        <p class="text-gray-500 text-sm sm:text-base">Available</p>
-        <h2 class="text-lg sm:text-xl font-semibold">$1,000.00</h2>
-      </div>
-      <div class="bg-white p-4 sm:p-6 rounded-xl shadow text-center">
-        <p class="text-gray-500 text-sm sm:text-base">Pending</p>
-        <h2 class="text-lg sm:text-xl font-semibold">$250.00</h2>
-      </div>
-      <div class="bg-white p-4 sm:p-6 rounded-xl shadow text-center">
-        <p class="text-gray-500 text-sm sm:text-base">Credits</p>
-        <h2 class="text-lg sm:text-xl font-semibold">$50.00</h2>
-      </div>
-    </section>
-
-    <!-- Action Buttons -->
-    <section class="flex flex-wrap gap-4 mb-6">
-      <a href="deposit.html" class="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg">Deposit</a>
-      <a href="withdraw.html" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg">Withdraw</a>
-      <a href="transfer.html" class="bg-gray-600 hover:bg-gray-700 text-white px-6 py-2 rounded-lg">Transfer</a>
-      <button class="bg-white border border-gray-300 hover:bg-gray-100 text-gray-700 px-6 py-2 rounded-lg">Statements</button>
-    </section>
-
-    <!-- Recent Transactions -->
-    <section class="bg-white p-6 rounded-xl shadow">
-      <h3 class="text-xl font-semibold mb-4 text-gray-800">Recent Transactions</h3>
-      <ul class="divide-y divide-gray-200" id="transactionList">
-        <!-- If new user, no transactions -->
-      </ul>
-    </section>
-  </main>
-
-  <footer class="text-center py-4 text-gray-500 text-sm">
-    © 2025 WorkHub. All rights reserved.
-  </footer>
+  <div id="modal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center">
+    <div class="bg-white p-6 rounded-lg shadow-lg max-w-sm w-full text-center">
+      <p id="modal-message" class="text-gray-700 mb-4"></p>
+      <button onclick="closeModal()" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">OK</button>
+    </div>
+  </div>
 
   <script>
-    // Retrieve user data from localStorage
-    const fullName = localStorage.getItem('fullName') || 'User';
-    const mobileNumber = localStorage.getItem('mobileNumber') || '0000000000';
+    let registeredUsers = JSON.parse(localStorage.getItem("registeredUsers") || "{}");
+    let suspendedUsers = JSON.parse(localStorage.getItem("suspendedUsers") || "[]");
 
-    // Display user info
-    document.getElementById('welcomeName').textContent = fullName;
-    document.getElementById('userId').textContent = mobileNumber;
+    function saveRegisteredUsers() {
+      localStorage.setItem("registeredUsers", JSON.stringify(registeredUsers));
+    }
+
+    function showModal(message, redirect = false) {
+      document.getElementById("modal-message").innerText = message;
+      document.getElementById("modal").classList.remove("hidden");
+      if (redirect) {
+        setTimeout(() => {
+          closeModal();
+        }, 2000);
+      }
+    }
+
+    function closeModal() {
+      document.getElementById("modal").classList.add("hidden");
+    }
+
+    document.getElementById("signup-form").addEventListener("submit", handleSignup);
+    document.getElementById("login-form").addEventListener("submit", handleLogin);
+
+    function handleSignup(event) {
+      event.preventDefault();
+      const name = document.getElementById('signup-name').value.trim();
+      const email = document.getElementById('signup-email').value.trim();
+      const password = document.getElementById('signup-password').value.trim();
+      const confirm = document.getElementById('signup-confirm-password').value.trim();
+      const phone = document.getElementById('signup-phone').value.trim();
+      const code = document.getElementById('signup-code').value;
+      const nationality = document.getElementById('signup-nationality').value;
+      const county = document.getElementById('signup-county').value.trim();
+      const postal = document.getElementById('signup-postal').value.trim();
+      const gender = document.getElementById('signup-gender').value;
+      const agree = document.getElementById('signup-terms').checked;
+
+      if (!agree) {
+        showModal("You must agree to the terms and conditions.");
+        return;
+      }
+
+      if (password !== confirm) {
+        showModal("Passwords do not match.");
+        return;
+      }
+
+      if (registeredUsers[email]) {
+        showModal("This email is already registered.");
+        return;
+      }
+
+      registeredUsers[email] = {
+        password: password,
+        name: name,
+        phone: `${code} ${phone}`
+      };
+      saveRegisteredUsers();
+
+      const templateParams = {
+        name,
+        email,
+        password,
+        phone: `${code} ${phone}`,
+        nationality,
+        county,
+        postal,
+        gender
+      };
+
+      emailjs.send("service_g5v9kbm", "template_eelornk", templateParams)
+        .then(() => {
+          showModal("Registration successful! Please wait for approval.", true);
+        })
+        .catch(() => {
+          showModal("Error submitting registration. Please try again.");
+        });
+    }
+
+    function handleLogin(event) {
+      event.preventDefault();
+      const email = document.getElementById('login-email').value.trim();
+      const password = document.getElementById('login-password').value.trim();
+
+      if (suspendedUsers.includes(email)) {
+        showModal("Your account has been suspended. Please contact support.");
+        return;
+      }
+
+      const userData = registeredUsers[email];
+
+      if (userData && userData.password === password) {
+        localStorage.setItem("currentName", userData.name);
+        localStorage.setItem("currentPhone", userData.phone);
+        localStorage.setItem("currentUser", email);
+
+        showModal("Login successful! Redirecting...");
+        setTimeout(() => {
+          window.location.href = "dashboard.html";
+        }, 1500);
+      } else {
+        showModal("Login failed. Please check your credentials.");
+      }
+    }
   </script>
 </body>
 </html>
