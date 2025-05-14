@@ -5,6 +5,36 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>WorkHub | Find Freelancers & Jobs</title>
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <script>
+    // Mock function to simulate search result fetching
+    function searchItems(query) {
+      // Normally here we would fetch from a database or API
+      const items = [
+        { name: 'UI/UX Designer', link: '/freelancers/ui-ux-designer.html' },
+        { name: 'Web Developer', link: '/freelancers/web-developer.html' },
+        { name: 'Content Writer', link: '/freelancers/content-writer.html' }
+      ];
+      
+      return items.filter(item => item.name.toLowerCase().includes(query.toLowerCase()));
+    }
+
+    // Function to handle search
+    function handleSearch() {
+      const searchQuery = document.getElementById('search-input').value;
+      const results = searchItems(searchQuery);
+      
+      // Display results - here you can modify it to show results dynamically
+      const resultContainer = document.getElementById('search-results');
+      resultContainer.innerHTML = ''; // Clear previous results
+
+      results.forEach(item => {
+        const resultItem = document.createElement('div');
+        resultItem.classList.add('bg-white', 'shadow', 'p-4', 'rounded', 'text-center', 'mb-4');
+        resultItem.innerHTML = `<a href="${item.link}" class="text-green-600 hover:underline">${item.name}</a>`;
+        resultContainer.appendChild(resultItem);
+      });
+    }
+  </script>
 </head>
 <body class="bg-gray-50 text-gray-800">
   <!-- Navigation Bar -->
@@ -12,9 +42,9 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center flex-wrap">
       <h1 class="text-2xl font-bold text-green-600">WorkHub</h1>
       <nav class="space-x-4 text-sm mt-2 sm:mt-0">
-        <a href="#" class="hover:text-green-600">Find Talent</a>
-        <a href="#" class="hover:text-green-600">Find Work</a>
-        <a href="#" class="hover:text-green-600">Why WorkHub</a>
+        <a href="find-talent.html" class="hover:text-green-600">Find Talent</a>
+        <a href="find-work.html" class="hover:text-green-600">Find Work</a>
+        <a href="why-workhub.html" class="hover:text-green-600">Why WorkHub</a>
         <a href="account.html" class="hover:text-green-600">My Account</a> <!-- Changed to My Account -->
       </nav>
     </div>
@@ -30,12 +60,17 @@
       <div class="flex w-full max-w-2xl mx-auto">
         <input 
           type="text" 
+          id="search-input"
           placeholder="Search for jobs or talent..."
           class="flex-grow px-4 py-2 border border-gray-300 rounded-l focus:outline-none" />
         <button 
+          onclick="handleSearch()"
           class="px-6 py-2 bg-green-600 text-white font-semibold rounded-r hover:bg-green-700">
           Search
         </button>
+      </div>
+      <div id="search-results" class="mt-4">
+        <!-- Search results will appear here dynamically -->
       </div>
     </div>
   </section>
