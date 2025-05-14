@@ -22,19 +22,19 @@
     <section class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-4 mb-8">
       <div class="bg-white p-4 sm:p-6 rounded-xl shadow text-center">
         <p class="text-gray-500 text-sm sm:text-base">Total Balance</p>
-        <h2 class="text-xl sm:text-2xl font-bold text-green-600 balance-total">$0.00</h2>
+        <h2 class="text-xl sm:text-2xl font-bold text-green-600" id="totalBalance">$0.00</h2>
       </div>
       <div class="bg-white p-4 sm:p-6 rounded-xl shadow text-center">
         <p class="text-gray-500 text-sm sm:text-base">Available</p>
-        <h2 class="text-lg sm:text-xl font-semibold balance-available">$0.00</h2>
+        <h2 class="text-lg sm:text-xl font-semibold" id="availableBalance">$0.00</h2>
       </div>
       <div class="bg-white p-4 sm:p-6 rounded-xl shadow text-center">
         <p class="text-gray-500 text-sm sm:text-base">Pending</p>
-        <h2 class="text-lg sm:text-xl font-semibold balance-pending">$0.00</h2>
+        <h2 class="text-lg sm:text-xl font-semibold" id="pendingBalance">$0.00</h2>
       </div>
       <div class="bg-white p-4 sm:p-6 rounded-xl shadow text-center">
         <p class="text-gray-500 text-sm sm:text-base">Credits</p>
-        <h2 class="text-lg sm:text-xl font-semibold balance-credits">$0.00</h2>
+        <h2 class="text-lg sm:text-xl font-semibold" id="creditsBalance">$0.00</h2>
       </div>
     </section>
 
@@ -65,26 +65,33 @@
     const fullName = localStorage.getItem('fullName') || 'User';
     const mobileNumber = localStorage.getItem('mobileNumber') || '0000000000';
 
+    // Store and update user balance data in localStorage
+    const userBalances = JSON.parse(localStorage.getItem('userBalances') || '{}');
+
+    // Check if the user has an existing balance
+    if (!userBalances[mobileNumber]) {
+      // If no existing balance, initialize with zero balance for a new user
+      userBalances[mobileNumber] = {
+        total: 0,
+        available: 0,
+        pending: 0,
+        credits: 0
+      };
+      // Save this new user balance to localStorage
+      localStorage.setItem('userBalances', JSON.stringify(userBalances));
+    }
+
+    const balance = userBalances[mobileNumber];
+
     // Display user info
     document.getElementById('welcomeName').textContent = fullName;
     document.getElementById('userId').textContent = mobileNumber;
 
-    // Retrieve user balance data
-    const userBalances = JSON.parse(localStorage.getItem('userBalances') || '{}');
-    const currentUser = mobileNumber;
-
-    const balance = userBalances[currentUser] || {
-      total: 0,
-      available: 0,
-      pending: 0,
-      credits: 0
-    };
-
-    // Display balances
-    document.querySelector('.balance-total').textContent = `$${balance.total.toFixed(2)}`;
-    document.querySelector('.balance-available').textContent = `$${balance.available.toFixed(2)}`;
-    document.querySelector('.balance-pending').textContent = `$${balance.pending.toFixed(2)}`;
-    document.querySelector('.balance-credits').textContent = `$${balance.credits.toFixed(2)}`;
+    // Update balance data
+    document.getElementById('totalBalance').textContent = `$${balance.total.toFixed(2)}`;
+    document.getElementById('availableBalance').textContent = `$${balance.available.toFixed(2)}`;
+    document.getElementById('pendingBalance').textContent = `$${balance.pending.toFixed(2)}`;
+    document.getElementById('creditsBalance').textContent = `$${balance.credits.toFixed(2)}`;
   </script>
 </body>
 </html>
