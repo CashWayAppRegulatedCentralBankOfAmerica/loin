@@ -1,10 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>WorkHub - Account Overview</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    html, body {
+      height: 100%;
+    }
+    body {
+      display: flex;
+      flex-direction: column;
+    }
+    main {
+      flex: 1;
+    }
+  </style>
 </head>
 <body class="bg-gray-100 font-sans">
   <!-- Top Bar -->
@@ -22,7 +34,7 @@
     <section class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-4 mb-8">
       <div class="bg-white p-4 sm:p-6 rounded-xl shadow text-center">
         <p class="text-gray-500 text-sm sm:text-base">Total Balance</p>
-        <h2 class="text-xl sm:text-2xl font-bold text-green-600" id="totalBalance">$0.00</h2>
+        <h2 id="totalBalance" class="text-xl sm:text-2xl font-bold text-green-600">$0.00</h2>
       </div>
       <div class="bg-white p-4 sm:p-6 rounded-xl shadow text-center">
         <p class="text-gray-500 text-sm sm:text-base">Available</p>
@@ -30,11 +42,11 @@
       </div>
       <div class="bg-white p-4 sm:p-6 rounded-xl shadow text-center">
         <p class="text-gray-500 text-sm sm:text-base">Pending</p>
-        <h2 class="text-lg sm:text-xl font-semibold" id="pendingBalance">$0.00</h2>
+        <h2 class="text-lg sm:text-xl font-semibold">$250.00</h2>
       </div>
       <div class="bg-white p-4 sm:p-6 rounded-xl shadow text-center">
         <p class="text-gray-500 text-sm sm:text-base">Credits</p>
-        <h2 class="text-lg sm:text-xl font-semibold" id="creditsBalance">$0.00</h2>
+        <h2 class="text-lg sm:text-xl font-semibold">$50.00</h2>
       </div>
     </section>
 
@@ -45,8 +57,8 @@
       <a href="transfer.html" class="bg-gray-600 hover:bg-gray-700 text-white px-6 py-2 rounded-lg">Transfer</a>
     </section>
 
-    <!-- Recent Transactions (Increased height) -->
-    <section class="bg-white p-6 rounded-xl shadow" style="min-height: 250px;">
+    <!-- Recent Transactions -->
+    <section class="bg-white p-6 rounded-xl shadow min-h-[300px]">
       <h3 class="text-xl font-semibold mb-4 text-gray-800">Recent Transactions</h3>
       <ul class="divide-y divide-gray-200" id="transactionList">
         <!-- If new user, no transactions -->
@@ -54,44 +66,21 @@
     </section>
   </main>
 
-  <!-- Footer (Always at the bottom) -->
-  <footer class="fixed bottom-0 w-full text-center py-4 text-gray-500 text-sm bg-white">
+  <footer class="text-center py-4 text-gray-500 text-sm">
     © 2025 WorkHub. All rights reserved.
   </footer>
 
-  <!-- Script to retrieve and display user data -->
+  <!-- Script -->
   <script>
-    // Retrieve user data from localStorage
     const fullName = localStorage.getItem('fullName') || 'User';
     const mobileNumber = localStorage.getItem('mobileNumber') || '0000000000';
+    const balance = parseFloat(localStorage.getItem('balance') || '0').toFixed(2);
 
-    // Store and update user balance data in localStorage
-    const userBalances = JSON.parse(localStorage.getItem('userBalances') || '{}');
-
-    // Check if the user has an existing balance
-    if (!userBalances[mobileNumber]) {
-      // If no existing balance, initialize with zero balance for a new user
-      userBalances[mobileNumber] = {
-        total: 0,
-        available: 0,
-        pending: 0,
-        credits: 0
-      };
-      // Save this new user balance to localStorage
-      localStorage.setItem('userBalances', JSON.stringify(userBalances));
-    }
-
-    const balance = userBalances[mobileNumber];
-
-    // Display user info
     document.getElementById('welcomeName').textContent = fullName;
     document.getElementById('userId').textContent = mobileNumber;
 
-    // Update balance data
-    document.getElementById('totalBalance').textContent = `$${balance.total.toFixed(2)}`;
-    document.getElementById('availableBalance').textContent = `$${balance.available.toFixed(2)}`;
-    document.getElementById('pendingBalance').textContent = `$${balance.pending.toFixed(2)}`;
-    document.getElementById('creditsBalance').textContent = `$${balance.credits.toFixed(2)}`;
+    document.getElementById('totalBalance').textContent = `$${balance}`;
+    document.getElementById('availableBalance').textContent = `$${balance}`;
   </script>
 </body>
 </html>
