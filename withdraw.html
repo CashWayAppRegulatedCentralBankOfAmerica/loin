@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>WorkHub - Withdraw</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 font-sans">
+  <!-- Header -->
+  <header class="bg-white shadow p-4 flex items-center justify-between">
+    <div class="text-xl font-bold text-green-600">WorkHub</div>
+    <h1 class="text-lg font-semibold text-gray-700">Withdraw Funds</h1>
+  </header>
+
+  <!-- Main -->
+  <main class="max-w-md mx-auto mt-10 bg-white p-6 rounded-lg shadow">
+    <form id="withdrawForm">
+      <label class="block mb-2 text-sm font-medium text-gray-700">Amount to Withdraw ($):</label>
+      <input type="number" id="withdrawAmount" required class="w-full border border-gray-300 p-2 rounded mb-4"/>
+
+      <label class="block mb-2 text-sm font-medium text-gray-700">Payment Reference:</label>
+      <input type="text" required class="w-full border border-gray-300 p-2 rounded mb-4"/>
+
+      <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 w-full">Submit</button>
+    </form>
+  </main>
+
+  <footer class="text-center py-4 text-gray-500 text-sm mt-10">
+    © 2025 WorkHub. All rights reserved.
+  </footer>
+
+  <script>
+    const withdrawForm = document.getElementById("withdrawForm");
+    withdrawForm.addEventListener("submit", function (e) {
+      e.preventDefault();
+      
+      // Get withdraw amount from user input
+      const amount = parseFloat(document.getElementById("withdrawAmount").value);
+      
+      // Get current balance from localStorage
+      let balance = parseFloat(localStorage.getItem("balance") || "0");
+
+      // Check if balance is sufficient for withdrawal
+      if (balance >= amount) {
+        balance -= amount;
+
+        // Save new balance back to localStorage
+        localStorage.setItem("balance", balance.toFixed(2));
+
+        // Create transaction object for logging
+        const transaction = {
+          type: "Withdrawal",
+          amount: amount.toFixed(2),
+          date: new Date().toLocaleString()
+        };
+
+        // Retrieve existing transactions from localStorage
+        const transactions = JSON.parse(localStorage.getItem("transactions") || "[]");
+        
+        // Add new transaction to transaction list
+        transactions.push(transaction);
+        
+        // Save updated transaction list to localStorage
+        localStorage.setItem("transactions", JSON.stringify(transactions));
+
+        // Show success message and redirect to account page
+        alert("Withdrawal successful!");
+        window.location.href = "account.html";
+      } else {
+        // Show error message if balance is insufficient
+        alert("Insufficient balance for withdrawal.");
+      }
+    });
+  </script>
+</body>
+</html>
