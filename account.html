@@ -99,10 +99,10 @@
       transactionList.innerHTML = '<li class="text-gray-400 text-sm">No transactions yet.</li>';
     } else {
       transactions.reverse().forEach(tx => {
+        const li = document.createElement('li');
         const isDeposit = tx.type === 'Deposit' || tx.type === 'Task Payment';
         const isTransfer = tx.type === 'Transfer';
-        liClass = `p-4 rounded-lg shadow border-l-4 ${isTransfer ? 'border-black bg-gray-50' : (isDeposit ? 'border-green-500 bg-green-50' : 'border-blue-500 bg-blue-50')}`;
-
+        li.className = `p-4 rounded-lg shadow border-l-4 ${isTransfer ? 'border-black bg-gray-50' : (isDeposit ? 'border-green-500 bg-green-50' : 'border-blue-500 bg-blue-50')}`;
         li.innerHTML = `
           <div class="flex justify-between items-center">
             <div>
@@ -117,7 +117,6 @@
             </div>
           </div>
         `;
-
         transactionList.appendChild(li);
       });
     }
