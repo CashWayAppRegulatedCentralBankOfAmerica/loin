@@ -15,30 +15,30 @@
         <a href="#" class="hover:text-green-600">Find Talent</a>
         <a href="#" class="hover:text-green-600">Find Work</a>
         <a href="#" class="hover:text-green-600">Why WorkHub</a>
-        <a href="#" class="hover:text-green-600">Enterprise</a>
+        <a href="account.html" class="hover:text-green-600">My Account</a> <!-- Changed to My Account -->
       </nav>
     </div>
   </header>
 
   <!-- Hero Section -->
-<section class="py-12 sm:py-16">
-  <div class="bg-green-100 rounded-xl max-w-6xl mx-auto px-4 sm:px-8 py-12 text-center">
-    <h2 class="text-3xl sm:text-4xl font-bold mb-4">Hire Freelancers or Find Work Easily</h2>
-    <p class="mb-6 sm:mb-8 text-base sm:text-lg">Work with the best talent. Anytime. Anywhere.</p>
+  <section class="py-12 sm:py-16">
+    <div class="bg-green-100 rounded-xl max-w-6xl mx-auto px-4 sm:px-8 py-12 text-center">
+      <h2 class="text-3xl sm:text-4xl font-bold mb-4">Hire Freelancers or Find Work Easily</h2>
+      <p class="mb-6 sm:mb-8 text-base sm:text-lg">Work with the best talent. Anytime. Anywhere.</p>
 
-    <!-- Responsive search row -->
-    <div class="flex w-full max-w-2xl mx-auto">
-      <input 
-        type="text" 
-        placeholder="Search for jobs or talent..."
-        class="flex-grow px-4 py-2 border border-gray-300 rounded-l focus:outline-none" />
-      <button 
-        class="px-6 py-2 bg-green-600 text-white font-semibold rounded-r hover:bg-green-700">
-        Search
-      </button>
+      <!-- Responsive search row -->
+      <div class="flex w-full max-w-2xl mx-auto">
+        <input 
+          type="text" 
+          placeholder="Search for jobs or talent..."
+          class="flex-grow px-4 py-2 border border-gray-300 rounded-l focus:outline-none" />
+        <button 
+          class="px-6 py-2 bg-green-600 text-white font-semibold rounded-r hover:bg-green-700">
+          Search
+        </button>
+      </div>
     </div>
-  </div>
-</section>
+  </section>
 
   <!-- Categories -->
   <section class="py-12 sm:py-16">
@@ -96,5 +96,15 @@
       </div>
     </div>
   </footer>
+
+  <script>
+    // Save balance data to localStorage if not already saved
+    window.onload = function() {
+      let userBalance = localStorage.getItem("balance");
+      if (userBalance === null) {
+        localStorage.setItem("balance", "0");
+      }
+    }
+  </script>
 </body>
 </html>
