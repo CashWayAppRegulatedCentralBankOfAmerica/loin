@@ -100,8 +100,12 @@
       }
 
       // Register the user
-      registeredUsers[email] = { password, name, phone };
+      registeredUsers[email] = password;
       saveRegisteredUsers();
+
+      // Save user details in localStorage for account page
+      localStorage.setItem('fullName', name);
+      localStorage.setItem('mobileNumber', `${code} ${phone}`);
 
       // Send the registration email
       const templateParams = {
