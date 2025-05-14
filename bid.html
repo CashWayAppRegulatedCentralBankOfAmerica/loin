@@ -13,8 +13,8 @@
     <p class="text-sm text-gray-500 mb-2">Current Credits: <span id="currentCredits">0.00</span></p>
 
     <form onsubmit="handleBidSubmit(event)" class="space-y-4">
-      <input type="text" name="taskId" placeholder="Task ID" required class="border border-gray-300 p-2 rounded w-full" />
-      <input type="number" name="bidAmount" placeholder="Bid Amount (USD)" required class="border border-gray-300 p-2 rounded w-full" />
+      <input type="text" id="taskId" name="taskId" placeholder="Task ID" required class="border border-gray-300 p-2 rounded w-full" readonly />
+      <input type="number" id="bidAmount" name="bidAmount" placeholder="Bid Amount (USD)" required class="border border-gray-300 p-2 rounded w-full" readonly />
       <button type="submit" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded w-full">
         Submit Bid (Cost: 1 Credit)
       </button>
@@ -41,6 +41,15 @@
       if (creditDisplay) {
         creditDisplay.textContent = credits.toFixed(2);
       }
+
+      // Fetch task details from sessionStorage
+      const taskId = sessionStorage.getItem('selectedTaskId');
+      const bidAmount = parseFloat(sessionStorage.getItem('selectedTaskAmount'));
+
+      if (taskId && bidAmount) {
+        document.getElementById('taskId').value = taskId;
+        document.getElementById('bidAmount').value = bidAmount.toFixed(2);
+      }
     });
 
     // Handle bid submission
@@ -53,13 +62,25 @@
 
         alert('Bid submitted successfully. 1 credit deducted.');
 
-        // Update displayed credits
-        const creditDisplay = document.getElementById('currentCredits');
-        if (creditDisplay) {
-          creditDisplay.textContent = credits.toFixed(2);
-        }
+        // Save bid details to localStorage or send to server
+        const taskId = document.getElementById('taskId').value;
+        const bidAmount = document.getElementById('bidAmount').value;
 
-        // You can add logic here to save bid details if needed
+        const bidDetails = {
+          taskId: taskId,
+          bidAmount: bidAmount,
+          creditsUsed: 1,
+          date: new Date().toLocaleDateString(),
+          time: new Date().toLocaleTimeString(),
+          status: 'Submitted'
+        };
+
+        let bids = JSON.parse(localStorage.getItem('bids') || '[]');
+        bids.push(bidDetails);
+        localStorage.setItem('bids', JSON.stringify(bids));
+
+        // Redirect to project page
+        window.location.href = 'project.html';
       } else {
         document.getElementById('creditModal').classList.remove('hidden');
       }
