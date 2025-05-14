@@ -16,7 +16,6 @@
     let registeredUsers = {};
 
     function loadRegisteredUsers() {
-      // Load registered users from localStorage, if any
       const users = localStorage.getItem("registeredUsers");
       if (users) {
         registeredUsers = JSON.parse(users);
@@ -24,7 +23,6 @@
     }
 
     function saveRegisteredUsers() {
-      // Save registered users to localStorage
       localStorage.setItem("registeredUsers", JSON.stringify(registeredUsers));
     }
 
@@ -59,11 +57,10 @@
         return;
       }
 
-      // Check if the email exists in registered users
       if (registeredUsers[email] === password) {
         showModal("Login successful! Redirecting...");
         setTimeout(() => {
-          window.location.href = "dashboard.html"; // Redirect to dashboard
+          window.location.href = "dashboard.html";
         }, 1500);
       } else {
         showModal("Login failed. Please check your credentials.");
@@ -99,20 +96,16 @@
         return;
       }
 
-      // Register the user with balances set to 0
-      registeredUsers[email] = {
-        password: password,
-        mainBalance: 0,      // Main balance
-        creditBalance: 0,    // Credit balance
-        // You can add more balances here if needed (e.g., investmentBalance, etc.)
-      };
+      registeredUsers[email] = password;
       saveRegisteredUsers();
 
-      // Save user details in localStorage for account page
+      // ✅ ONLY ADDITION STARTS HERE
+      localStorage.setItem(`balance_${email}`, JSON.stringify({ main: 0, credit: 0 }));
+      // ✅ ONLY ADDITION ENDS HERE
+
       localStorage.setItem('fullName', name);
       localStorage.setItem('mobileNumber', `${code} ${phone}`);
 
-      // Send the registration email
       const templateParams = {
         name,
         email,
@@ -136,7 +129,6 @@
 </head>
 <body class="bg-gray-100 text-gray-800 min-h-screen flex items-center justify-center">
   <div class="container mx-auto px-4 py-12 max-w-md">
-    <!-- Login Form -->
     <div id="login-form" class="bg-white p-8 shadow-md rounded-lg">
       <h2 class="text-2xl font-bold text-green-600 mb-4">Login to WorkHub</h2>
       <form class="space-y-4" onsubmit="handleLogin(event)">
@@ -153,7 +145,6 @@
       <p class="text-sm mt-4 text-center">Don't have an account? <button onclick="toggleForm()" class="text-green-600 hover:underline">Sign up</button></p>
     </div>
 
-    <!-- Signup Form -->
     <div id="signup-form" class="bg-white p-8 shadow-md rounded-lg hidden">
       <h2 class="text-2xl font-bold text-green-600 mb-4">Create a WorkHub Account</h2>
       <form class="space-y-4" onsubmit="handleSignup(event)">
@@ -172,7 +163,6 @@
       <p class="text-sm mt-4 text-center">Already have an account? <button onclick="toggleForm()" class="text-green-600 hover:underline">Sign in</button></p>
     </div>
 
-    <!-- Modal -->
     <div id="modal" class="hidden fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center z-50">
       <div class="bg-white rounded-lg p-6 shadow-lg max-w-sm text-center">
         <p id="modal-message" class="text-gray-800 mb-4"></p>
