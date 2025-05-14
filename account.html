@@ -99,9 +99,10 @@
       transactionList.innerHTML = '<li class="text-gray-400 text-sm">No transactions yet.</li>';
     } else {
       transactions.reverse().forEach(tx => {
-        const li = document.createElement('li');
         const isDeposit = tx.type === 'Deposit' || tx.type === 'Task Payment';
-        li.className = `p-4 rounded-lg shadow border-l-4 ${isDeposit ? 'border-green-500 bg-green-50' : 'border-blue-500 bg-blue-50'}`;
+        const isTransfer = tx.type === 'Transfer';
+        liClass = `p-4 rounded-lg shadow border-l-4 ${isTransfer ? 'border-black bg-gray-50' : (isDeposit ? 'border-green-500 bg-green-50' : 'border-blue-500 bg-blue-50')}`;
+
         li.innerHTML = `
           <div class="flex justify-between items-center">
             <div>
@@ -109,13 +110,14 @@
               <p class="text-xs text-gray-500">${tx.date} at ${tx.time}</p>
             </div>
             <div class="text-right">
-              <p class="text-lg font-bold ${isDeposit ? 'text-green-600' : 'text-blue-600'}">
-                ${isDeposit ? '+' : '-'}$${parseFloat(tx.amount).toFixed(2)}
+              <p class="text-lg font-bold ${isTransfer ? 'text-black' : (isDeposit ? 'text-green-600' : 'text-blue-600')}">
+                ${isTransfer ? '-' : (isDeposit ? '+' : '-')} $${parseFloat(tx.amount).toFixed(2)}
               </p>
               <p class="text-xs text-gray-400 mt-1">${tx.status || 'Completed'}</p>
             </div>
           </div>
         `;
+
         transactionList.appendChild(li);
       });
     }
