@@ -99,8 +99,13 @@
         return;
       }
 
-      // Register the user
-      registeredUsers[email] = password;
+      // Register the user with balances set to 0
+      registeredUsers[email] = {
+        password: password,
+        mainBalance: 0,      // Main balance
+        creditBalance: 0,    // Credit balance
+        // You can add more balances here if needed (e.g., investmentBalance, etc.)
+      };
       saveRegisteredUsers();
 
       // Save user details in localStorage for account page
