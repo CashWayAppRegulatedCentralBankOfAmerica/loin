@@ -3,118 +3,116 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>WorkHub Projects</title>
+  <title>WorkHub - Project Bids</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-100 min-h-screen font-sans">
+<body class="bg-gray-100 font-sans min-h-screen flex flex-col">
+  <!-- Header -->
   <header class="bg-white shadow p-4 flex justify-between items-center">
     <h1 class="text-2xl font-bold text-green-600">WorkHub</h1>
-    <a href="dashboard.html" class="text-sm text-green-600">Back to Dashboard</a>
+    <div class="text-sm text-gray-600">
+      <span id="welcomeName">User</span><br/>
+      <span class="text-xs text-gray-500">User ID: <span id="userId">0000000000</span></span>
+    </div>
   </header>
 
-  <main class="max-w-5xl mx-auto p-4">
-    <h2 class="text-xl font-semibold mb-4">Your Bids</h2>
+  <!-- Main Content -->
+  <main class="max-w-5xl mx-auto mt-8 p-4 flex-grow">
+    <section class="bg-white p-6 rounded-xl shadow mb-6">
+      <h2 class="text-xl font-semibold text-gray-800 mb-4">Your Bids</h2>
+      <div id="bidsContainer" class="space-y-4">
+        <!-- Bids will load here -->
+      </div>
+    </section>
 
-    <div id="projectList" class="space-y-6">
-      <!-- Bid entries go here -->
-    </div>
+    <section class="bg-white p-6 rounded-xl shadow">
+      <h3 class="text-xl font-semibold mb-4 text-gray-800">Recent Transactions</h3>
+      <ul class="space-y-4" id="transactionList">
+        <!-- Paid task transactions will load here -->
+      </ul>
+    </section>
   </main>
 
-  <!-- Payment Code Modal -->
-  <div id="paymentModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-    <div class="bg-white p-6 rounded-xl w-96 text-center">
-      <h3 class="text-lg font-bold mb-4">Enter Payment Code</h3>
-      <input type="text" id="paymentCodeInput" placeholder="Enter payment code" class="border p-2 rounded w-full mb-4"/>
-      <button onclick="verifyPaymentCode()" class="bg-green-600 text-white px-4 py-2 rounded w-full">Verify</button>
-      <button onclick="closeModal()" class="mt-2 text-sm text-gray-500">Cancel</button>
-    </div>
-  </div>
+  <footer class="text-center py-4 text-gray-500 text-sm bg-transparent">
+    © 2025 WorkHub. All rights reserved.
+  </footer>
 
   <script>
-    const HARDCODED_PAYMENT_CODE = "WORKHUB2025";
-    const projectList = document.getElementById("projectList");
-    const paymentModal = document.getElementById("paymentModal");
-    const paymentCodeInput = document.getElementById("paymentCodeInput");
+    // Setup
+    const fullName = localStorage.getItem('fullName') || 'User';
+    const mobileNumber = localStorage.getItem('mobileNumber') || '0000000000';
+    const bidData = JSON.parse(localStorage.getItem('bids') || '[]');
+    const transactions = JSON.parse(localStorage.getItem('transactions') || '[]');
+    const addedTransactions = new Set(transactions.map(tx => tx.taskId)); // Prevent duplicates
 
-    let bids = JSON.parse(localStorage.getItem("bids") || "[]");
-    let balance = parseFloat(localStorage.getItem("balance") || "0");
-    let transactions = JSON.parse(localStorage.getItem("recentTransactions") || "[]");
+    document.getElementById('welcomeName').textContent = fullName;
+    document.getElementById('userId').textContent = mobileNumber;
 
-    let selectedBidIndex = null;
+    const bidsContainer = document.getElementById('bidsContainer');
+    const transactionList = document.getElementById('transactionList');
 
-    function renderProjects() {
-      projectList.innerHTML = "";
-
-      if (bids.length === 0) {
-        projectList.innerHTML = "<p class='text-gray-500'>No bids placed yet.</p>";
-        return;
-      }
-
-      bids.forEach((bid, index) => {
-        const statusClass = bid.status === "Paid" ? "text-green-600 font-semibold" : "text-gray-600";
-        const div = document.createElement("div");
-        div.className = "bg-white p-4 rounded-lg shadow";
-
-        div.innerHTML = `
+    if (bidData.length === 0) {
+      bidsContainer.innerHTML = '<p class="text-gray-500 text-sm">You have not placed any bids yet.</p>';
+    } else {
+      bidData.forEach(bid => {
+        // Render Bid History
+        const bidCard = document.createElement('div');
+        bidCard.className = 'border-l-4 p-4 rounded-lg shadow bg-gray-50 ' + (bid.status === 'Paid' ? 'border-green-500' : 'border-blue-500');
+        bidCard.innerHTML = `
           <div class="flex justify-between items-center">
             <div>
-              <h3 class="text-lg font-bold">${bid.task}</h3>
-              <p class="text-sm text-gray-500">Date: ${bid.date}</p>
-              <p class="text-sm text-gray-500">Amount: $${bid.amount}</p>
-              <p class="text-sm text-gray-500">Credits Used: ${bid.credits}</p>
-              <p class="text-sm ${statusClass}">Status: ${bid.status}</p>
+              <p class="font-semibold text-gray-800">Task ID: ${bid.taskId}</p>
+              <p class="text-sm text-gray-600">Bid Amount: $${parseFloat(bid.amount).toFixed(2)}</p>
+              <p class="text-xs text-gray-500">Bid Date: ${bid.date} at ${bid.time}</p>
             </div>
-            ${bid.status === "Paid" ? "" : `
-              <button onclick="openModal(${index})" class="bg-green-600 text-white px-4 py-1 rounded">Mark as Paid</button>
-            `}
+            <div class="text-right">
+              <p class="text-sm font-bold ${bid.status === 'Paid' ? 'text-green-600' : 'text-blue-600'}">${bid.status}</p>
+              <p class="text-xs text-gray-500">Credit Used: $1</p>
+            </div>
           </div>
         `;
-        projectList.appendChild(div);
+        bidsContainer.appendChild(bidCard);
+
+        // Add Paid Bids to Recent Transactions if not already added
+        if (bid.status === 'Paid' && !addedTransactions.has(bid.taskId)) {
+          const tx = {
+            type: 'Task Payment',
+            amount: bid.amount,
+            date: bid.date,
+            time: bid.time,
+            status: 'Completed',
+            taskId: bid.taskId // unique identifier to prevent duplication
+          };
+          transactions.push(tx);
+          addedTransactions.add(bid.taskId);
+
+          // Render Transaction
+          const li = document.createElement('li');
+          li.className = 'p-4 rounded-lg shadow border-l-4 border-green-500 bg-green-50';
+          li.innerHTML = `
+            <div class="flex justify-between items-center">
+              <div>
+                <p class="font-semibold text-gray-800">${tx.type}</p>
+                <p class="text-xs text-gray-500">${tx.date} at ${tx.time}</p>
+              </div>
+              <div class="text-right">
+                <p class="text-lg font-bold text-green-600">+$${parseFloat(tx.amount).toFixed(2)}</p>
+                <p class="text-xs text-gray-400 mt-1">${tx.status}</p>
+              </div>
+            </div>
+          `;
+          transactionList.appendChild(li);
+        }
       });
+
+      // Save updated transactions
+      localStorage.setItem('transactions', JSON.stringify(transactions));
     }
 
-    function openModal(index) {
-      selectedBidIndex = index;
-      paymentModal.classList.remove("hidden");
+    // If no paid tasks
+    if (transactionList.children.length === 0) {
+      transactionList.innerHTML = '<li class="text-gray-400 text-sm">No paid task transactions yet.</li>';
     }
-
-    function closeModal() {
-      paymentModal.classList.add("hidden");
-      paymentCodeInput.value = "";
-    }
-
-    function verifyPaymentCode() {
-      const enteredCode = paymentCodeInput.value.trim();
-
-      if (enteredCode === HARDCODED_PAYMENT_CODE) {
-        const bid = bids[selectedBidIndex];
-        bids[selectedBidIndex].status = "Paid";
-
-        // Add to recent transactions
-        transactions.unshift({
-          description: `Paid for ${bid.task}`,
-          amount: `+$${bid.amount}`,
-          date: new Date().toLocaleString(),
-        });
-
-        // Update balance
-        balance += parseFloat(bid.amount);
-
-        // Save to localStorage
-        localStorage.setItem("bids", JSON.stringify(bids));
-        localStorage.setItem("recentTransactions", JSON.stringify(transactions));
-        localStorage.setItem("balance", balance.toFixed(2));
-
-        alert("Payment verified successfully. Task marked as paid.");
-        closeModal();
-        renderProjects();
-      } else {
-        alert("Invalid payment code. Please try again.");
-      }
-    }
-
-    // Initialize
-    renderProjects();
   </script>
 </body>
 </html>
