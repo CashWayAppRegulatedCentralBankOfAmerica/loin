@@ -34,10 +34,34 @@
     const depositForm = document.getElementById("depositForm");
     depositForm.addEventListener("submit", function (e) {
       e.preventDefault();
+      
+      // Get deposit amount from user input
       const amount = parseFloat(document.getElementById("depositAmount").value);
+      
+      // Get current balance from localStorage
       let balance = parseFloat(localStorage.getItem("balance") || "0");
       balance += amount;
+
+      // Save new balance back to localStorage
       localStorage.setItem("balance", balance.toFixed(2));
+
+      // Create transaction object for logging
+      const transaction = {
+        type: "Deposit",
+        amount: amount.toFixed(2),
+        date: new Date().toLocaleString()
+      };
+
+      // Retrieve existing transactions from localStorage
+      const transactions = JSON.parse(localStorage.getItem("transactions") || "[]");
+      
+      // Add new transaction to transaction list
+      transactions.push(transaction);
+      
+      // Save updated transaction list to localStorage
+      localStorage.setItem("transactions", JSON.stringify(transactions));
+
+      // Show success message and redirect to account page
       alert("Deposit successful!");
       window.location.href = "account.html";
     });
