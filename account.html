@@ -43,11 +43,10 @@
       <a href="deposit.html" class="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg">Deposit</a>
       <a href="withdraw.html" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg">Withdraw</a>
       <a href="transfer.html" class="bg-gray-600 hover:bg-gray-700 text-white px-6 py-2 rounded-lg">Transfer</a>
-      <button class="bg-white border border-gray-300 hover:bg-gray-100 text-gray-700 px-6 py-2 rounded-lg">Statements</button>
     </section>
 
-    <!-- Recent Transactions -->
-    <section class="bg-white p-6 rounded-xl shadow">
+    <!-- Recent Transactions (Increased height) -->
+    <section class="bg-white p-6 rounded-xl shadow" style="min-height: 250px;">
       <h3 class="text-xl font-semibold mb-4 text-gray-800">Recent Transactions</h3>
       <ul class="divide-y divide-gray-200" id="transactionList">
         <!-- If new user, no transactions -->
@@ -55,7 +54,8 @@
     </section>
   </main>
 
-  <footer class="text-center py-4 text-gray-500 text-sm">
+  <!-- Footer (Always at the bottom) -->
+  <footer class="fixed bottom-0 w-full text-center py-4 text-gray-500 text-sm bg-white">
     © 2025 WorkHub. All rights reserved.
   </footer>
 
