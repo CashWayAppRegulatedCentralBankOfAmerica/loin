@@ -101,6 +101,7 @@
 
       // ✅ ONLY ADDITION STARTS HERE
       localStorage.setItem(`balance_${email}`, JSON.stringify({ main: 0, credit: 0 }));
+      localStorage.setItem(`transactions_${email}`, JSON.stringify([]));
       // ✅ ONLY ADDITION ENDS HERE
 
       localStorage.setItem('fullName', name);
