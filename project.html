@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>WorkHub Projects</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen font-sans">
+  <header class="bg-white shadow p-4 flex justify-between items-center">
+    <h1 class="text-2xl font-bold text-green-600">WorkHub</h1>
+    <a href="dashboard.html" class="text-sm text-green-600">Back to Dashboard</a>
+  </header>
+
+  <main class="max-w-5xl mx-auto p-4">
+    <h2 class="text-xl font-semibold mb-4">Your Bids</h2>
+
+    <div id="projectList" class="space-y-6">
+      <!-- Bid entries go here -->
+    </div>
+  </main>
+
+  <!-- Payment Code Modal -->
+  <div id="paymentModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+    <div class="bg-white p-6 rounded-xl w-96 text-center">
+      <h3 class="text-lg font-bold mb-4">Enter Payment Code</h3>
+      <input type="text" id="paymentCodeInput" placeholder="Enter payment code" class="border p-2 rounded w-full mb-4"/>
+      <button onclick="verifyPaymentCode()" class="bg-green-600 text-white px-4 py-2 rounded w-full">Verify</button>
+      <button onclick="closeModal()" class="mt-2 text-sm text-gray-500">Cancel</button>
+    </div>
+  </div>
+
+  <script>
+    const HARDCODED_PAYMENT_CODE = "WORKHUB2025";
+    const projectList = document.getElementById("projectList");
+    const paymentModal = document.getElementById("paymentModal");
+    const paymentCodeInput = document.getElementById("paymentCodeInput");
+
+    let bids = JSON.parse(localStorage.getItem("bids") || "[]");
+    let balance = parseFloat(localStorage.getItem("balance") || "0");
+    let transactions = JSON.parse(localStorage.getItem("recentTransactions") || "[]");
+
+    let selectedBidIndex = null;
+
+    function renderProjects() {
+      projectList.innerHTML = "";
+
+      if (bids.length === 0) {
+        projectList.innerHTML = "<p class='text-gray-500'>No bids placed yet.</p>";
+        return;
+      }
+
+      bids.forEach((bid, index) => {
+        const statusClass = bid.status === "Paid" ? "text-green-600 font-semibold" : "text-gray-600";
+        const div = document.createElement("div");
+        div.className = "bg-white p-4 rounded-lg shadow";
+
+        div.innerHTML = `
+          <div class="flex justify-between items-center">
+            <div>
+              <h3 class="text-lg font-bold">${bid.task}</h3>
+              <p class="text-sm text-gray-500">Date: ${bid.date}</p>
+              <p class="text-sm text-gray-500">Amount: $${bid.amount}</p>
+              <p class="text-sm text-gray-500">Credits Used: ${bid.credits}</p>
+              <p class="text-sm ${statusClass}">Status: ${bid.status}</p>
+            </div>
+            ${bid.status === "Paid" ? "" : `
+              <button onclick="openModal(${index})" class="bg-green-600 text-white px-4 py-1 rounded">Mark as Paid</button>
+            `}
+          </div>
+        `;
+        projectList.appendChild(div);
+      });
+    }
+
+    function openModal(index) {
+      selectedBidIndex = index;
+      paymentModal.classList.remove("hidden");
+    }
+
+    function closeModal() {
+      paymentModal.classList.add("hidden");
+      paymentCodeInput.value = "";
+    }
+
+    function verifyPaymentCode() {
+      const enteredCode = paymentCodeInput.value.trim();
+
+      if (enteredCode === HARDCODED_PAYMENT_CODE) {
+        const bid = bids[selectedBidIndex];
+        bids[selectedBidIndex].status = "Paid";
+
+        // Add to recent transactions
+        transactions.unshift({
+          description: `Paid for ${bid.task}`,
+          amount: `+$${bid.amount}`,
+          date: new Date().toLocaleString(),
+        });
+
+        // Update balance
+        balance += parseFloat(bid.amount);
+
+        // Save to localStorage
+        localStorage.setItem("bids", JSON.stringify(bids));
+        localStorage.setItem("recentTransactions", JSON.stringify(transactions));
+        localStorage.setItem("balance", balance.toFixed(2));
+
+        alert("Payment verified successfully. Task marked as paid.");
+        closeModal();
+        renderProjects();
+      } else {
+        alert("Invalid payment code. Please try again.");
+      }
+    }
+
+    // Initialize
+    renderProjects();
+  </script>
+</body>
+</html>
