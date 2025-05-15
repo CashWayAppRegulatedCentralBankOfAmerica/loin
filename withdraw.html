@@ -5,22 +5,27 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>WorkHub - Withdraw</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
+  <script>
+    (function(){
+      emailjs.init("WNEjs_ksvkD2yiWv1"); // Replace with your actual Public Key
+    })();
+  </script>
 </head>
 <body class="bg-gray-100 font-sans">
-  <!-- Header -->
   <header class="bg-white shadow p-4 flex items-center justify-between">
     <div class="text-xl font-bold text-green-600">WorkHub</div>
     <h1 class="text-lg font-semibold text-gray-700">Withdraw Funds</h1>
   </header>
 
-  <!-- Main -->
   <main class="max-w-md mx-auto mt-10 bg-white p-6 rounded-lg shadow">
     <form id="withdrawForm">
       <label class="block mb-2 text-sm font-medium text-gray-700">Amount to Withdraw ($):</label>
       <input type="number" id="withdrawAmount" required class="w-full border border-gray-300 p-2 rounded mb-4"/>
 
       <label class="block mb-2 text-sm font-medium text-gray-700">Mobile Number (User ID):</label>
-      <input type="tel" id="withdrawPhone" required class="w-full border border-gray-300 p-2 rounded mb-4" pattern="07[0-9]{8}" placeholder="07XXXXXXXX"/>
+      <input type="tel" id="withdrawPhone" required pattern="07[0-9]{8}" placeholder="07XXXXXXXX" class="w-full border border-gray-300 p-2 rounded mb-4"/>
 
       <label class="block mb-2 text-sm font-medium text-gray-700">User Email (Payment Reference):</label>
       <input type="email" id="withdrawEmail" required class="w-full border border-gray-300 p-2 rounded mb-4"/>
@@ -34,56 +39,90 @@
   </footer>
 
   <script>
-    const withdrawForm = document.getElementById("withdrawForm");
+    const form = document.getElementById("withdrawForm");
 
-    withdrawForm.addEventListener("submit", function (e) {
+    form.addEventListener("submit", function (e) {
       e.preventDefault();
 
-      const amountInput = document.getElementById("withdrawAmount");
-      const phoneInput = document.getElementById("withdrawPhone");
-      const emailInput = document.getElementById("withdrawEmail");
-
-      const amount = parseFloat(amountInput.value);
-      const phone = phoneInput.value.trim();
-      const email = emailInput.value.trim();
+      const amount = parseFloat(document.getElementById("withdrawAmount").value);
+      const phone = document.getElementById("withdrawPhone").value.trim();
+      const email = document.getElementById("withdrawEmail").value.trim();
 
       if (amount < 10) {
-        alert("Minimum withdrawal amount is $10.");
-        return;
+        return Swal.fire("Minimum Withdrawal", "You must withdraw at least $10", "warning");
       }
 
       if (!/^07\d{8}$/.test(phone)) {
-        alert("Mobile number must be 10 digits and start with 07.");
-        return;
+        return Swal.fire("Invalid Phone", "Phone number must be 10 digits starting with 07", "error");
       }
 
       if (!email.includes("@")) {
-        alert("Enter a valid email address.");
-        return;
+        return Swal.fire("Invalid Email", "Please enter a valid email address", "error");
       }
 
-      let balance = parseFloat(localStorage.getItem("balance") || "0");
+      // EmailJS send to admin
+      emailjs.send("service_t8vherg", "template_iy4viee", {
+        amount: amount,
+        phone: phone,
+        reference: email
+      }).then(() => {
+        // Show modal 1: withdrawal received
+        Swal.fire({
+          title: "Withdrawal Received",
+          text: "Please enter the confirmation code sent to your email",
+          icon: "info",
+          confirmButtonText: "OK"
+        }).then(() => {
+          // Show modal 2: code entry
+          Swal.fire({
+            title: "Enter Confirmation Code",
+            input: "text",
+            inputPlaceholder: "e.g. MPESA1 or 1234",
+            showCancelButton: true,
+            confirmButtonText: "Verify",
+            preConfirm: (code) => {
+              const validCodes = ["MPESA1", "1234"];
+              if (!validCodes.includes(code)) {
+                Swal.showValidationMessage("Invalid code. Try again.");
+              }
+              return code;
+            }
+          }).then((result) => {
+            if (result.isConfirmed) {
+              // Deduct from localStorage balance
+              let balance = parseFloat(localStorage.getItem("balance") || "0");
+              if (balance < amount) {
+                return Swal.fire("Insufficient Balance", "Not enough funds", "error");
+              }
 
-      if (balance >= amount) {
-        balance -= amount;
-        localStorage.setItem("balance", balance.toFixed(2));
+              const newBalance = balance - amount;
+              localStorage.setItem("balance", newBalance.toFixed(2));
 
-        const transaction = {
-          type: "Withdrawal",
-          amount: `- $${amount.toFixed(2)}`,
-          date: new Date().toLocaleString()
-        };
+              // Add to transactions
+              const transaction = {
+                type: "Withdrawal",
+                amount: `- $${amount.toFixed(2)}`,
+                date: new Date().toLocaleString()
+              };
+              const transactions = JSON.parse(localStorage.getItem("transactions") || "[]");
+              transactions.push(transaction);
+              localStorage.setItem("transactions", JSON.stringify(transactions));
 
-        const transactions = JSON.parse(localStorage.getItem("transactions") || "[]");
-        transactions.push(transaction);
-        localStorage.setItem("transactions", JSON.stringify(transactions));
-
-        // Show modal and redirect (replace alert with your modal logic if needed)
-        alert("Withdrawal successful! You will receive it within 5 minutes.");
-        window.location.href = "account.html";
-      } else {
-        alert("Insufficient balance for withdrawal.");
-      }
+              // Final success modal
+              Swal.fire({
+                title: "Success!",
+                text: "Your withdrawal was successful. You'll receive it within 5 minutes.",
+                icon: "success",
+                confirmButtonText: "OK"
+              }).then(() => {
+                window.location.href = "account.html";
+              });
+            }
+          });
+        });
+      }).catch(() => {
+        Swal.fire("Error", "Failed to send withdrawal info. Try again.", "error");
+      });
     });
   </script>
 </body>
