@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>WorkHub - Account Overview</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
@@ -11,7 +11,7 @@
   <header class="bg-white shadow p-4 flex justify-between items-center">
     <h1 class="text-2xl font-bold text-green-600">WorkHub</h1>
     <div class="text-sm text-gray-600">
-      <span id="welcomeName">User</span><br>
+      <span id="welcomeName">User</span><br />
       <span class="text-xs text-gray-500">User ID: <span id="userId">0000000000</span></span>
     </div>
   </header>
@@ -68,7 +68,7 @@
     const paidTasks = JSON.parse(localStorage.getItem('paidTasks') || '[]');
     let newPaymentAdded = false;
 
-    // Add new task payments
+    // Add new task payments to transactions if not already logged
     paidTasks.forEach(task => {
       const alreadyLogged = transactions.some(tx => tx.id === task.id);
       if (!alreadyLogged) {
@@ -95,29 +95,32 @@
       audio.play();
     }
 
-    // Display user info
+    // Display user info and balances
     document.getElementById('welcomeName').textContent = fullName;
     document.getElementById('userId').textContent = mobileNumber;
     document.getElementById('totalBalance').textContent = `$${(balance + credits).toFixed(2)}`;
     document.getElementById('availableBalance').textContent = `$${balance.toFixed(2)}`;
     document.getElementById('creditBalance').textContent = `$${credits.toFixed(2)}`;
 
-    // Sort transactions: latest first (by date and time)
+    // Sort transactions by date and time descending (newest first)
     transactions.sort((a, b) => {
       const aDate = new Date(`${a.date} ${a.time}`);
       const bDate = new Date(`${b.date} ${b.time}`);
-      return bDate - aDate;
+      return bDate - aDate;  // newest first
     });
 
     const transactionList = document.getElementById('transactionList');
     if (transactions.length === 0) {
       transactionList.innerHTML = '<li class="text-gray-400 text-sm">No transactions yet.</li>';
     } else {
+      transactionList.innerHTML = ''; // clear before adding
       transactions.forEach(tx => {
         const li = document.createElement('li');
         const isDeposit = tx.type === 'Deposit' || tx.type === 'Task Payment';
         const isTransfer = tx.type === 'Transfer';
-        li.className = `p-4 rounded-lg shadow border-l-4 ${isTransfer ? 'border-black bg-gray-50' : (isDeposit ? 'border-green-500 bg-green-50' : 'border-blue-500 bg-blue-50')}`;
+        li.className = `p-4 rounded-lg shadow border-l-4 ${
+          isTransfer ? 'border-black bg-gray-50' : (isDeposit ? 'border-green-500 bg-green-50' : 'border-blue-500 bg-blue-50')
+        }`;
         li.innerHTML = `
           <div class="flex justify-between items-center">
             <div>
@@ -125,7 +128,9 @@
               <p class="text-xs text-gray-500">${tx.date} at ${tx.time}</p>
             </div>
             <div class="text-right">
-              <p class="text-lg font-bold ${isTransfer ? 'text-black' : (isDeposit ? 'text-green-600' : 'text-blue-600')}">
+              <p class="text-lg font-bold ${
+                isTransfer ? 'text-black' : (isDeposit ? 'text-green-600' : 'text-blue-600')
+              }">
                 ${isTransfer ? '-' : (isDeposit ? '+' : '-')} $${parseFloat(tx.amount).toFixed(2)}
               </p>
               <p class="text-xs text-gray-400 mt-1">${tx.status || 'Completed'}</p>
