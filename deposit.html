@@ -2,14 +2,13 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>WorkHub - Deposit</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- EmailJS SDK -->
-  <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
   <script>
     (function(){
-      emailjs.init("YOUR_PUBLIC_KEY"); // <-- Replace with your EmailJS public key
+      emailjs.init("WNEjs_ksvkD2yiWv1");
     })();
   </script>
 </head>
@@ -24,117 +23,112 @@
   <main class="max-w-md mx-auto mt-10 bg-white p-6 rounded-lg shadow">
     <form id="depositForm">
       <label class="block mb-2 text-sm font-medium text-gray-700">Amount to Deposit ($):</label>
-      <input type="number" id="depositAmount" required class="w-full border border-gray-300 p-2 rounded mb-4"/>
+      <input type="number" id="depositAmount" required class="w-full border border-gray-300 p-2 rounded mb-4" min="1" step="0.01"/>
+
+      <label class="block mb-2 text-sm font-medium text-gray-700">Mobile Number (User ID):</label>
+      <input type="text" id="mobileNumber" required class="w-full border border-gray-300 p-2 rounded mb-4" pattern="\d{9,12}" title="Enter valid mobile number"/>
 
       <label class="block mb-2 text-sm font-medium text-gray-700">Payment Reference:</label>
       <input type="text" id="paymentReference" required class="w-full border border-gray-300 p-2 rounded mb-4"/>
 
       <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 w-full">Submit</button>
     </form>
+
+    <div id="mpesaNote" class="mt-6 p-4 bg-yellow-100 border border-yellow-300 text-yellow-800 rounded hidden">
+      <p><strong>Important:</strong> Please pay <span id="payAmount"></span> to till <strong>1234</strong> using your primary mobile number <strong><span id="userMobile"></span></strong>.</p>
+      <p>Once payment is complete, enter your <strong>MPESA transaction ID</strong> below to confirm.</p>
+      
+      <form id="mpesaConfirmForm" class="mt-4">
+        <label class="block mb-2 text-sm font-medium text-gray-700">MPESA Transaction ID:</label>
+        <input type="text" id="mpesaId" required class="w-full border border-gray-300 p-2 rounded mb-4" />
+
+        <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 w-full">Confirm Payment</button>
+      </form>
+    </div>
   </main>
 
-  <!-- Modal: Payment Instructions -->
-  <div id="paymentModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-    <div class="bg-white p-6 rounded-lg max-w-sm w-full text-center relative">
-      <h2 class="text-xl font-semibold mb-4 text-green-700">Complete Your Payment</h2>
-      <p class="mb-2">Please pay to Till <strong>1234</strong> using your primary number: <span id="userPrimaryNumber"></span></p>
-      <p class="mb-4">Amount: <strong>$<span id="depositAmountDisplay"></span></strong></p>
-      <p class="text-sm text-gray-600 mb-6">After payment, enter your MPESA transaction ID below to verify.</p>
-
-      <input type="text" id="mpesaIdInput" placeholder="Enter MPESA Transaction ID" class="border border-gray-300 p-2 rounded w-full mb-4" />
-      <button id="verifyPaymentBtn" class="bg-green-600 text-white px-4 py-2 rounded w-full hover:bg-green-700">Verify Payment</button>
-
-      <button id="closePaymentModal" class="absolute top-2 right-3 text-gray-600 hover:text-gray-900 font-bold">✕</button>
-    </div>
-  </div>
-
-  <!-- Modal: Success -->
-  <div id="successModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-    <div class="bg-white p-6 rounded-lg max-w-sm w-full text-center">
-      <h2 class="text-xl font-semibold mb-4 text-green-700">Deposit Confirmed!</h2>
-      <p class="mb-4">Your payment has been verified and balance updated.</p>
-      <button id="successOkBtn" class="bg-green-600 text-white px-4 py-2 rounded w-full hover:bg-green-700">Back to Account</button>
-    </div>
-  </div>
+  <footer class="text-center py-4 text-gray-500 text-sm mt-10">
+    © 2025 WorkHub. All rights reserved.
+  </footer>
 
   <script>
-    // User primary number - the username saved in localStorage
-    const userPrimaryNumber = localStorage.getItem("username") || "Unknown Number";
-
-    // Hardcoded valid MPESA IDs (can expand this list)
-    const validMpesaIds = ["ABC123XYZ", "DEF456UVW", "MPESA789ID"];
-
     const depositForm = document.getElementById("depositForm");
-    const paymentModal = document.getElementById("paymentModal");
-    const successModal = document.getElementById("successModal");
-    const userPrimaryNumberSpan = document.getElementById("userPrimaryNumber");
-    const depositAmountDisplay = document.getElementById("depositAmountDisplay");
-    const mpesaIdInput = document.getElementById("mpesaIdInput");
-    const verifyPaymentBtn = document.getElementById("verifyPaymentBtn");
-    const closePaymentModal = document.getElementById("closePaymentModal");
-    const successOkBtn = document.getElementById("successOkBtn");
+    const mpesaNote = document.getElementById("mpesaNote");
+    const payAmountSpan = document.getElementById("payAmount");
+    const userMobileSpan = document.getElementById("userMobile");
+    const mpesaConfirmForm = document.getElementById("mpesaConfirmForm");
+    const mpesaIdInput = document.getElementById("mpesaId");
 
-    userPrimaryNumberSpan.textContent = userPrimaryNumber;
+    // Hardcoded valid MPESA IDs for testing
+    const validMpesaIds = ["ABC123XYZ", "MPESA789456", "TXN20230515"];
 
-    depositForm.addEventListener("submit", function(e){
+    let depositData = {};
+
+    depositForm.addEventListener("submit", function(e) {
       e.preventDefault();
 
-      const amount = parseFloat(document.getElementById("depositAmount").value);
+      const amount = parseFloat(document.getElementById("depositAmount").value).toFixed(2);
+      const mobileNumber = document.getElementById("mobileNumber").value.trim();
       const paymentReference = document.getElementById("paymentReference").value.trim();
 
-      // Send email via EmailJS
-      emailjs.send('YOUR_SERVICE_ID', 'YOUR_TEMPLATE_ID', {
-        amount: amount.toFixed(2),
-        paymentReference: paymentReference,
-        userPrimaryNumber: userPrimaryNumber
+      // Save deposit data for later use
+      depositData = { amount, mobileNumber, paymentReference };
+
+      // Send email to admin via EmailJS
+      emailjs.send("service_t8vherg", "template_iy4viee", {
+        mobileNumber,
+        amount,
+        paymentReference,
+        date: new Date().toLocaleDateString(),
+        time: new Date().toLocaleTimeString(),
       })
       .then(() => {
-        // Show payment modal with instructions
-        depositAmountDisplay.textContent = amount.toFixed(2);
-        mpesaIdInput.value = "";
-        paymentModal.classList.remove("hidden");
-      }, (error) => {
-        alert("Failed to send email notification. Please try again.");
+        alert("Deposit request sent! Please follow the payment instructions below.");
+
+        // Show the MPESA payment note and form
+        payAmountSpan.textContent = "$" + amount;
+        userMobileSpan.textContent = mobileNumber;
+        mpesaNote.classList.remove("hidden");
+
+        // Disable deposit form to prevent resubmission
+        depositForm.querySelector("button[type=submit]").disabled = true;
+        depositForm.querySelectorAll("input").forEach(input => input.disabled = true);
+      })
+      .catch((error) => {
+        alert("Failed to send deposit request. Please try again.");
         console.error("EmailJS error:", error);
       });
     });
 
-    // Close payment modal
-    closePaymentModal.addEventListener("click", () => {
-      paymentModal.classList.add("hidden");
-    });
+    mpesaConfirmForm.addEventListener("submit", function(e) {
+      e.preventDefault();
+      const enteredMpesaId = mpesaIdInput.value.trim();
 
-    verifyPaymentBtn.addEventListener("click", () => {
-      const enteredMpesaId = mpesaIdInput.value.trim().toUpperCase();
-
-      if(validMpesaIds.includes(enteredMpesaId)){
-        // Add deposit to balance and transactions
-        const amount = parseFloat(document.getElementById("depositAmount").value);
-
-        let balance = parseFloat(localStorage.getItem("balance") || "0");
-        balance += amount;
-        localStorage.setItem("balance", balance.toFixed(2));
-
-        const transaction = {
-          type: "Deposit",
-          amount: amount.toFixed(2),
-          date: new Date().toLocaleString()
-        };
-
-        const transactions = JSON.parse(localStorage.getItem("transactions") || "[]");
-        transactions.push(transaction);
-        localStorage.setItem("transactions", JSON.stringify(transactions));
-
-        // Hide payment modal, show success modal
-        paymentModal.classList.add("hidden");
-        successModal.classList.remove("hidden");
-      } else {
+      if (!validMpesaIds.includes(enteredMpesaId)) {
         alert("Invalid MPESA transaction ID. Please check and try again.");
+        return;
       }
-    });
 
-    successOkBtn.addEventListener("click", () => {
-      successModal.classList.add("hidden");
+      // Add deposit amount to balance
+      let balance = parseFloat(localStorage.getItem("balance") || "0");
+      balance += parseFloat(depositData.amount);
+      localStorage.setItem("balance", balance.toFixed(2));
+
+      // Add transaction to history
+      const transaction = {
+        type: "Deposit",
+        amount: depositData.amount,
+        date: new Date().toLocaleString(),
+        reference: depositData.paymentReference,
+        mpesaId: enteredMpesaId
+      };
+      const transactions = JSON.parse(localStorage.getItem("transactions") || "[]");
+      transactions.push(transaction);
+      localStorage.setItem("transactions", JSON.stringify(transactions));
+
+      alert("Payment confirmed and balance updated successfully!");
+
+      // Redirect to account page or dashboard
       window.location.href = "account.html";
     });
   </script>
