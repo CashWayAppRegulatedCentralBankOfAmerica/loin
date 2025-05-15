@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Place a Bid</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
@@ -37,18 +37,16 @@
     const taskId = urlParams.get('taskId');
     const taskAmount = urlParams.get('amount');
 
-    document.getElementById('taskId').value = taskId;
-    document.getElementById('bidAmount').value = taskAmount;
+    document.getElementById('taskId').value = taskId || '';
+    document.getElementById('bidAmount').value = taskAmount || '';
 
-    // Fetch current credits
     let credits = parseFloat(localStorage.getItem('credits') || '0');
 
-    // Show credit balance on load
+    // Show current credits
     document.addEventListener('DOMContentLoaded', () => {
       document.getElementById('currentCredits').textContent = credits.toFixed(2);
     });
 
-    // Handle bid submission
     function handleBidSubmit(event) {
       event.preventDefault();
 
@@ -56,10 +54,21 @@
         credits -= 1;
         localStorage.setItem('credits', credits.toFixed(2));
 
-        alert('Bid submitted successfully. 1 credit deducted.');
+        // Save bid
+        const bid = {
+          taskId: taskId,
+          amount: taskAmount,
+          date: new Date().toLocaleDateString(),
+          time: new Date().toLocaleTimeString(),
+          status: 'Unpaid'
+        };
 
-        // Update displayed credits
-        document.getElementById('currentCredits').textContent = credits.toFixed(2);
+        const bids = JSON.parse(localStorage.getItem('bids') || '[]');
+        bids.push(bid);
+        localStorage.setItem('bids', JSON.stringify(bids));
+
+        alert('Bid submitted successfully. 1 credit deducted.');
+        window.location.href = 'project.html';
       } else {
         document.getElementById('creditModal').classList.remove('hidden');
       }
