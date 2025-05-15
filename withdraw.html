@@ -5,15 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>WorkHub - Withdraw</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
-  <script>
-    (function(){
-      emailjs.init("WNEjs_ksvkD2yiWv1"); // Your public key
-    })();
-  </script>
 </head>
 <body class="bg-gray-100 font-sans">
-
   <!-- Header -->
   <header class="bg-white shadow p-4 flex items-center justify-between">
     <div class="text-xl font-bold text-green-600">WorkHub</div>
@@ -26,11 +19,11 @@
       <label class="block mb-2 text-sm font-medium text-gray-700">Amount to Withdraw ($):</label>
       <input type="number" id="withdrawAmount" required class="w-full border border-gray-300 p-2 rounded mb-4"/>
 
-      <label class="block mb-2 text-sm font-medium text-gray-700">Phone Number to Receive:</label>
-      <input type="tel" id="withdrawPhone" required class="w-full border border-gray-300 p-2 rounded mb-4"/>
+      <label class="block mb-2 text-sm font-medium text-gray-700">Mobile Number (User ID):</label>
+      <input type="tel" id="withdrawPhone" required class="w-full border border-gray-300 p-2 rounded mb-4" pattern="07[0-9]{8}" placeholder="07XXXXXXXX"/>
 
-      <label class="block mb-2 text-sm font-medium text-gray-700">Payment Reference:</label>
-      <input type="text" id="withdrawRef" required class="w-full border border-gray-300 p-2 rounded mb-4"/>
+      <label class="block mb-2 text-sm font-medium text-gray-700">User Email (Payment Reference):</label>
+      <input type="email" id="withdrawEmail" required class="w-full border border-gray-300 p-2 rounded mb-4"/>
 
       <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 w-full">Submit</button>
     </form>
@@ -46,86 +39,52 @@
     withdrawForm.addEventListener("submit", function (e) {
       e.preventDefault();
 
-      const amount = parseFloat(document.getElementById("withdrawAmount").value);
-      const phone = document.getElementById("withdrawPhone").value.trim();
-      const reference = document.getElementById("withdrawRef").value.trim();
+      const amountInput = document.getElementById("withdrawAmount");
+      const phoneInput = document.getElementById("withdrawPhone");
+      const emailInput = document.getElementById("withdrawEmail");
 
-      let balance = parseFloat(localStorage.getItem("balance") || "0");
+      const amount = parseFloat(amountInput.value);
+      const phone = phoneInput.value.trim();
+      const email = emailInput.value.trim();
 
-      if (amount > balance) {
-        showModal("Insufficient balance for withdrawal.");
+      if (amount < 10) {
+        alert("Minimum withdrawal amount is $10.");
         return;
       }
 
-      // Send withdrawal info to admin via EmailJS
-      emailjs.send("service_t8vherg", "template_sqgf423", {
-        amount,
-        phone,
-        reference
-      }).then(() => {
-        showModal("Withdrawal request received. Click OK to continue.", () => {
-          showInputModal("Enter the confirmation code sent to your email", (code) => {
-            if (code === "MPESA1" || code === "1234") {
-              balance -= amount;
-              localStorage.setItem("balance", balance.toFixed(2));
+      if (!/^07\d{8}$/.test(phone)) {
+        alert("Mobile number must be 10 digits and start with 07.");
+        return;
+      }
 
-              const transaction = {
-                type: "Withdrawal",
-                amount: `- $${amount.toFixed(2)}`,
-                date: new Date().toLocaleString()
-              };
+      if (!email.includes("@")) {
+        alert("Enter a valid email address.");
+        return;
+      }
 
-              const transactions = JSON.parse(localStorage.getItem("transactions") || "[]");
-              transactions.unshift(transaction);
-              localStorage.setItem("transactions", JSON.stringify(transactions));
+      let balance = parseFloat(localStorage.getItem("balance") || "0");
 
-              showModal("Withdrawal successful! You will receive funds within 5 minutes.", () => {
-                window.location.href = "account.html";
-              });
-            } else {
-              showModal("Invalid confirmation code. Withdrawal declined.");
-            }
-          });
-        });
-      }).catch((err) => {
-        console.error("EmailJS error:", err);
-        showModal("Failed to send withdrawal info. Please try again.");
-      });
+      if (balance >= amount) {
+        balance -= amount;
+        localStorage.setItem("balance", balance.toFixed(2));
+
+        const transaction = {
+          type: "Withdrawal",
+          amount: `- $${amount.toFixed(2)}`,
+          date: new Date().toLocaleString()
+        };
+
+        const transactions = JSON.parse(localStorage.getItem("transactions") || "[]");
+        transactions.push(transaction);
+        localStorage.setItem("transactions", JSON.stringify(transactions));
+
+        // Show modal and redirect (replace alert with your modal logic if needed)
+        alert("Withdrawal successful! You will receive it within 5 minutes.");
+        window.location.href = "account.html";
+      } else {
+        alert("Insufficient balance for withdrawal.");
+      }
     });
-
-    function showModal(message, callback) {
-      const modal = document.createElement("div");
-      modal.innerHTML = `
-        <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div class="bg-white p-6 rounded-xl shadow-lg max-w-sm w-full text-center">
-            <p class="mb-4 text-lg font-medium">${message}</p>
-            <button class="bg-green-600 text-white px-4 py-2 rounded" id="modal-ok">OK</button>
-          </div>
-        </div>`;
-      document.body.appendChild(modal);
-      modal.querySelector("#modal-ok").addEventListener("click", () => {
-        modal.remove();
-        if (callback) callback();
-      });
-    }
-
-    function showInputModal(promptText, callback) {
-      const modal = document.createElement("div");
-      modal.innerHTML = `
-        <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div class="bg-white p-6 rounded-xl shadow-lg max-w-sm w-full text-center">
-            <p class="mb-3 text-lg font-medium">${promptText}</p>
-            <input type="text" id="codeInput" placeholder="Enter code" class="border p-2 w-full rounded mb-4" />
-            <button class="bg-blue-600 text-white px-4 py-2 rounded" id="submit-code">Submit</button>
-          </div>
-        </div>`;
-      document.body.appendChild(modal);
-      modal.querySelector("#submit-code").addEventListener("click", () => {
-        const input = modal.querySelector("#codeInput").value.trim();
-        modal.remove();
-        callback(input);
-      });
-    }
   </script>
 </body>
 </html>
