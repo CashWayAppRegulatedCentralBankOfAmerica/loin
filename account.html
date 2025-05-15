@@ -58,21 +58,17 @@
     © 2025 WorkHub. All rights reserved.
   </footer>
 
-  <!-- Script to retrieve and display user data -->
+  <!-- Script -->
   <script>
     const fullName = localStorage.getItem('fullName') || 'User';
     const mobileNumber = localStorage.getItem('mobileNumber') || '0000000000';
     let balance = parseFloat(localStorage.getItem('balance') || '0');
     const credits = parseFloat(localStorage.getItem('credits') || '0');
     let transactions = JSON.parse(localStorage.getItem('transactions') || '[]');
-
-    // Fetch completed paid tasks from localStorage
     const paidTasks = JSON.parse(localStorage.getItem('paidTasks') || '[]');
-
-    // Track if any new transaction was added
     let newPaymentAdded = false;
 
-    // Add new paid task transactions if not already added
+    // Add new task payments
     paidTasks.forEach(task => {
       const alreadyLogged = transactions.some(tx => tx.id === task.id);
       if (!alreadyLogged) {
@@ -85,32 +81,39 @@
           status: 'Paid'
         };
         transactions.push(tx);
-        balance += parseFloat(task.amount); // Update balance
+        balance += parseFloat(task.amount);
         newPaymentAdded = true;
       }
     });
 
-    // Save updated data
+    // Save updated transactions and balance
     localStorage.setItem('transactions', JSON.stringify(transactions));
     localStorage.setItem('balance', balance.toFixed(2));
 
-    // Play notification sound if new task added
     if (newPaymentAdded) {
       const audio = new Audio('https://notificationsounds.com/storage/sounds/file-sounds-1150-pristine.mp3');
       audio.play();
     }
 
+    // Display user info
     document.getElementById('welcomeName').textContent = fullName;
     document.getElementById('userId').textContent = mobileNumber;
     document.getElementById('totalBalance').textContent = `$${(balance + credits).toFixed(2)}`;
     document.getElementById('availableBalance').textContent = `$${balance.toFixed(2)}`;
     document.getElementById('creditBalance').textContent = `$${credits.toFixed(2)}`;
 
+    // Sort transactions: latest first (by date and time)
+    transactions.sort((a, b) => {
+      const aDate = new Date(`${a.date} ${a.time}`);
+      const bDate = new Date(`${b.date} ${b.time}`);
+      return bDate - aDate;
+    });
+
     const transactionList = document.getElementById('transactionList');
     if (transactions.length === 0) {
       transactionList.innerHTML = '<li class="text-gray-400 text-sm">No transactions yet.</li>';
     } else {
-      transactions.reverse().forEach(tx => {
+      transactions.forEach(tx => {
         const li = document.createElement('li');
         const isDeposit = tx.type === 'Deposit' || tx.type === 'Task Payment';
         const isTransfer = tx.type === 'Transfer';
