@@ -34,9 +34,8 @@
   <script>
     const fullName = localStorage.getItem('fullName') || 'User';
     const mobileNumber = localStorage.getItem('mobileNumber') || '0000000000';
-    const bidData = JSON.parse(localStorage.getItem('bids') || '[]');
-    const transactions = JSON.parse(localStorage.getItem('transactions') || '[]');
-    const addedTransactions = new Set(transactions.map(tx => tx.taskId));
+    let bidData = JSON.parse(localStorage.getItem('bids') || '[]');
+    let transactions = JSON.parse(localStorage.getItem('transactions') || '[]');
 
     document.getElementById('welcomeName').textContent = fullName;
     document.getElementById('userId').textContent = mobileNumber;
@@ -74,8 +73,26 @@
             if (code === '1234') {
               bid.status = 'Paid';
               alert("Payment verified.");
-              addToTransactions(bid);
+
+              // Save bid status
+              bidData[index] = bid;
               localStorage.setItem('bids', JSON.stringify(bidData));
+
+              // Only add transaction if not already added
+              const alreadyAdded = transactions.some(t => t.taskId === bid.taskId && t.type === 'Task Payment');
+              if (!alreadyAdded) {
+                const tx = {
+                  type: 'Task Payment',
+                  amount: bid.amount,
+                  date: bid.date,
+                  time: bid.time,
+                  status: 'Completed',
+                  taskId: bid.taskId
+                };
+                transactions.push(tx);
+                localStorage.setItem('transactions', JSON.stringify(transactions));
+              }
+
               renderBids();
               renderTransactions();
             } else {
@@ -91,35 +108,24 @@
       });
     }
 
-    function addToTransactions(bid) {
-      if (addedTransactions.has(bid.taskId)) return;
-      const tx = {
-        type: 'Task Payment',
-        amount: bid.amount,
-        date: bid.date,
-        time: bid.time,
-        status: 'Completed',
-        taskId: bid.taskId
-      };
-      transactions.push(tx);
-      addedTransactions.add(bid.taskId);
-      localStorage.setItem('transactions', JSON.stringify(transactions));
-    }
-
     function renderTransactions() {
       transactionList.innerHTML = '';
-      if (transactions.length === 0) {
+
+      const bidTransactions = transactions.filter(tx => tx.type === 'Task Payment');
+
+      if (bidTransactions.length === 0) {
         transactionList.innerHTML = '<li class="text-gray-400 text-sm">No paid task transactions yet.</li>';
         return;
       }
 
-      transactions.forEach(tx => {
+      bidTransactions.forEach(tx => {
         const li = document.createElement('li');
         li.className = 'p-4 rounded-lg shadow border-l-4 border-green-500 bg-green-50';
         li.innerHTML = `
           <div class="flex justify-between items-center">
             <div>
               <p class="font-semibold text-gray-800">${tx.type}</p>
+              <p class="text-xs text-gray-500">Task ID: ${tx.taskId}</p>
               <p class="text-xs text-gray-500">${tx.date} at ${tx.time}</p>
             </div>
             <div class="text-right">
@@ -132,7 +138,7 @@
       });
     }
 
-    // Initial render
+    // Initialize
     renderBids();
     renderTransactions();
   </script>
