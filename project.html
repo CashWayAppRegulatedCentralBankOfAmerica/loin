@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" >
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -20,152 +20,148 @@
       font-weight: 600;
       min-width: 250px;
     }
-    .modal {
-      position: fixed;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.4);
-      display: none;
-      align-items: center;
-      justify-content: center;
-      z-index: 10000;
-    }
-    .modal-content {
-      background: white;
-      padding: 2rem;
-      border-radius: 0.5rem;
-      width: 90%;
-      max-width: 400px;
-      text-align: center;
+    #verifyModal {
+      background: rgba(0, 0, 0, 0.5);
     }
   </style>
 </head>
 <body class="bg-gray-100 font-sans p-6">
 
-<div class="max-w-4xl mx-auto bg-white p-6 rounded-lg shadow-md">
-  <h1 class="text-2xl font-bold text-green-600 mb-6">My Bids</h1>
-  <div id="bidsContainer" class="space-y-4"></div>
-</div>
+  <div class="max-w-4xl mx-auto bg-white p-6 rounded-lg shadow-md">
+    <h1 class="text-2xl font-bold text-green-600 mb-6">My Bids</h1>
+    <div id="bidsContainer" class="space-y-4"></div>
+  </div>
 
-<!-- Notification Toast -->
-<div id="notifyToast">Payment verified successfully and balance updated!</div>
-<audio id="notifySound" src="https://actions.google.com/sounds/v1/alarms/digital_watch_alarm_long.ogg" preload="auto"></audio>
+  <!-- Notification Toast -->
+  <div id="notifyToast">Payment verified successfully and balance updated!</div>
 
-<!-- Verification Modal -->
-<div id="verificationModal" class="modal">
-  <div class="modal-content">
-    <h2 class="text-lg font-semibold mb-4 text-gray-700">Enter Verification Code</h2>
-    <input type="text" id="verificationInput" class="w-full border p-2 rounded mb-4" placeholder="Enter code here" />
-    <div class="flex justify-end gap-2">
-      <button id="cancelBtn" class="bg-gray-500 text-white px-4 py-2 rounded">Cancel</button>
-      <button id="confirmBtn" class="bg-green-600 text-white px-4 py-2 rounded">Confirm</button>
+  <!-- Modal -->
+  <div id="verifyModal" class="fixed inset-0 items-center justify-center hidden z-50">
+    <div class="bg-white p-6 rounded-xl w-full max-w-sm mx-auto shadow-xl text-center">
+      <h2 class="text-xl font-semibold mb-4">Enter Verification Code</h2>
+      <input type="text" id="verificationInput" class="w-full p-2 border rounded mb-4" placeholder="Enter code here" />
+      <div class="flex justify-end space-x-2">
+        <button onclick="closeModal()" class="bg-gray-400 hover:bg-gray-500 text-white px-4 py-2 rounded">Cancel</button>
+        <button onclick="confirmVerification()" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded">Confirm</button>
+      </div>
     </div>
   </div>
-</div>
+
+  <!-- Audio -->
+  <audio id="notifySound" src="https://actions.google.com/sounds/v1/alarms/digital_watch_alarm_long.ogg" preload="auto"></audio>
 
 <script>
   const verificationCode = '1234';
-  let selectedBidIndex = null;
-
   let bids = JSON.parse(localStorage.getItem('bids') || '[]');
   const bidsContainer = document.getElementById('bidsContainer');
   const notifyToast = document.getElementById('notifyToast');
   const notifySound = document.getElementById('notifySound');
-  const modal = document.getElementById('verificationModal');
+  const verifyModal = document.getElementById('verifyModal');
   const verificationInput = document.getElementById('verificationInput');
+  let selectedBidIndex = null;
 
-  document.getElementById('cancelBtn').onclick = () => {
-    modal.style.display = 'none';
-    selectedBidIndex = null;
+  function showNotification(message) {
+    notifyToast.textContent = message;
+    notifyToast.style.display = 'block';
+    notifySound.play();
+    setTimeout(() => {
+      notifyToast.style.display = 'none';
+    }, 4000);
+  }
+
+  function openModal(index) {
+    selectedBidIndex = index;
     verificationInput.value = '';
-  };
+    verifyModal.classList.remove('hidden');
+    verifyModal.classList.add('flex');
+  }
 
-  document.getElementById('confirmBtn').onclick = () => {
-    const inputCode = verificationInput.value.trim();
-    if (inputCode === verificationCode && selectedBidIndex !== null) {
+  function closeModal() {
+    verifyModal.classList.add('hidden');
+    verifyModal.classList.remove('flex');
+  }
+
+  function confirmVerification() {
+    const userCode = verificationInput.value;
+    if (userCode === verificationCode && selectedBidIndex !== null) {
       const bid = bids[selectedBidIndex];
       if (bid.status === 'Paid') return;
+
       bids[selectedBidIndex].status = 'Paid';
 
+      // Update balance
       let balance = parseFloat(localStorage.getItem('balance') || '0');
       balance += parseFloat(bid.amount);
       localStorage.setItem('balance', balance.toFixed(2));
 
-      const paidTasks = JSON.parse(localStorage.getItem('paidTasks') || '[]');
-      paidTasks.push({
-        id: `task-${Date.now()}`,
-        type: 'Task Payment',
-        amount: bid.amount,
-        date: bid.date,
-        time: bid.time,
-        status: 'Paid'
-      });
-      localStorage.setItem('paidTasks', JSON.stringify(paidTasks));
-
+      // Add transaction to localStorage
       const transactions = JSON.parse(localStorage.getItem('transactions') || '[]');
-      transactions.unshift({
-        id: `task-${Date.now()}`,
+      const paidTasks = JSON.parse(localStorage.getItem('paidTasks') || '[]');
+
+      const taskObj = {
+        id: bid.taskId,
         type: 'Task Payment',
         amount: bid.amount,
         date: bid.date,
         time: bid.time,
         status: 'Paid'
-      });
-      localStorage.setItem('transactions', JSON.stringify(transactions));
+      };
 
+      transactions.unshift(taskObj);
+      paidTasks.unshift(taskObj);
+
+      localStorage.setItem('transactions', JSON.stringify(transactions));
+      localStorage.setItem('paidTasks', JSON.stringify(paidTasks));
       localStorage.setItem('bids', JSON.stringify(bids));
-      notifyToast.style.display = 'block';
-      notifySound.play();
-      modal.style.display = 'none';
+
+      closeModal();
+      showNotification('Payment verified successfully and balance updated!');
       setTimeout(() => {
-        notifyToast.style.display = 'none';
         window.location.href = 'account.html';
-      }, 2000);
+      }, 1000);
     } else {
       verificationInput.classList.add('border-red-500');
+      verificationInput.placeholder = 'Wrong code!';
     }
-  };
-
-  function formatDateTime(dateStr, timeStr) {
-    return `${dateStr} ${timeStr}`;
   }
 
   function renderBids() {
     bidsContainer.innerHTML = '';
-    const sorted = [...bids].sort((a, b) => {
-      if (a.status === 'Paid' && b.status !== 'Paid') return 1;
-      if (a.status !== 'Paid' && b.status === 'Paid') return -1;
-      return new Date(`${b.date} ${b.time}`) - new Date(`${a.date} ${a.time}`);
-    });
-
-    if (sorted.length === 0) {
+    if (bids.length === 0) {
       bidsContainer.innerHTML = '<p class="text-gray-500">No bids placed yet.</p>';
       return;
     }
 
-    sorted.forEach((bid, index) => {
+    const sortedBids = [...bids].sort((a, b) => {
+      if (a.status === 'Paid' && b.status !== 'Paid') return 1;
+      if (a.status !== 'Paid' && b.status === 'Paid') return -1;
+      return 0;
+    });
+
+    sortedBids.forEach((bid, index) => {
+      const realIndex = bids.findIndex(b => b.taskId === bid.taskId);
       const statusColor = bid.status === 'Paid' ? 'text-green-600' : 'text-red-600';
       const bidEl = document.createElement('div');
       bidEl.className = 'flex justify-between items-center border rounded p-4 bg-gray-50 shadow-sm';
+
       bidEl.innerHTML = `
         <div class="flex-1">
           <p><span class="font-semibold">Task ID:</span> ${bid.taskId}</p>
           <p><span class="font-semibold">Amount:</span> $${bid.amount}</p>
-          <p><span class="font-semibold">Date & Time:</span> ${formatDateTime(bid.date, bid.time)}</p>
+          <p><span class="font-semibold">Date & Time:</span> ${bid.date} ${bid.time}</p>
           <p><span class="font-semibold">Status:</span> <span class="${statusColor}">${bid.status}</span></p>
         </div>
         <div class="ml-4">
-          ${bid.status !== 'Paid' ? `<button class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded" onclick="openVerification(${index})">Verify</button>` : ''}
+          ${bid.status !== 'Paid' ? `
+            <button 
+              class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded"
+              onclick="openModal(${realIndex})"
+            >Verify</button>` : ''}
         </div>
       `;
+
       bidsContainer.appendChild(bidEl);
     });
-  }
-
-  function openVerification(index) {
-    selectedBidIndex = index;
-    modal.style.display = 'flex';
-    verificationInput.value = '';
-    verificationInput.classList.remove('border-red-500');
   }
 
   renderBids();
