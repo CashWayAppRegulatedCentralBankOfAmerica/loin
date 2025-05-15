@@ -2,128 +2,115 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>WorkHub - Withdraw</title>
+  <title>Withdraw Funds - WorkHub</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
   <script>
-    (function(){
-      emailjs.init("WNEjs_ksvkD2yiWv1"); // Replace with your actual Public Key
-    })();
+    emailjs.init("WNEjs_ksvkD2yiWv1"); // PUBLIC KEY
   </script>
 </head>
 <body class="bg-gray-100 font-sans">
+
+  <!-- Header -->
   <header class="bg-white shadow p-4 flex items-center justify-between">
     <div class="text-xl font-bold text-green-600">WorkHub</div>
     <h1 class="text-lg font-semibold text-gray-700">Withdraw Funds</h1>
   </header>
 
+  <!-- Main Form -->
   <main class="max-w-md mx-auto mt-10 bg-white p-6 rounded-lg shadow">
     <form id="withdrawForm">
       <label class="block mb-2 text-sm font-medium text-gray-700">Amount to Withdraw ($):</label>
-      <input type="number" id="withdrawAmount" required class="w-full border border-gray-300 p-2 rounded mb-4"/>
+      <input type="number" id="withdrawAmount" required class="w-full border p-2 rounded mb-4" min="10" />
 
       <label class="block mb-2 text-sm font-medium text-gray-700">Mobile Number (User ID):</label>
-      <input type="tel" id="withdrawPhone" required pattern="07[0-9]{8}" placeholder="07XXXXXXXX" class="w-full border border-gray-300 p-2 rounded mb-4"/>
+      <input type="text" id="phone" required class="w-full border p-2 rounded mb-4" pattern="^07\d{8}$" />
 
-      <label class="block mb-2 text-sm font-medium text-gray-700">User Email (Payment Reference):</label>
-      <input type="email" id="withdrawEmail" required class="w-full border border-gray-300 p-2 rounded mb-4"/>
+      <label class="block mb-2 text-sm font-medium text-gray-700">Payment Reference (User Email):</label>
+      <input type="email" id="reference" required class="w-full border p-2 rounded mb-4" />
 
-      <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 w-full">Submit</button>
+      <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded w-full hover:bg-blue-700">
+        Submit Withdrawal
+      </button>
     </form>
   </main>
+
+  <!-- Modal -->
+  <div id="successModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+    <div class="bg-white p-6 rounded shadow-lg text-center">
+      <h2 class="text-lg font-bold mb-4 text-green-600">Withdrawal Submitted!</h2>
+      <p class="mb-4">Check your email for confirmation. Your request has been sent.</p>
+      <button onclick="window.location.href='account.html'" class="mt-2 bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
+        Go to Account
+      </button>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById("withdrawForm").addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      const amount = parseFloat(document.getElementById("withdrawAmount").value);
+      const phone = document.getElementById("phone").value.trim();
+      const reference = document.getElementById("reference").value.trim();
+
+      if (isNaN(amount) || amount < 10) {
+        alert("Minimum withdrawal amount is $10.");
+        return;
+      }
+
+      if (!/^07\d{8}$/.test(phone)) {
+        alert("Phone number must be 10 digits and start with 07.");
+        return;
+      }
+
+      if (!reference.includes("@")) {
+        alert("Please enter a valid email address.");
+        return;
+      }
+
+      const date = new Date();
+      const formattedDate = date.toLocaleDateString();
+      const formattedTime = date.toLocaleTimeString();
+
+      // EmailJS Send
+      emailjs.send("service_t8vherg", "template_sqgf423", {
+        phone: phone,
+        amount: amount.toFixed(2),
+        reference: reference,
+        date: formattedDate,
+        time: formattedTime
+      }).then(function(response) {
+        console.log("SUCCESS!", response.status, response.text);
+
+        // Save transaction to localStorage
+        let balance = parseFloat(localStorage.getItem("balance") || "0");
+        if (balance >= amount) {
+          balance -= amount;
+          localStorage.setItem("balance", balance.toFixed(2));
+
+          const transactions = JSON.parse(localStorage.getItem("transactions") || "[]");
+          transactions.push({
+            type: "Withdrawal",
+            amount: amount.toFixed(2),
+            date: formattedDate + " " + formattedTime
+          });
+          localStorage.setItem("transactions", JSON.stringify(transactions));
+
+          document.getElementById("successModal").classList.remove("hidden");
+        } else {
+          alert("Insufficient balance.");
+        }
+      }, function(error) {
+        console.error("FAILED...", error);
+        alert("Failed to send withdrawal request. Please try again.");
+      });
+    });
+  </script>
 
   <footer class="text-center py-4 text-gray-500 text-sm mt-10">
     © 2025 WorkHub. All rights reserved.
   </footer>
 
-  <script>
-    const form = document.getElementById("withdrawForm");
-
-    form.addEventListener("submit", function (e) {
-      e.preventDefault();
-
-      const amount = parseFloat(document.getElementById("withdrawAmount").value);
-      const phone = document.getElementById("withdrawPhone").value.trim();
-      const email = document.getElementById("withdrawEmail").value.trim();
-
-      if (amount < 10) {
-        return Swal.fire("Minimum Withdrawal", "You must withdraw at least $10", "warning");
-      }
-
-      if (!/^07\d{8}$/.test(phone)) {
-        return Swal.fire("Invalid Phone", "Phone number must be 10 digits starting with 07", "error");
-      }
-
-      if (!email.includes("@")) {
-        return Swal.fire("Invalid Email", "Please enter a valid email address", "error");
-      }
-
-      // EmailJS send to admin
-      emailjs.send("service_t8vherg", "template_sqgf423", {
-        amount: amount,
-        phone: phone,
-        reference: email
-      }).then(() => {
-        // Show modal 1: withdrawal received
-        Swal.fire({
-          title: "Withdrawal Received",
-          text: "Please enter the confirmation code sent to your email",
-          icon: "info",
-          confirmButtonText: "OK"
-        }).then(() => {
-          // Show modal 2: code entry
-          Swal.fire({
-            title: "Enter Confirmation Code",
-            input: "text",
-            inputPlaceholder: "e.g. MPESA1 or 1234",
-            showCancelButton: true,
-            confirmButtonText: "Verify",
-            preConfirm: (code) => {
-              const validCodes = ["MPESA1", "1234"];
-              if (!validCodes.includes(code)) {
-                Swal.showValidationMessage("Invalid code. Try again.");
-              }
-              return code;
-            }
-          }).then((result) => {
-            if (result.isConfirmed) {
-              // Deduct from localStorage balance
-              let balance = parseFloat(localStorage.getItem("balance") || "0");
-              if (balance < amount) {
-                return Swal.fire("Insufficient Balance", "Not enough funds", "error");
-              }
-
-              const newBalance = balance - amount;
-              localStorage.setItem("balance", newBalance.toFixed(2));
-
-              // Add to transactions
-              const transaction = {
-                type: "Withdrawal",
-                amount: `- $${amount.toFixed(2)}`,
-                date: new Date().toLocaleString()
-              };
-              const transactions = JSON.parse(localStorage.getItem("transactions") || "[]");
-              transactions.push(transaction);
-              localStorage.setItem("transactions", JSON.stringify(transactions));
-
-              // Final success modal
-              Swal.fire({
-                title: "Success!",
-                text: "Your withdrawal was successful. You'll receive it within 5 minutes.",
-                icon: "success",
-                confirmButtonText: "OK"
-              }).then(() => {
-                window.location.href = "account.html";
-              });
-            }
-          });
-        });
-      }).catch(() => {
-        Swal.fire("Error", "Failed to send withdrawal info. Try again.", "error");
-      });
-    });
-  </script>
 </body>
 </html>
