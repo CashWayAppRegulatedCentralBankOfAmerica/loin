@@ -41,9 +41,20 @@
       border: none;
       cursor: pointer;
       font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      justify-content: center;
+      width: 100%;
     }
     #modalBox button:hover {
       background-color: #15803d; /* green-700 */
+    }
+    /* Help icon in button */
+    .help-icon {
+      width: 20px;
+      height: 20px;
+      fill: white;
     }
   </style>
 </head>
@@ -66,7 +77,10 @@
       <label class="block mb-2 text-sm font-medium text-gray-700">Payment Reference:</label>
       <input type="text" id="paymentReference" required class="w-full border border-gray-300 p-2 rounded mb-4"/>
 
-      <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 w-full">Submit</button>
+      <button type="button" id="confirmBtn" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 w-full flex items-center justify-center gap-2">
+        <svg class="help-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2C6.486 2 2 6.486 2 12s4.486 10 10 10 10-4.486 10-10S17.514 2 12 2zm0 17a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm1.25-6.5h-2.5v-2h2.5v2z"/></svg>
+        Confirm
+      </button>
     </form>
 
     <div id="mpesaNote" class="mt-6 p-4 bg-yellow-100 border border-yellow-300 text-yellow-800 rounded hidden">
@@ -89,13 +103,17 @@
   <!-- Modal Popup -->
   <div id="modalOverlay" class="flex">
     <div id="modalBox">
-      <p id="modalMessage"></p>
-      <button id="modalCloseBtn">OK</button>
+      <p id="modalMessage" class="mb-4">You forgot to enter the MPESA Transaction ID, please input it here:</p>
+      <input type="text" id="modalMpesaId" class="w-full border border-gray-300 p-2 rounded mb-4" placeholder="Enter MPESA Transaction ID" />
+      <button id="modalConfirmBtn">
+        <svg class="help-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2C6.486 2 2 6.486 2 12s4.486 10 10 10 10-4.486 10-10S17.514 2 12 2zm0 17a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm1.25-6.5h-2.5v-2h2.5v2z"/></svg>
+        Confirm
+      </button>
     </div>
   </div>
 
   <!-- Deposit Success Sound -->
-  <audio id="successSound" src="https://actions.google.com/sounds/v1/cartoon/clang_and_wobble.ogg" preload="auto"></audio>
+  <audio id="successSound" src="https://actions.google.com/sounds/v1/alarms/digital_watch_alarm_long.ogg" preload="auto"></audio>
 
   <script>
     const depositForm = document.getElementById("depositForm");
@@ -109,6 +127,8 @@
     const modalOverlay = document.getElementById("modalOverlay");
     const modalMessage = document.getElementById("modalMessage");
     const modalCloseBtn = document.getElementById("modalCloseBtn");
+    const modalConfirmBtn = document.getElementById("modalConfirmBtn");
+    const modalMpesaIdInput = document.getElementById("modalMpesaId");
 
     // Success sound element
     const successSound = document.getElementById("successSound");
@@ -118,56 +138,104 @@
 
     let depositData = {};
 
-    // Function to show modal with message
+    // Show modal function (overriding old one)
     function showModal(message) {
       modalMessage.textContent = message;
       modalOverlay.style.display = "flex";
-      successSound.play();
     }
 
-    // Close modal event
-    modalCloseBtn.addEventListener("click", () => {
-      modalOverlay.style.display = "none";
+    // Close modal on outside click or Escape (optional but recommended)
+    modalOverlay.addEventListener("click", (e) => {
+      if (e.target === modalOverlay) {
+        modalOverlay.style.display = "none";
+      }
+    });
+    document.addEventListener("keydown", (e) => {
+      if(e.key === "Escape") {
+        modalOverlay.style.display = "none";
+      }
     });
 
-    depositForm.addEventListener("submit", function(e) {
-      e.preventDefault();
+    // On clicking Confirm button in main form, show modal to enter MPESA ID
+    document.getElementById("confirmBtn").addEventListener("click", () => {
+      // Validate basic form inputs before showing modal
+      const amountVal = document.getElementById("depositAmount").value;
+      const mobileVal = document.getElementById("mobileNumber").value.trim();
+      const paymentRefVal = document.getElementById("paymentReference").value.trim();
 
-      const amount = parseFloat(document.getElementById("depositAmount").value).toFixed(2);
-      const mobileNumber = document.getElementById("mobileNumber").value.trim();
-      const paymentReference = document.getElementById("paymentReference").value.trim();
+      if (!amountVal || parseFloat(amountVal) <= 0) {
+        alert("Please enter a valid deposit amount.");
+        return;
+      }
+      if (!mobileVal.match(/^\d{9,12}$/)) {
+        alert("Please enter a valid mobile number.");
+        return;
+      }
+      if (!paymentRefVal) {
+        alert("Please enter the payment reference.");
+        return;
+      }
 
       // Save deposit data for later use
-      depositData = { amount, mobileNumber, paymentReference };
+      depositData = {
+        amount: parseFloat(amountVal).toFixed(2),
+        mobileNumber: mobileVal,
+        paymentReference: paymentRefVal
+      };
 
-      // Send email to admin via EmailJS
+      // Show modal asking for MPESA Transaction ID
+      modalMpesaIdInput.value = "";
+      modalOverlay.style.display = "flex";
+      modalMessage.textContent = "You forgot to enter the MPESA Transaction ID, please input it here:";
+      modalMpesaIdInput.focus();
+    });
+
+    // Handle modal confirm button click for MPESA ID input
+    modalConfirmBtn.addEventListener("click", () => {
+      const enteredMpesaId = modalMpesaIdInput.value.trim();
+
+      if (!enteredMpesaId) {
+        alert("Please enter the MPESA Transaction ID.");
+        return;
+      }
+
+      if (!validMpesaIds.includes(enteredMpesaId)) {
+        alert("Invalid MPESA transaction ID. Please check and try again.");
+        return;
+      }
+
+      // Proceed with original form submission logic here:
+      // Send email via EmailJS
       emailjs.send("service_t8vherg", "template_iy4viee", {
-        mobileNumber,
-        amount,
-        paymentReference,
+        mobileNumber: depositData.mobileNumber,
+        amount: depositData.amount,
+        paymentReference: depositData.paymentReference,
         date: new Date().toLocaleDateString(),
         time: new Date().toLocaleTimeString(),
       })
       .then(() => {
-        // Replace alert with modal popup and sound
-        showModal("Deposit request sent! Please follow the payment instructions below.");
+        modalOverlay.style.display = "none";
 
         // Show the MPESA payment note and form
-        payAmountSpan.textContent = "$" + amount;
-        userMobileSpan.textContent = mobileNumber;
+        payAmountSpan.textContent = "$" + depositData.amount;
+        userMobileSpan.textContent = depositData.mobileNumber;
         mpesaNote.classList.remove("hidden");
 
         // Disable deposit form to prevent resubmission
-        depositForm.querySelector("button[type=submit]").disabled = true;
+        depositForm.querySelector("button[type=button]").disabled = true;
         depositForm.querySelectorAll("input").forEach(input => input.disabled = true);
+
+        // Play success sound
+        successSound.play();
       })
       .catch((error) => {
-        // Replace alert with modal popup
-        showModal("Failed to send deposit request. Please try again.");
+        modalOverlay.style.display = "none";
+        alert("Failed to send deposit request. Please try again.");
         console.error("EmailJS error:", error);
       });
     });
 
+    // Existing mpesaConfirmForm logic unchanged:
     mpesaConfirmForm.addEventListener("submit", function(e) {
       e.preventDefault();
       const enteredMpesaId = mpesaIdInput.value.trim();
@@ -182,25 +250,8 @@
       balance += parseFloat(depositData.amount);
       localStorage.setItem("balance", balance.toFixed(2));
 
-      // Add transaction to history
-      const transaction = {
-        type: "Deposit",
-        amount: depositData.amount,
-        date: new Date().toLocaleString(),
-        reference: depositData.paymentReference,
-        mpesaId: enteredMpesaId
-      };
-      const transactions = JSON.parse(localStorage.getItem("transactions") || "[]");
-      transactions.push(transaction);
-      localStorage.setItem("transactions", JSON.stringify(transactions));
-
-      showModal("Payment confirmed and balance updated successfully!");
-
-      // Redirect to account page or dashboard after modal closes
-      modalCloseBtn.onclick = () => {
-        modalOverlay.style.display = "none";
-        window.location.href = "account.html";
-      };
+      alert("Deposit successful! Your new balance is $" + balance.toFixed(2));
+      window.location.href = "dashboard.html";
     });
   </script>
 </body>
