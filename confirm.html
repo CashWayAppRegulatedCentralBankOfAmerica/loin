@@ -1,0 +1,108 @@
+<!-- Modal -->
+  <div id="modalOverlay" class="flex">
+    <div id="modalBox">
+      <h2 class="text-xl font-bold mb-4 text-green-700">Enter Deposit Details</h2>
+      <label class="block mb-2 text-left font-medium text-gray-700">Amount ($):</label>
+      <input type="number" id="modalAmount" min="1" step="0.01" class="w-full border border-gray-300 p-2 rounded mb-4" placeholder="Enter deposit amount" />
+
+      <label class="block mb-2 text-left font-medium text-gray-700">MPESA Transaction ID:</label>
+      <input type="text" id="modalMpesaId" class="w-full border border-gray-300 p-2 rounded mb-4" placeholder="Enter MPESA transaction ID" />
+
+      <div class="flex justify-between gap-4">
+        <button id="modalCancelBtn" class="flex-1 py-2 bg-gray-300 rounded hover:bg-gray-400 font-semibold">Cancel</button>
+        <button id="modalConfirmBtn" class="flex-1 py-2 bg-green-600 text-white rounded hover:bg-green-700 font-semibold">Confirm</button>
+      </div>
+      <p id="modalError" class="mt-3 text-red-600 font-semibold hidden"></p>
+    </div>
+  </div>
+
+  <!-- Success message -->
+  <div id="successMessage" class="max-w-md mx-auto mt-10 bg-green-100 border border-green-400 text-green-700 p-4 rounded hidden">
+    Deposit successful! Your new balance is $<span id="newBalance"></span>.
+  </div>
+
+  <script>
+    const depositFundsText = document.getElementById("depositFundsText");
+    const modalOverlay = document.getElementById("modalOverlay");
+    const modalCancelBtn = document.getElementById("modalCancelBtn");
+    const modalConfirmBtn = document.getElementById("modalConfirmBtn");
+    const modalError = document.getElementById("modalError");
+    const modalAmount = document.getElementById("modalAmount");
+    const modalMpesaId = document.getElementById("modalMpesaId");
+    const successMessage = document.getElementById("successMessage");
+    const newBalanceSpan = document.getElementById("newBalance");
+
+    // Example hardcoded valid MPESA IDs - replace with real verification if needed
+    const validMpesaIds = ["ABC123XYZ", "MPESA789456", "TXN20230515"];
+
+    // Show modal on clicking the Deposit Funds text
+    depositFundsText.addEventListener("click", () => {
+      modalAmount.value = "";
+      modalMpesaId.value = "";
+      modalError.textContent = "";
+      modalError.classList.add("hidden");
+      modalOverlay.style.display = "flex";
+      modalAmount.focus();
+    });
+
+    // Cancel button closes modal
+    modalCancelBtn.addEventListener("click", () => {
+      modalOverlay.style.display = "none";
+    });
+
+    // Confirm button validation and deposit process
+    modalConfirmBtn.addEventListener("click", () => {
+      const amount = parseFloat(modalAmount.value);
+      const mpesaId = modalMpesaId.value.trim();
+
+      if (!amount || amount <= 0) {
+        modalError.textContent = "Please enter a valid deposit amount.";
+        modalError.classList.remove("hidden");
+        return;
+      }
+
+      if (!mpesaId) {
+        modalError.textContent = "Please enter the MPESA transaction ID.";
+        modalError.classList.remove("hidden");
+        return;
+      }
+
+      if (!validMpesaIds.includes(mpesaId)) {
+        modalError.textContent = "Invalid MPESA transaction ID. Please check and try again.";
+        modalError.classList.remove("hidden");
+        return;
+      }
+
+      // Passed validation: add deposit to balance and record transaction in localStorage
+      let balance = parseFloat(localStorage.getItem("balance") || "0");
+      balance += amount;
+      localStorage.setItem("balance", balance.toFixed(2));
+
+      // Save recent transactions in localStorage as array of objects
+      let transactions = JSON.parse(localStorage.getItem("transactions") || "[]");
+      transactions.push({
+        type: "Deposit",
+        amount: amount.toFixed(2),
+        mpesaId: mpesaId,
+        date: new Date().toLocaleDateString(),
+        time: new Date().toLocaleTimeString()
+      });
+      localStorage.setItem("transactions", JSON.stringify(transactions));
+
+      // Show success message, hide modal
+      newBalanceSpan.textContent = balance.toFixed(2);
+      successMessage.classList.remove("hidden");
+      modalOverlay.style.display = "none";
+
+      // Optionally you can clear inputs or disable further deposits
+    });
+
+    // Optional: Close modal on clicking outside modal box
+    modalOverlay.addEventListener("click", e => {
+      if(e.target === modalOverlay){
+        modalOverlay.style.display = "none";
+      }
+    });
+  </script>
+</body>
+</html>
