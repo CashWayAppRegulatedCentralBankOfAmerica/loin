@@ -5,6 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>WorkHub - Deposit</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <!-- EmailJS SDK -->
+  <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
+  <script>
+    (function(){
+      emailjs.init("YOUR_PUBLIC_KEY"); // <-- Replace with your EmailJS public key
+    })();
+  </script>
 </head>
 <body class="bg-gray-100 font-sans">
   <!-- Header -->
@@ -20,49 +27,114 @@
       <input type="number" id="depositAmount" required class="w-full border border-gray-300 p-2 rounded mb-4"/>
 
       <label class="block mb-2 text-sm font-medium text-gray-700">Payment Reference:</label>
-      <input type="text" required class="w-full border border-gray-300 p-2 rounded mb-4"/>
+      <input type="text" id="paymentReference" required class="w-full border border-gray-300 p-2 rounded mb-4"/>
 
       <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 w-full">Submit</button>
     </form>
   </main>
 
-  <footer class="text-center py-4 text-gray-500 text-sm mt-10">
-    © 2025 WorkHub. All rights reserved.
-  </footer>
+  <!-- Modal: Payment Instructions -->
+  <div id="paymentModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+    <div class="bg-white p-6 rounded-lg max-w-sm w-full text-center relative">
+      <h2 class="text-xl font-semibold mb-4 text-green-700">Complete Your Payment</h2>
+      <p class="mb-2">Please pay to Till <strong>1234</strong> using your primary number: <span id="userPrimaryNumber"></span></p>
+      <p class="mb-4">Amount: <strong>$<span id="depositAmountDisplay"></span></strong></p>
+      <p class="text-sm text-gray-600 mb-6">After payment, enter your MPESA transaction ID below to verify.</p>
+
+      <input type="text" id="mpesaIdInput" placeholder="Enter MPESA Transaction ID" class="border border-gray-300 p-2 rounded w-full mb-4" />
+      <button id="verifyPaymentBtn" class="bg-green-600 text-white px-4 py-2 rounded w-full hover:bg-green-700">Verify Payment</button>
+
+      <button id="closePaymentModal" class="absolute top-2 right-3 text-gray-600 hover:text-gray-900 font-bold">✕</button>
+    </div>
+  </div>
+
+  <!-- Modal: Success -->
+  <div id="successModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+    <div class="bg-white p-6 rounded-lg max-w-sm w-full text-center">
+      <h2 class="text-xl font-semibold mb-4 text-green-700">Deposit Confirmed!</h2>
+      <p class="mb-4">Your payment has been verified and balance updated.</p>
+      <button id="successOkBtn" class="bg-green-600 text-white px-4 py-2 rounded w-full hover:bg-green-700">Back to Account</button>
+    </div>
+  </div>
 
   <script>
+    // User primary number - the username saved in localStorage
+    const userPrimaryNumber = localStorage.getItem("username") || "Unknown Number";
+
+    // Hardcoded valid MPESA IDs (can expand this list)
+    const validMpesaIds = ["ABC123XYZ", "DEF456UVW", "MPESA789ID"];
+
     const depositForm = document.getElementById("depositForm");
-    depositForm.addEventListener("submit", function (e) {
+    const paymentModal = document.getElementById("paymentModal");
+    const successModal = document.getElementById("successModal");
+    const userPrimaryNumberSpan = document.getElementById("userPrimaryNumber");
+    const depositAmountDisplay = document.getElementById("depositAmountDisplay");
+    const mpesaIdInput = document.getElementById("mpesaIdInput");
+    const verifyPaymentBtn = document.getElementById("verifyPaymentBtn");
+    const closePaymentModal = document.getElementById("closePaymentModal");
+    const successOkBtn = document.getElementById("successOkBtn");
+
+    userPrimaryNumberSpan.textContent = userPrimaryNumber;
+
+    depositForm.addEventListener("submit", function(e){
       e.preventDefault();
-      
-      // Get deposit amount from user input
+
       const amount = parseFloat(document.getElementById("depositAmount").value);
-      
-      // Get current balance from localStorage
-      let balance = parseFloat(localStorage.getItem("balance") || "0");
-      balance += amount;
+      const paymentReference = document.getElementById("paymentReference").value.trim();
 
-      // Save new balance back to localStorage
-      localStorage.setItem("balance", balance.toFixed(2));
-
-      // Create transaction object for logging
-      const transaction = {
-        type: "Deposit",
+      // Send email via EmailJS
+      emailjs.send('YOUR_SERVICE_ID', 'YOUR_TEMPLATE_ID', {
         amount: amount.toFixed(2),
-        date: new Date().toLocaleString()
-      };
+        paymentReference: paymentReference,
+        userPrimaryNumber: userPrimaryNumber
+      })
+      .then(() => {
+        // Show payment modal with instructions
+        depositAmountDisplay.textContent = amount.toFixed(2);
+        mpesaIdInput.value = "";
+        paymentModal.classList.remove("hidden");
+      }, (error) => {
+        alert("Failed to send email notification. Please try again.");
+        console.error("EmailJS error:", error);
+      });
+    });
 
-      // Retrieve existing transactions from localStorage
-      const transactions = JSON.parse(localStorage.getItem("transactions") || "[]");
-      
-      // Add new transaction to transaction list
-      transactions.push(transaction);
-      
-      // Save updated transaction list to localStorage
-      localStorage.setItem("transactions", JSON.stringify(transactions));
+    // Close payment modal
+    closePaymentModal.addEventListener("click", () => {
+      paymentModal.classList.add("hidden");
+    });
 
-      // Show success message and redirect to account page
-      alert("Deposit successful!");
+    verifyPaymentBtn.addEventListener("click", () => {
+      const enteredMpesaId = mpesaIdInput.value.trim().toUpperCase();
+
+      if(validMpesaIds.includes(enteredMpesaId)){
+        // Add deposit to balance and transactions
+        const amount = parseFloat(document.getElementById("depositAmount").value);
+
+        let balance = parseFloat(localStorage.getItem("balance") || "0");
+        balance += amount;
+        localStorage.setItem("balance", balance.toFixed(2));
+
+        const transaction = {
+          type: "Deposit",
+          amount: amount.toFixed(2),
+          date: new Date().toLocaleString()
+        };
+
+        const transactions = JSON.parse(localStorage.getItem("transactions") || "[]");
+        transactions.push(transaction);
+        localStorage.setItem("transactions", JSON.stringify(transactions));
+
+        // Hide payment modal, show success modal
+        paymentModal.classList.add("hidden");
+        successModal.classList.remove("hidden");
+      } else {
+        alert("Invalid MPESA transaction ID. Please check and try again.");
+      }
+    });
+
+    successOkBtn.addEventListener("click", () => {
+      successModal.classList.add("hidden");
       window.location.href = "account.html";
     });
   </script>
