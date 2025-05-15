@@ -11,6 +11,41 @@
       emailjs.init("WNEjs_ksvkD2yiWv1");
     })();
   </script>
+
+  <style>
+    /* Modal backdrop */
+    #modalOverlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 9999;
+      align-items: center;
+      justify-content: center;
+    }
+    /* Modal box */
+    #modalBox {
+      background: white;
+      padding: 1.5rem 2rem;
+      border-radius: 0.5rem;
+      max-width: 400px;
+      text-align: center;
+      box-shadow: 0 0 15px rgba(0,0,0,0.3);
+    }
+    #modalBox button {
+      margin-top: 1rem;
+      background-color: #16a34a; /* green-600 */
+      color: white;
+      padding: 0.5rem 1.5rem;
+      border-radius: 0.375rem;
+      border: none;
+      cursor: pointer;
+      font-weight: 600;
+    }
+    #modalBox button:hover {
+      background-color: #15803d; /* green-700 */
+    }
+  </style>
 </head>
 <body class="bg-gray-100 font-sans">
   <!-- Header -->
@@ -51,6 +86,17 @@
     © 2025 WorkHub. All rights reserved.
   </footer>
 
+  <!-- Modal Popup -->
+  <div id="modalOverlay" class="flex">
+    <div id="modalBox">
+      <p id="modalMessage"></p>
+      <button id="modalCloseBtn">OK</button>
+    </div>
+  </div>
+
+  <!-- Deposit Success Sound -->
+  <audio id="successSound" src="https://actions.google.com/sounds/v1/cartoon/clang_and_wobble.ogg" preload="auto"></audio>
+
   <script>
     const depositForm = document.getElementById("depositForm");
     const mpesaNote = document.getElementById("mpesaNote");
@@ -59,10 +105,30 @@
     const mpesaConfirmForm = document.getElementById("mpesaConfirmForm");
     const mpesaIdInput = document.getElementById("mpesaId");
 
+    // Modal elements
+    const modalOverlay = document.getElementById("modalOverlay");
+    const modalMessage = document.getElementById("modalMessage");
+    const modalCloseBtn = document.getElementById("modalCloseBtn");
+
+    // Success sound element
+    const successSound = document.getElementById("successSound");
+
     // Hardcoded valid MPESA IDs for testing
     const validMpesaIds = ["ABC123XYZ", "MPESA789456", "TXN20230515"];
 
     let depositData = {};
+
+    // Function to show modal with message
+    function showModal(message) {
+      modalMessage.textContent = message;
+      modalOverlay.style.display = "flex";
+      successSound.play();
+    }
+
+    // Close modal event
+    modalCloseBtn.addEventListener("click", () => {
+      modalOverlay.style.display = "none";
+    });
 
     depositForm.addEventListener("submit", function(e) {
       e.preventDefault();
@@ -83,7 +149,8 @@
         time: new Date().toLocaleTimeString(),
       })
       .then(() => {
-        alert("Deposit request sent! Please follow the payment instructions below.");
+        // Replace alert with modal popup and sound
+        showModal("Deposit request sent! Please follow the payment instructions below.");
 
         // Show the MPESA payment note and form
         payAmountSpan.textContent = "$" + amount;
@@ -95,7 +162,8 @@
         depositForm.querySelectorAll("input").forEach(input => input.disabled = true);
       })
       .catch((error) => {
-        alert("Failed to send deposit request. Please try again.");
+        // Replace alert with modal popup
+        showModal("Failed to send deposit request. Please try again.");
         console.error("EmailJS error:", error);
       });
     });
@@ -105,7 +173,7 @@
       const enteredMpesaId = mpesaIdInput.value.trim();
 
       if (!validMpesaIds.includes(enteredMpesaId)) {
-        alert("Invalid MPESA transaction ID. Please check and try again.");
+        showModal("Invalid MPESA transaction ID. Please check and try again.");
         return;
       }
 
@@ -126,10 +194,13 @@
       transactions.push(transaction);
       localStorage.setItem("transactions", JSON.stringify(transactions));
 
-      alert("Payment confirmed and balance updated successfully!");
+      showModal("Payment confirmed and balance updated successfully!");
 
-      // Redirect to account page or dashboard
-      window.location.href = "account.html";
+      // Redirect to account page or dashboard after modal closes
+      modalCloseBtn.onclick = () => {
+        modalOverlay.style.display = "none";
+        window.location.href = "account.html";
+      };
     });
   </script>
 </body>
