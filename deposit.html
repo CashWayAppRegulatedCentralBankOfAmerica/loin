@@ -191,7 +191,7 @@
         mpesaId: enteredMpesaId
       };
       const transactions = JSON.parse(localStorage.getItem("transactions") || "[]");
-      transactions.push(transaction);
+      transactions.unshift(transaction);   /* <-- changed here to add at the front */
       localStorage.setItem("transactions", JSON.stringify(transactions));
 
       showModal("Payment confirmed and balance updated successfully!");
