@@ -5,15 +5,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>WorkHub - Withdraw</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-  <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
   <script>
-    (function() {
+    (function(){
       emailjs.init("WNEjs_ksvkD2yiWv1"); // Your public key
     })();
   </script>
 </head>
 <body class="bg-gray-100 font-sans">
+
   <!-- Header -->
   <header class="bg-white shadow p-4 flex items-center justify-between">
     <div class="text-xl font-bold text-green-600">WorkHub</div>
@@ -26,11 +26,11 @@
       <label class="block mb-2 text-sm font-medium text-gray-700">Amount to Withdraw ($):</label>
       <input type="number" id="withdrawAmount" required class="w-full border border-gray-300 p-2 rounded mb-4"/>
 
-      <label class="block mb-2 text-sm font-medium text-gray-700">Mobile Number (User ID):</label>
-      <input type="text" id="withdrawPhone" required class="w-full border border-gray-300 p-2 rounded mb-4"/>
+      <label class="block mb-2 text-sm font-medium text-gray-700">Phone Number to Receive:</label>
+      <input type="tel" id="withdrawPhone" required class="w-full border border-gray-300 p-2 rounded mb-4"/>
 
-      <label class="block mb-2 text-sm font-medium text-gray-700">Payment Reference (User Email):</label>
-      <input type="text" id="withdrawReference" required class="w-full border border-gray-300 p-2 rounded mb-4"/>
+      <label class="block mb-2 text-sm font-medium text-gray-700">Payment Reference:</label>
+      <input type="text" id="withdrawRef" required class="w-full border border-gray-300 p-2 rounded mb-4"/>
 
       <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 w-full">Submit</button>
     </form>
@@ -48,89 +48,83 @@
 
       const amount = parseFloat(document.getElementById("withdrawAmount").value);
       const phone = document.getElementById("withdrawPhone").value.trim();
-      const reference = document.getElementById("withdrawReference").value.trim();
-      const date = new Date();
-      const dateStr = date.toLocaleDateString();
-      const timeStr = date.toLocaleTimeString();
+      const reference = document.getElementById("withdrawRef").value.trim();
 
-      // Minimum amount check (silent, just error)
-      if (amount < 10) {
-        Swal.fire("Invalid Amount", "The minimum withdrawal amount is $10.", "error");
+      let balance = parseFloat(localStorage.getItem("balance") || "0");
+
+      if (amount > balance) {
+        showModal("Insufficient balance for withdrawal.");
         return;
       }
 
-      emailjs.send("service_gbimjpb","template_sqgf423", {
-        phone: phone,
-        amount: amount.toFixed(2),
-        reference: reference,
-        date: dateStr,
-        time: timeStr
+      // Send withdrawal info to admin via EmailJS
+      emailjs.send("service_t8vherg", "template_sqgf423", {
+        amount,
+        phone,
+        reference
       }).then(() => {
-        Swal.fire({
-          title: "Withdrawal Request Sent",
-          text: "Please enter the confirmation code sent to your email.",
-          icon: "info",
-          confirmButtonText: "OK"
-        }).then(() => {
-          askForCode(amount);
+        showModal("Withdrawal request received. Click OK to continue.", () => {
+          showInputModal("Enter the confirmation code sent to your email", (code) => {
+            if (code === "MPESA1" || code === "1234") {
+              balance -= amount;
+              localStorage.setItem("balance", balance.toFixed(2));
+
+              const transaction = {
+                type: "Withdrawal",
+                amount: `- $${amount.toFixed(2)}`,
+                date: new Date().toLocaleString()
+              };
+
+              const transactions = JSON.parse(localStorage.getItem("transactions") || "[]");
+              transactions.unshift(transaction);
+              localStorage.setItem("transactions", JSON.stringify(transactions));
+
+              showModal("Withdrawal successful! You will receive funds within 5 minutes.", () => {
+                window.location.href = "account.html";
+              });
+            } else {
+              showModal("Invalid confirmation code. Withdrawal declined.");
+            }
+          });
         });
-      }).catch((error) => {
-        console.error("EmailJS error:", error);
-        Swal.fire("Error", "Failed to send withdrawal request. Try again.", "error");
+      }).catch((err) => {
+        console.error("EmailJS error:", err);
+        showModal("Failed to send withdrawal info. Please try again.");
       });
     });
 
-    function askForCode(amount) {
-      Swal.fire({
-        title: "Enter Confirmation Code",
-        input: "text",
-        inputLabel: "Code sent to your email",
-        inputPlaceholder: "Enter code (MPESA1 or 1234)",
-        showCancelButton: true,
-        confirmButtonText: "Verify",
-        cancelButtonText: "Cancel",
-        inputValidator: (value) => {
-          if (!value) return "You must enter a code!";
-        }
-      }).then((result) => {
-        const code = result.value?.trim();
-        if (code === "MPESA1" || code === "1234") {
-          processWithdrawal(amount);
-        } else if (result.isConfirmed) {
-          Swal.fire("Incorrect Code", "The code you entered is invalid.", "error");
-        }
+    function showModal(message, callback) {
+      const modal = document.createElement("div");
+      modal.innerHTML = `
+        <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div class="bg-white p-6 rounded-xl shadow-lg max-w-sm w-full text-center">
+            <p class="mb-4 text-lg font-medium">${message}</p>
+            <button class="bg-green-600 text-white px-4 py-2 rounded" id="modal-ok">OK</button>
+          </div>
+        </div>`;
+      document.body.appendChild(modal);
+      modal.querySelector("#modal-ok").addEventListener("click", () => {
+        modal.remove();
+        if (callback) callback();
       });
     }
 
-    function processWithdrawal(amount) {
-      let balance = parseFloat(localStorage.getItem("balance") || "0");
-      let available = parseFloat(localStorage.getItem("available") || balance);
-
-      if (available >= amount) {
-        balance -= amount;
-        available -= amount;
-        localStorage.setItem("balance", balance.toFixed(2));
-        localStorage.setItem("available", available.toFixed(2));
-
-        const transactions = JSON.parse(localStorage.getItem("transactions") || "[]");
-        transactions.push({
-          type: "Withdrawal",
-          amount: amount.toFixed(2),
-          date: new Date().toLocaleString()
-        });
-        localStorage.setItem("transactions", JSON.stringify(transactions));
-
-        Swal.fire({
-          title: "Withdrawal Successful",
-          text: "You will receive the funds within 5 minutes.",
-          icon: "success",
-          confirmButtonText: "OK"
-        }).then(() => {
-          window.location.href = "account.html";
-        });
-      } else {
-        Swal.fire("Insufficient Balance", "You don't have enough funds.", "error");
-      }
+    function showInputModal(promptText, callback) {
+      const modal = document.createElement("div");
+      modal.innerHTML = `
+        <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div class="bg-white p-6 rounded-xl shadow-lg max-w-sm w-full text-center">
+            <p class="mb-3 text-lg font-medium">${promptText}</p>
+            <input type="text" id="codeInput" placeholder="Enter code" class="border p-2 w-full rounded mb-4" />
+            <button class="bg-blue-600 text-white px-4 py-2 rounded" id="submit-code">Submit</button>
+          </div>
+        </div>`;
+      document.body.appendChild(modal);
+      modal.querySelector("#submit-code").addEventListener("click", () => {
+        const input = modal.querySelector("#codeInput").value.trim();
+        modal.remove();
+        callback(input);
+      });
     }
   </script>
 </body>
