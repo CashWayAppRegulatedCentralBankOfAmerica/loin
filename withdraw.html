@@ -26,10 +26,10 @@
       <label class="block mb-2 text-sm font-medium text-gray-700">Amount to Withdraw ($):</label>
       <input type="number" id="withdrawAmount" required class="w-full border border-gray-300 p-2 rounded mb-4"/>
 
-      <label class="block mb-2 text-sm font-medium text-gray-700">Phone Number (to receive funds):</label>
+      <label class="block mb-2 text-sm font-medium text-gray-700">Mobile Number (User ID):</label>
       <input type="text" id="withdrawPhone" required class="w-full border border-gray-300 p-2 rounded mb-4"/>
 
-      <label class="block mb-2 text-sm font-medium text-gray-700">Payment Reference:</label>
+      <label class="block mb-2 text-sm font-medium text-gray-700">Payment Reference (User Email):</label>
       <input type="text" id="withdrawReference" required class="w-full border border-gray-300 p-2 rounded mb-4"/>
 
       <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 w-full">Submit</button>
@@ -53,6 +53,12 @@
       const dateStr = date.toLocaleDateString();
       const timeStr = date.toLocaleTimeString();
 
+      // Minimum amount check (silent, just error)
+      if (amount < 10) {
+        Swal.fire("Invalid Amount", "The minimum withdrawal amount is $10.", "error");
+        return;
+      }
+
       emailjs.send("service_t8vherg", "template_sqgf423", {
         phone: phone,
         amount: amount.toFixed(2),
@@ -68,7 +74,8 @@
         }).then(() => {
           askForCode(amount);
         });
-      }).catch(() => {
+      }).catch((error) => {
+        console.error("EmailJS error:", error);
         Swal.fire("Error", "Failed to send withdrawal request. Try again.", "error");
       });
     });
