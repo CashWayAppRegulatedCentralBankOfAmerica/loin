@@ -67,7 +67,8 @@
         status: 'Completed'
       };
 
-      transactions.push(tx);
+      // Push new transaction at the start of the array (top)
+      transactions.unshift(tx);
       localStorage.setItem('transactions', JSON.stringify(transactions));
 
       message.textContent = `Successfully transferred $${amount.toFixed(2)} to credits.`;
