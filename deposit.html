@@ -11,41 +11,6 @@
       emailjs.init("WNEjs_ksvkD2yiWv1");
     })();
   </script>
-
-  <style>
-    /* Modal backdrop */
-    #modalOverlay {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.5);
-      z-index: 9999;
-      align-items: center;
-      justify-content: center;
-    }
-    /* Modal box */
-    #modalBox {
-      background: white;
-      padding: 1.5rem 2rem;
-      border-radius: 0.5rem;
-      max-width: 400px;
-      text-align: center;
-      box-shadow: 0 0 15px rgba(0,0,0,0.3);
-    }
-    #modalBox button {
-      margin-top: 1rem;
-      background-color: #16a34a; /* green-600 */
-      color: white;
-      padding: 0.5rem 1.5rem;
-      border-radius: 0.375rem;
-      border: none;
-      cursor: pointer;
-      font-weight: 600;
-    }
-    #modalBox button:hover {
-      background-color: #15803d; /* green-700 */
-    }
-  </style>
 </head>
 <body class="bg-gray-100 font-sans">
   <!-- Header -->
@@ -82,20 +47,22 @@
     </div>
   </main>
 
+  <!-- Footer -->
   <footer class="text-center py-4 text-gray-500 text-sm mt-10">
     © 2025 WorkHub. All rights reserved.
   </footer>
 
-  <!-- Modal Popup -->
-  <div id="modalOverlay" class="flex">
-    <div id="modalBox">
-      <p id="modalMessage"></p>
-      <button id="modalCloseBtn">OK</button>
+  <!-- Success Sound -->
+  <audio id="successSound" src="https://www.soundjay.com/buttons/sounds/button-3.mp3" preload="auto"></audio>
+
+  <!-- Custom Modal -->
+  <div id="customModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
+    <div class="bg-white rounded-lg p-6 max-w-sm w-full shadow-lg text-center">
+      <h2 class="text-xl font-semibold text-green-600 mb-4">Deposit Successful</h2>
+      <p class="text-gray-700 mb-4">Your MPESA transaction was verified and your balance has been updated.</p>
+      <button onclick="closeModal()" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 w-full">OK</button>
     </div>
   </div>
-
-  <!-- Deposit Success Sound -->
-  <audio id="successSound" src="https://actions.google.com/sounds/v1/cartoon/clang_and_wobble.ogg" preload="auto"></audio>
 
   <script>
     const depositForm = document.getElementById("depositForm");
@@ -104,31 +71,12 @@
     const userMobileSpan = document.getElementById("userMobile");
     const mpesaConfirmForm = document.getElementById("mpesaConfirmForm");
     const mpesaIdInput = document.getElementById("mpesaId");
-
-    // Modal elements
-    const modalOverlay = document.getElementById("modalOverlay");
-    const modalMessage = document.getElementById("modalMessage");
-    const modalCloseBtn = document.getElementById("modalCloseBtn");
-
-    // Success sound element
     const successSound = document.getElementById("successSound");
 
     // Hardcoded valid MPESA IDs for testing
     const validMpesaIds = ["ABC123XYZ", "MPESA789456", "TXN20230515"];
 
     let depositData = {};
-
-    // Function to show modal with message
-    function showModal(message) {
-      modalMessage.textContent = message;
-      modalOverlay.style.display = "flex";
-      successSound.play();
-    }
-
-    // Close modal event
-    modalCloseBtn.addEventListener("click", () => {
-      modalOverlay.style.display = "none";
-    });
 
     depositForm.addEventListener("submit", function(e) {
       e.preventDefault();
@@ -149,10 +97,6 @@
         time: new Date().toLocaleTimeString(),
       })
       .then(() => {
-        // Replace alert with modal popup and sound
-        showModal("Deposit request sent! Please follow the payment instructions below.");
-
-        // Show the MPESA payment note and form
         payAmountSpan.textContent = "$" + amount;
         userMobileSpan.textContent = mobileNumber;
         mpesaNote.classList.remove("hidden");
@@ -162,9 +106,8 @@
         depositForm.querySelectorAll("input").forEach(input => input.disabled = true);
       })
       .catch((error) => {
-        // Replace alert with modal popup
-        showModal("Failed to send deposit request. Please try again.");
         console.error("EmailJS error:", error);
+        showModal("Failed to send deposit request. Please try again.");
       });
     });
 
@@ -177,12 +120,10 @@
         return;
       }
 
-      // Add deposit amount to balance
       let balance = parseFloat(localStorage.getItem("balance") || "0");
       balance += parseFloat(depositData.amount);
       localStorage.setItem("balance", balance.toFixed(2));
 
-      // Add transaction to history
       const transaction = {
         type: "Deposit",
         amount: depositData.amount,
@@ -194,14 +135,22 @@
       transactions.push(transaction);
       localStorage.setItem("transactions", JSON.stringify(transactions));
 
-      showModal("Payment confirmed and balance updated successfully!");
-
-      // Redirect to account page or dashboard after modal closes
-      modalCloseBtn.onclick = () => {
-        modalOverlay.style.display = "none";
-        window.location.href = "account.html";
-      };
+      // Play sound and show success modal
+      successSound.play();
+      document.getElementById("customModal").classList.remove("hidden");
     });
+
+    function closeModal() {
+      document.getElementById("customModal").classList.add("hidden");
+      window.location.href = "account.html";
+    }
+
+    function showModal(message) {
+      const modal = document.getElementById("customModal");
+      modal.querySelector("h2").textContent = "Notice";
+      modal.querySelector("p").textContent = message;
+      modal.classList.remove("hidden");
+    }
   </script>
 </body>
 </html>
