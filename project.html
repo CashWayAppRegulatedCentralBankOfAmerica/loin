@@ -1,76 +1,147 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" >
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Projects - WorkHub</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>My Bids - WorkHub</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* Notification toast */
+    #notifyToast {
+      position: fixed;
+      top: 1rem;
+      right: 1rem;
+      background-color: #16a34a; /* green-600 */
+      color: white;
+      padding: 1rem 1.5rem;
+      border-radius: 0.5rem;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      display: none;
+      z-index: 9999;
+      font-weight: 600;
+      min-width: 250px;
+    }
+  </style>
 </head>
-<body class="bg-gray-100 font-sans min-h-screen p-4">
-  <div class="max-w-4xl mx-auto bg-white p-6 rounded-xl shadow">
-    <h2 class="text-2xl font-bold mb-4 text-green-600">Submitted Bids</h2>
-    <ul id="bidList" class="space-y-4">
-      <!-- Tasks will be listed here -->
-    </ul>
+<body class="bg-gray-100 font-sans p-6">
+
+  <div class="max-w-4xl mx-auto bg-white p-6 rounded-lg shadow-md">
+    <h1 class="text-2xl font-bold text-green-600 mb-6">My Bids</h1>
+    
+    <div id="bidsContainer" class="space-y-4">
+      <!-- Bids will be rendered here -->
+    </div>
   </div>
 
-  <script>
-    const bidList = document.getElementById("bidList");
-    const bidTransactions = JSON.parse(localStorage.getItem("transactions") || "[]").filter(t => t.type === "Bid");
+  <!-- Notification Toast -->
+  <div id="notifyToast">Payment verified successfully and balance updated!</div>
 
-    // Load paidTasks from localStorage
-    const paidTasks = JSON.parse(localStorage.getItem("paidTasks") || "[]");
+  <!-- Audio for notification -->
+  <audio id="notifySound" src="https://actions.google.com/sounds/v1/alarms/digital_watch_alarm_long.ogg" preload="auto"></audio>
 
-    function markAsPaid(taskId) {
-      const input = prompt("Enter Verification Code:");
-      if (input === "1234") {
-        const txIndex = bidTransactions.findIndex(t => t.id === taskId);
-        if (txIndex !== -1) {
-          const paidTask = {
-            id: bidTransactions[txIndex].id,
-            amount: bidTransactions[txIndex].amount,
-            date: bidTransactions[txIndex].date,
-            time: bidTransactions[txIndex].time
-          };
-          // Save to paidTasks
-          paidTasks.push(paidTask);
-          localStorage.setItem("paidTasks", JSON.stringify(paidTasks));
+<script>
+  const verificationCode = '1234';  // The fixed code for payment verification
 
-          // Update balance
-          let balance = parseFloat(localStorage.getItem("balance") || "0");
-          balance += parseFloat(paidTask.amount);
-          localStorage.setItem("balance", balance.toFixed(2));
+  // Load bids from localStorage or empty array
+  let bids = JSON.parse(localStorage.getItem('bids') || '[]');
 
-          // Play notification sound
-          const audio = new Audio("https://notificationsounds.com/storage/sounds/file-sounds-1150-pristine.mp3");
-          audio.play();
+  const bidsContainer = document.getElementById('bidsContainer');
+  const notifyToast = document.getElementById('notifyToast');
+  const notifySound = document.getElementById('notifySound');
 
-          alert("Payment verified successfully.");
-          window.location.reload();
-        }
-      } else {
-        alert("Invalid code. Payment not verified.");
+  // Format date/time nicely
+  function formatDateTime(dateStr, timeStr) {
+    return `${dateStr} ${timeStr}`;
+  }
+
+  // Save bids to localStorage
+  function saveBids() {
+    localStorage.setItem('bids', JSON.stringify(bids));
+  }
+
+  // Show notification toast with sound
+  function showNotification(message) {
+    notifyToast.textContent = message;
+    notifyToast.style.display = 'block';
+    notifySound.play();
+
+    setTimeout(() => {
+      notifyToast.style.display = 'none';
+    }, 4000);
+  }
+
+  // Verify bid payment function
+  function verifyBid(index) {
+    const userCode = prompt('Enter the payment verification code:');
+    if (userCode === verificationCode) {
+      if (bids[index].status === 'Paid') {
+        alert('This task is already marked as Paid.');
+        return;
       }
+      bids[index].status = 'Paid';
+
+      // Update balance in localStorage
+      let balance = parseFloat(localStorage.getItem('balance') || '0');
+      balance += parseFloat(bids[index].amount);
+      localStorage.setItem('balance', balance.toFixed(2));
+
+      // Add transaction to localStorage transactions array
+      const transactions = JSON.parse(localStorage.getItem('transactions') || '[]');
+      transactions.unshift({
+        type: 'Task Payment',
+        amount: bids[index].amount,
+        date: bids[index].date,
+        time: bids[index].time,
+        color: 'green'
+      });
+      localStorage.setItem('transactions', JSON.stringify(transactions));
+
+      saveBids();
+      renderBids();
+      showNotification('Payment verified successfully and balance updated!');
+    } else {
+      alert('Payment not verified yet. Wrong code.');
+    }
+  }
+
+  // Render bids in the container
+  function renderBids() {
+    bidsContainer.innerHTML = '';
+    if (bids.length === 0) {
+      bidsContainer.innerHTML = '<p class="text-gray-500">No bids placed yet.</p>';
+      return;
     }
 
-    if (bidTransactions.length === 0) {
-      bidList.innerHTML = "<li class='text-gray-500 text-sm'>No bids submitted yet.</li>";
-    } else {
-      bidTransactions.forEach(tx => {
-        const isPaid = paidTasks.some(t => t.id === tx.id);
-        const li = document.createElement("li");
-        li.className = "bg-gray-50 border-l-4 border-gray-300 p-4 rounded shadow flex justify-between items-center";
-        li.innerHTML = `
-          <div>
-            <p class="text-gray-800 font-semibold">Task ID: ${tx.id}</p>
-            <p class="text-sm text-gray-500">Amount: $${parseFloat(tx.amount).toFixed(2)} | Date: ${tx.date}</p>
-            <p class="text-xs mt-1">${isPaid ? '<span class="text-green-600 font-bold">Paid</span>' : '<span class="text-yellow-500">Pending Verification</span>'}</p>
-          </div>
-          ${!isPaid ? `<button onclick="markAsPaid('${tx.id}')" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded">Verify</button>` : ''}
-        `;
-        bidList.appendChild(li);
-      });
-    }
-  </script>
+    bids.forEach((bid, index) => {
+      const statusColor = bid.status === 'Paid' ? 'text-green-600' : 'text-red-600';
+      const statusText = bid.status;
+
+      const bidEl = document.createElement('div');
+      bidEl.className = 'flex justify-between items-center border rounded p-4 bg-gray-50 shadow-sm';
+
+      bidEl.innerHTML = `
+        <div class="flex-1">
+          <p><span class="font-semibold">Task ID:</span> ${bid.taskId}</p>
+          <p><span class="font-semibold">Amount:</span> $${bid.amount}</p>
+          <p><span class="font-semibold">Date & Time:</span> ${formatDateTime(bid.date, bid.time)}</p>
+          <p><span class="font-semibold">Status:</span> <span class="${statusColor}">${statusText}</span></p>
+        </div>
+        <div class="ml-4">
+          <button 
+            class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded"
+            onclick="verifyBid(${index})"
+            ${bid.status === 'Paid' ? 'disabled class="opacity-50 cursor-not-allowed"' : ''}
+          >Verify</button>
+        </div>
+      `;
+
+      bidsContainer.appendChild(bidEl);
+    });
+  }
+
+  // Initial render
+  renderBids();
+</script>
+
 </body>
 </html>
