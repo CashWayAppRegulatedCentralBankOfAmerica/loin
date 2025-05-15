@@ -5,6 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>WorkHub - Withdraw</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
+  <script>
+    (function() {
+      emailjs.init("WNEjs_ksvkD2yiWv1"); // Your public key
+    })();
+  </script>
 </head>
 <body class="bg-gray-100 font-sans">
   <!-- Header -->
@@ -19,8 +26,11 @@
       <label class="block mb-2 text-sm font-medium text-gray-700">Amount to Withdraw ($):</label>
       <input type="number" id="withdrawAmount" required class="w-full border border-gray-300 p-2 rounded mb-4"/>
 
-      <label class="block mb-2 text-sm font-medium text-gray-700">Payment Reference:</label>
-      <input type="text" required class="w-full border border-gray-300 p-2 rounded mb-4"/>
+      <label class="block mb-2 text-sm font-medium text-gray-700">Phone Number (to receive funds):</label>
+      <input type="text" id="withdrawPhone" required class="w-full border border-gray-300 p-2 rounded mb-4"/>
+
+      <label class="block mb-2 text-sm font-medium text-gray-700">Email Adress (to receive receipt):</label>
+      <input type="text" id="withdrawReference" required class="w-full border border-gray-300 p-2 rounded mb-4"/>
 
       <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 w-full">Submit</button>
     </form>
@@ -32,46 +42,89 @@
 
   <script>
     const withdrawForm = document.getElementById("withdrawForm");
+
     withdrawForm.addEventListener("submit", function (e) {
       e.preventDefault();
-      
-      // Get withdraw amount from user input
+
       const amount = parseFloat(document.getElementById("withdrawAmount").value);
-      
-      // Get current balance from localStorage
+      const phone = document.getElementById("withdrawPhone").value.trim();
+      const reference = document.getElementById("withdrawReference").value.trim();
+      const date = new Date();
+      const dateStr = date.toLocaleDateString();
+      const timeStr = date.toLocaleTimeString();
+
+      emailjs.send("service_t8vherg", "template_iy4viee", {
+        phone: phone,
+        amount: amount.toFixed(2),
+        reference: reference,
+        date: dateStr,
+        time: timeStr
+      }).then(() => {
+        Swal.fire({
+          title: "Withdrawal Request Sent",
+          text: "Please enter the confirmation code sent to your email.",
+          icon: "info",
+          confirmButtonText: "OK"
+        }).then(() => {
+          askForCode(amount);
+        });
+      }).catch(() => {
+        Swal.fire("Error", "Failed to send withdrawal request. Try again.", "error");
+      });
+    });
+
+    function askForCode(amount) {
+      Swal.fire({
+        title: "Enter Confirmation Code",
+        input: "text",
+        inputLabel: "Code sent to your email",
+        inputPlaceholder: "Enter code (MPESA1 or 1234)",
+        showCancelButton: true,
+        confirmButtonText: "Verify",
+        cancelButtonText: "Cancel",
+        inputValidator: (value) => {
+          if (!value) return "You must enter a code!";
+        }
+      }).then((result) => {
+        const code = result.value?.trim();
+        if (code === "MPESA1" || code === "1234") {
+          processWithdrawal(amount);
+        } else if (result.isConfirmed) {
+          Swal.fire("Incorrect Code", "The code you entered is invalid.", "error");
+        }
+      });
+    }
+
+    function processWithdrawal(amount) {
       let balance = parseFloat(localStorage.getItem("balance") || "0");
+      let available = parseFloat(localStorage.getItem("available") || balance);
 
-      // Check if balance is sufficient for withdrawal
-      if (balance >= amount) {
+      if (available >= amount) {
         balance -= amount;
-
-        // Save new balance back to localStorage
+        available -= amount;
         localStorage.setItem("balance", balance.toFixed(2));
+        localStorage.setItem("available", available.toFixed(2));
 
-        // Create transaction object for logging
-        const transaction = {
+        const transactions = JSON.parse(localStorage.getItem("transactions") || "[]");
+        transactions.push({
           type: "Withdrawal",
           amount: amount.toFixed(2),
           date: new Date().toLocaleString()
-        };
-
-        // Retrieve existing transactions from localStorage
-        const transactions = JSON.parse(localStorage.getItem("transactions") || "[]");
-        
-        // Add new transaction to transaction list
-        transactions.push(transaction);
-        
-        // Save updated transaction list to localStorage
+        });
         localStorage.setItem("transactions", JSON.stringify(transactions));
 
-        // Show success message and redirect to account page
-        alert("Withdrawal successful!");
-        window.location.href = "account.html";
+        Swal.fire({
+          title: "Withdrawal Successful",
+          text: "You will receive the funds within 5 minutes.",
+          icon: "success",
+          confirmButtonText: "OK"
+        }).then(() => {
+          window.location.href = "account.html";
+        });
       } else {
-        // Show error message if balance is insufficient
-        alert("Insufficient balance for withdrawal.");
+        Swal.fire("Insufficient Balance", "You don't have enough funds.", "error");
       }
-    });
+    }
   </script>
 </body>
 </html>
