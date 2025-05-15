@@ -1,74 +1,135 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Projects - WorkHub</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WorkHub - Account Overview</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-100 font-sans min-h-screen p-4">
-  <div class="max-w-4xl mx-auto bg-white p-6 rounded-xl shadow">
-    <h2 class="text-2xl font-bold mb-4 text-green-600">Submitted Bids</h2>
-    <ul id="bidList" class="space-y-4">
-      <!-- Tasks will be listed here -->
-    </ul>
-  </div>
+<body class="bg-gray-100 font-sans min-h-screen flex flex-col">
+  <!-- Top Bar -->
+  <header class="bg-white shadow p-4 flex justify-between items-center">
+    <h1 class="text-2xl font-bold text-green-600">WorkHub</h1>
+    <div class="text-sm text-gray-600">
+      <span id="welcomeName">User</span><br>
+      <span class="text-xs text-gray-500">User ID: <span id="userId">0000000000</span></span>
+    </div>
+  </header>
 
+  <!-- Main Section -->
+  <main class="max-w-5xl mx-auto mt-8 p-4 flex-grow">
+    <!-- Balance Overview -->
+    <section class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+      <div class="bg-white p-4 sm:p-6 rounded-xl shadow text-center">
+        <p class="text-gray-500 text-sm sm:text-base">Total Balance</p>
+        <h2 id="totalBalance" class="text-xl sm:text-2xl font-bold text-green-600">$0.00</h2>
+      </div>
+      <div class="bg-white p-4 sm:p-6 rounded-xl shadow text-center">
+        <p class="text-gray-500 text-sm sm:text-base">Available</p>
+        <h2 id="availableBalance" class="text-lg sm:text-xl font-semibold">$0.00</h2>
+      </div>
+      <div class="bg-white p-4 sm:p-6 rounded-xl shadow text-center">
+        <p class="text-gray-500 text-sm sm:text-base">Pending</p>
+        <h2 class="text-lg sm:text-xl font-semibold">$0.00</h2>
+      </div>
+      <div class="bg-white p-4 sm:p-6 rounded-xl shadow text-center">
+        <p class="text-gray-500 text-sm sm:text-base">Credits</p>
+        <h2 id="creditBalance" class="text-lg sm:text-xl font-semibold">$0.00</h2>
+      </div>
+    </section>
+
+    <!-- Action Buttons -->
+    <section class="flex flex-wrap gap-4 mb-6">
+      <a href="deposit.html" class="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg">Deposit</a>
+      <a href="withdraw.html" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg">Withdraw</a>
+      <a href="transfer.html" class="bg-gray-600 hover:bg-gray-700 text-white px-6 py-2 rounded-lg">Transfer</a>
+    </section>
+
+    <!-- Recent Transactions -->
+    <section class="bg-white p-6 rounded-xl shadow min-h-[200px]">
+      <h3 class="text-xl font-semibold mb-4 text-gray-800">Recent Transactions</h3>
+      <ul class="space-y-4" id="transactionList">
+        <!-- Transactions will appear here -->
+      </ul>
+    </section>
+  </main>
+
+  <footer class="text-center py-4 text-gray-500 text-sm bg-transparent">
+    © 2025 WorkHub. All rights reserved.
+  </footer>
+
+  <!-- Script to retrieve and display user data -->
   <script>
-    const bidList = document.getElementById("bidList");
-    const bidTransactions = JSON.parse(localStorage.getItem("transactions") || "[]").filter(t => t.type === "Bid");
+    const fullName = localStorage.getItem('fullName') || 'User';
+    const mobileNumber = localStorage.getItem('mobileNumber') || '0000000000';
+    let balance = parseFloat(localStorage.getItem('balance') || '0');
+    const credits = parseFloat(localStorage.getItem('credits') || '0');
+    let transactions = JSON.parse(localStorage.getItem('transactions') || '[]');
 
-    // Load paidTasks from localStorage
-    const paidTasks = JSON.parse(localStorage.getItem("paidTasks") || "[]");
+    // Fetch completed paid tasks from localStorage
+    const paidTasks = JSON.parse(localStorage.getItem('paidTasks') || '[]');
 
-    function markAsPaid(taskId) {
-      const input = prompt("Enter Verification Code:");
-      if (input === "1234") {
-        const txIndex = bidTransactions.findIndex(t => t.id === taskId);
-        if (txIndex !== -1) {
-          const paidTask = {
-            id: bidTransactions[txIndex].id,
-            amount: bidTransactions[txIndex].amount,
-            date: bidTransactions[txIndex].date,
-            time: bidTransactions[txIndex].time
-          };
-          // Save to paidTasks
-          paidTasks.push(paidTask);
-          localStorage.setItem("paidTasks", JSON.stringify(paidTasks));
+    // Track if any new transaction was added
+    let newPaymentAdded = false;
 
-          // Update balance
-          let balance = parseFloat(localStorage.getItem("balance") || "0");
-          balance += parseFloat(paidTask.amount);
-          localStorage.setItem("balance", balance.toFixed(2));
-
-          // Play notification sound
-          const audio = new Audio("https://notificationsounds.com/storage/sounds/file-sounds-1150-pristine.mp3");
-          audio.play();
-
-          alert("Payment verified successfully.");
-          window.location.reload();
-        }
-      } else {
-        alert("Invalid code. Payment not verified.");
+    // Add new paid task transactions if not already added
+    paidTasks.forEach(task => {
+      const alreadyLogged = transactions.some(tx => tx.id === task.id);
+      if (!alreadyLogged) {
+        const tx = {
+          id: task.id,
+          type: 'Task Payment',
+          amount: task.amount,
+          date: task.date,
+          time: task.time,
+          status: 'Paid'
+        };
+        transactions.push(tx);
+        balance += parseFloat(task.amount); // Update balance
+        newPaymentAdded = true;
       }
+    });
+
+    // Save updated data
+    localStorage.setItem('transactions', JSON.stringify(transactions));
+    localStorage.setItem('balance', balance.toFixed(2));
+
+    // Play notification sound if new task added
+    if (newPaymentAdded) {
+      const audio = new Audio('https://notificationsounds.com/storage/sounds/file-sounds-1150-pristine.mp3');
+      audio.play();
     }
 
-    if (bidTransactions.length === 0) {
-      bidList.innerHTML = "<li class='text-gray-500 text-sm'>No bids submitted yet.</li>";
+    document.getElementById('welcomeName').textContent = fullName;
+    document.getElementById('userId').textContent = mobileNumber;
+    document.getElementById('totalBalance').textContent = `$${(balance + credits).toFixed(2)}`;
+    document.getElementById('availableBalance').textContent = `$${balance.toFixed(2)}`;
+    document.getElementById('creditBalance').textContent = `$${credits.toFixed(2)}`;
+
+    const transactionList = document.getElementById('transactionList');
+    if (transactions.length === 0) {
+      transactionList.innerHTML = '<li class="text-gray-400 text-sm">No transactions yet.</li>';
     } else {
-      bidTransactions.forEach(tx => {
-        const isPaid = paidTasks.some(t => t.id === tx.id);
-        const li = document.createElement("li");
-        li.className = "bg-gray-50 border-l-4 border-gray-300 p-4 rounded shadow flex justify-between items-center";
+      transactions.reverse().forEach(tx => {
+        const li = document.createElement('li');
+        const isDeposit = tx.type === 'Deposit' || tx.type === 'Task Payment';
+        const isTransfer = tx.type === 'Transfer';
+        li.className = `p-4 rounded-lg shadow border-l-4 ${isTransfer ? 'border-black bg-gray-50' : (isDeposit ? 'border-green-500 bg-green-50' : 'border-blue-500 bg-blue-50')}`;
         li.innerHTML = `
-          <div>
-            <p class="text-gray-800 font-semibold">Task ID: ${tx.id}</p>
-            <p class="text-sm text-gray-500">Amount: $${parseFloat(tx.amount).toFixed(2)} | Date: ${tx.date}</p>
-            <p class="text-xs mt-1">${isPaid ? '<span class="text-green-600 font-bold">Paid</span>' : '<span class="text-yellow-500">Pending Verification</span>'}</p>
+          <div class="flex justify-between items-center">
+            <div>
+              <p class="font-semibold text-gray-800">${tx.type}</p>
+              <p class="text-xs text-gray-500">${tx.date} at ${tx.time}</p>
+            </div>
+            <div class="text-right">
+              <p class="text-lg font-bold ${isTransfer ? 'text-black' : (isDeposit ? 'text-green-600' : 'text-blue-600')}">
+                ${isTransfer ? '-' : (isDeposit ? '+' : '-')} $${parseFloat(tx.amount).toFixed(2)}
+              </p>
+              <p class="text-xs text-gray-400 mt-1">${tx.status || 'Completed'}</p>
+            </div>
           </div>
-          ${!isPaid ? `<button onclick="markAsPaid('${tx.id}')" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded">Verify</button>` : ''}
         `;
-        bidList.appendChild(li);
+        transactionList.appendChild(li);
       });
     }
   </script>
