@@ -47,9 +47,22 @@
     </div>
   </main>
 
+  <!-- Footer -->
   <footer class="text-center py-4 text-gray-500 text-sm mt-10">
     © 2025 WorkHub. All rights reserved.
   </footer>
+
+  <!-- Success Sound -->
+  <audio id="successSound" src="https://www.soundjay.com/buttons/sounds/button-3.mp3" preload="auto"></audio>
+
+  <!-- Custom Modal -->
+  <div id="customModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
+    <div class="bg-white rounded-lg p-6 max-w-sm w-full shadow-lg text-center">
+      <h2 class="text-xl font-semibold text-green-600 mb-4">Deposit Successful</h2>
+      <p class="text-gray-700 mb-4">Your MPESA transaction was verified and your balance has been updated.</p>
+      <button onclick="closeModal()" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 w-full">OK</button>
+    </div>
+  </div>
 
   <script>
     const depositForm = document.getElementById("depositForm");
@@ -58,6 +71,7 @@
     const userMobileSpan = document.getElementById("userMobile");
     const mpesaConfirmForm = document.getElementById("mpesaConfirmForm");
     const mpesaIdInput = document.getElementById("mpesaId");
+    const successSound = document.getElementById("successSound");
 
     // Hardcoded valid MPESA IDs for testing
     const validMpesaIds = ["ABC123XYZ", "MPESA789456", "TXN20230515"];
@@ -83,9 +97,6 @@
         time: new Date().toLocaleTimeString(),
       })
       .then(() => {
-        alert("Deposit request sent! Please follow the payment instructions below.");
-
-        // Show the MPESA payment note and form
         payAmountSpan.textContent = "$" + amount;
         userMobileSpan.textContent = mobileNumber;
         mpesaNote.classList.remove("hidden");
@@ -95,8 +106,8 @@
         depositForm.querySelectorAll("input").forEach(input => input.disabled = true);
       })
       .catch((error) => {
-        alert("Failed to send deposit request. Please try again.");
         console.error("EmailJS error:", error);
+        showModal("Failed to send deposit request. Please try again.");
       });
     });
 
@@ -105,16 +116,14 @@
       const enteredMpesaId = mpesaIdInput.value.trim();
 
       if (!validMpesaIds.includes(enteredMpesaId)) {
-        alert("Invalid MPESA transaction ID. Please check and try again.");
+        showModal("Invalid MPESA transaction ID. Please check and try again.");
         return;
       }
 
-      // Add deposit amount to balance
       let balance = parseFloat(localStorage.getItem("balance") || "0");
       balance += parseFloat(depositData.amount);
       localStorage.setItem("balance", balance.toFixed(2));
 
-      // Add transaction to history
       const transaction = {
         type: "Deposit",
         amount: depositData.amount,
@@ -126,11 +135,22 @@
       transactions.push(transaction);
       localStorage.setItem("transactions", JSON.stringify(transactions));
 
-      alert("Payment confirmed and balance updated successfully!");
-
-      // Redirect to account page or dashboard
-      window.location.href = "account.html";
+      // Play sound and show success modal
+      successSound.play();
+      document.getElementById("customModal").classList.remove("hidden");
     });
+
+    function closeModal() {
+      document.getElementById("customModal").classList.add("hidden");
+      window.location.href = "account.html";
+    }
+
+    function showModal(message) {
+      const modal = document.getElementById("customModal");
+      modal.querySelector("h2").textContent = "Notice";
+      modal.querySelector("p").textContent = message;
+      modal.classList.remove("hidden");
+    }
   </script>
 </body>
 </html>
