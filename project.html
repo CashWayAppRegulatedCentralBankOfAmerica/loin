@@ -7,7 +7,6 @@
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-100 font-sans min-h-screen flex flex-col">
-  <!-- Header -->
   <header class="bg-white shadow p-4 flex justify-between items-center">
     <h1 class="text-2xl font-bold text-green-600">WorkHub</h1>
     <div class="text-sm text-gray-600">
@@ -16,20 +15,15 @@
     </div>
   </header>
 
-  <!-- Main Content -->
   <main class="max-w-5xl mx-auto mt-8 p-4 flex-grow">
     <section class="bg-white p-6 rounded-xl shadow mb-6">
       <h2 class="text-xl font-semibold text-gray-800 mb-4">Your Bids</h2>
-      <div id="bidsContainer" class="space-y-4">
-        <!-- Bids will load here -->
-      </div>
+      <div id="bidsContainer" class="space-y-4"></div>
     </section>
 
     <section class="bg-white p-6 rounded-xl shadow">
       <h3 class="text-xl font-semibold mb-4 text-gray-800">Recent Transactions</h3>
-      <ul class="space-y-4" id="transactionList">
-        <!-- Paid task transactions will load here -->
-      </ul>
+      <ul class="space-y-4" id="transactionList"></ul>
     </section>
   </main>
 
@@ -38,12 +32,11 @@
   </footer>
 
   <script>
-    // Setup
     const fullName = localStorage.getItem('fullName') || 'User';
     const mobileNumber = localStorage.getItem('mobileNumber') || '0000000000';
     const bidData = JSON.parse(localStorage.getItem('bids') || '[]');
     const transactions = JSON.parse(localStorage.getItem('transactions') || '[]');
-    const addedTransactions = new Set(transactions.map(tx => tx.taskId)); // Prevent duplicates
+    const addedTransactions = new Set(transactions.map(tx => tx.taskId));
 
     document.getElementById('welcomeName').textContent = fullName;
     document.getElementById('userId').textContent = mobileNumber;
@@ -51,68 +44,97 @@
     const bidsContainer = document.getElementById('bidsContainer');
     const transactionList = document.getElementById('transactionList');
 
-    if (bidData.length === 0) {
-      bidsContainer.innerHTML = '<p class="text-gray-500 text-sm">You have not placed any bids yet.</p>';
-    } else {
-      bidData.forEach(bid => {
-        // Render Bid History
-        const bidCard = document.createElement('div');
-        bidCard.className = 'border-l-4 p-4 rounded-lg shadow bg-gray-50 ' + (bid.status === 'Paid' ? 'border-green-500' : 'border-blue-500');
-        bidCard.innerHTML = `
-          <div class="flex justify-between items-center">
-            <div>
-              <p class="font-semibold text-gray-800">Task ID: ${bid.taskId}</p>
-              <p class="text-sm text-gray-600">Bid Amount: $${parseFloat(bid.amount).toFixed(2)}</p>
-              <p class="text-xs text-gray-500">Bid Date: ${bid.date} at ${bid.time}</p>
-            </div>
-            <div class="text-right">
-              <p class="text-sm font-bold ${bid.status === 'Paid' ? 'text-green-600' : 'text-blue-600'}">${bid.status}</p>
-              <p class="text-xs text-gray-500">Credit Used: $1</p>
-            </div>
-          </div>
+    function renderBids() {
+      bidsContainer.innerHTML = '';
+      if (bidData.length === 0) {
+        bidsContainer.innerHTML = '<p class="text-gray-500 text-sm">You have not placed any bids yet.</p>';
+        return;
+      }
+
+      bidData.forEach((bid, index) => {
+        const container = document.createElement('div');
+        container.className = 'bg-gray-50 p-4 shadow border rounded-lg flex justify-between items-center';
+
+        const left = document.createElement('div');
+        left.innerHTML = `
+          <p class="text-sm text-gray-600 font-semibold">Task ID: ${bid.taskId}</p>
+          <p class="text-xs text-gray-500">Bid Amount: $${parseFloat(bid.amount).toFixed(2)}</p>
+          <p class="text-xs text-gray-400">Date: ${bid.date} at ${bid.time}</p>
         `;
-        bidsContainer.appendChild(bidCard);
 
-        // Add Paid Bids to Recent Transactions if not already added
-        if (bid.status === 'Paid' && !addedTransactions.has(bid.taskId)) {
-          const tx = {
-            type: 'Task Payment',
-            amount: bid.amount,
-            date: bid.date,
-            time: bid.time,
-            status: 'Completed',
-            taskId: bid.taskId // unique identifier to prevent duplication
+        const right = document.createElement('div');
+        if (bid.status === 'Paid') {
+          right.innerHTML = `<p class="text-green-600 text-sm font-bold">Paid</p>`;
+        } else {
+          const button = document.createElement('button');
+          button.textContent = 'Verify';
+          button.className = 'bg-blue-600 hover:bg-blue-700 text-white text-sm px-4 py-1 rounded';
+          button.onclick = () => {
+            const code = prompt("Enter verification code to mark as paid:");
+            if (code === '1234') {
+              bid.status = 'Paid';
+              alert("Payment verified.");
+              addToTransactions(bid);
+              localStorage.setItem('bids', JSON.stringify(bidData));
+              renderBids();
+              renderTransactions();
+            } else {
+              alert("Payment not verified yet.");
+            }
           };
-          transactions.push(tx);
-          addedTransactions.add(bid.taskId);
-
-          // Render Transaction
-          const li = document.createElement('li');
-          li.className = 'p-4 rounded-lg shadow border-l-4 border-green-500 bg-green-50';
-          li.innerHTML = `
-            <div class="flex justify-between items-center">
-              <div>
-                <p class="font-semibold text-gray-800">${tx.type}</p>
-                <p class="text-xs text-gray-500">${tx.date} at ${tx.time}</p>
-              </div>
-              <div class="text-right">
-                <p class="text-lg font-bold text-green-600">+$${parseFloat(tx.amount).toFixed(2)}</p>
-                <p class="text-xs text-gray-400 mt-1">${tx.status}</p>
-              </div>
-            </div>
-          `;
-          transactionList.appendChild(li);
+          right.appendChild(button);
         }
-      });
 
-      // Save updated transactions
+        container.appendChild(left);
+        container.appendChild(right);
+        bidsContainer.appendChild(container);
+      });
+    }
+
+    function addToTransactions(bid) {
+      if (addedTransactions.has(bid.taskId)) return;
+      const tx = {
+        type: 'Task Payment',
+        amount: bid.amount,
+        date: bid.date,
+        time: bid.time,
+        status: 'Completed',
+        taskId: bid.taskId
+      };
+      transactions.push(tx);
+      addedTransactions.add(bid.taskId);
       localStorage.setItem('transactions', JSON.stringify(transactions));
     }
 
-    // If no paid tasks
-    if (transactionList.children.length === 0) {
-      transactionList.innerHTML = '<li class="text-gray-400 text-sm">No paid task transactions yet.</li>';
+    function renderTransactions() {
+      transactionList.innerHTML = '';
+      if (transactions.length === 0) {
+        transactionList.innerHTML = '<li class="text-gray-400 text-sm">No paid task transactions yet.</li>';
+        return;
+      }
+
+      transactions.forEach(tx => {
+        const li = document.createElement('li');
+        li.className = 'p-4 rounded-lg shadow border-l-4 border-green-500 bg-green-50';
+        li.innerHTML = `
+          <div class="flex justify-between items-center">
+            <div>
+              <p class="font-semibold text-gray-800">${tx.type}</p>
+              <p class="text-xs text-gray-500">${tx.date} at ${tx.time}</p>
+            </div>
+            <div class="text-right">
+              <p class="text-lg font-bold text-green-600">+$${parseFloat(tx.amount).toFixed(2)}</p>
+              <p class="text-xs text-gray-400 mt-1">${tx.status}</p>
+            </div>
+          </div>
+        `;
+        transactionList.appendChild(li);
+      });
     }
+
+    // Initial render
+    renderBids();
+    renderTransactions();
   </script>
 </body>
 </html>
