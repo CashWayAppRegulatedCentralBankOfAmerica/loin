@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Upwork User Profile Clone</title>
+  <style>
+    body {
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f5f8fa;
+      margin: 0;
+      padding: 20px;
+      display: flex;
+      justify-content: center;
+    }
+    .profile-card {
+      background: white;
+      max-width: 400px;
+      width: 100%;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgb(0 0 0 / 0.1);
+      padding: 24px;
+      box-sizing: border-box;
+    }
+    .profile-header {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+    .avatar-wrapper {
+      position: relative;
+      width: 72px;
+      height: 72px;
+      flex-shrink: 0;
+    }
+    .avatar-wrapper img {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid #e1e4e8;
+    }
+    /* Green online indicator */
+    .online-indicator {
+      position: absolute;
+      bottom: 4px;
+      right: 4px;
+      width: 18px;
+      height: 18px;
+      background-color: #21bf48; /* Upwork green */
+      border: 2px solid white;
+      border-radius: 50%;
+      box-shadow: 0 0 6px #21bf48aa;
+    }
+    .user-info {
+      flex-grow: 1;
+    }
+    .user-name {
+      font-weight: 700;
+      font-size: 1.25rem;
+      margin: 0;
+      color: #222;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .user-title {
+      font-weight: 500;
+      font-size: 1rem;
+      margin: 4px 0 0 0;
+      color: #555;
+    }
+    .user-location {
+      font-size: 0.9rem;
+      color: #666;
+      margin-top: 6px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 400;
+    }
+    .user-location svg {
+      fill: #666;
+      width: 14px;
+      height: 14px;
+    }
+    .skills {
+      margin-top: 20px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .skill {
+      background-color: #e6f4ea;
+      color: #21bf48;
+      font-weight: 600;
+      font-size: 0.85rem;
+      padding: 6px 12px;
+      border-radius: 20px;
+      user-select: none;
+    }
+    .rating {
+      margin-top: 18px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: #f0b429;
+      font-weight: 600;
+      font-size: 1rem;
+    }
+    .rating svg {
+      fill: #f0b429;
+      width: 18px;
+      height: 18px;
+    }
+    .bio {
+      margin-top: 18px;
+      font-size: 0.95rem;
+      line-height: 1.4;
+      color: #333;
+    }
+  </style>
+</head>
+<body>
+  <div class="profile-card">
+    <div class="profile-header">
+      <div class="avatar-wrapper">
+        <img src="https://randomuser.me/api/portraits/women/65.jpg" alt="User Avatar" />
+        <span class="online-indicator" title="Online"></span>
+      </div>
+      <div class="user-info">
+        <h2 class="user-name">Tabitha Nelima</h2>
+        <p class="user-title">Full Stack Developer</p>
+        <p class="user-location" title="Location">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zM12 11.5c-1.38 0-2.5-1.12-2.5-2.5S10.62 6.5 12 6.5s2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"></path></svg>
+          Nairobi, Kenya
+        </p>
+      </div>
+    </div>
+    <div class="skills" aria-label="Skills">
+      <span class="skill">JavaScript</span>
+      <span class="skill">React</span>
+      <span class="skill">Node.js</span>
+      <span class="skill">Tailwind CSS</span>
+      <span class="skill">Python</span>
+    </div>
+    <div class="rating" aria-label="User Rating">
+      <!-- 5 stars example -->
+      <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 15l-5.878 3.09L5.822 11.18 1 7.27l6.06-.52L10 1l2.94 5.75 6.06.52-4.822 3.91 1.7 6.91z"></path></svg>
+      <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 15l-5.878 3.09L5.822 11.18 1 7.27l6.06-.52L10 1l2.94 5.75 6.06.52-4.822 3.91 1.7 6.91z"></path></svg>
+      <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 15l-5.878 3.09L5.822 11.18 1 7.27l6.06-.52L10 1l2.94 5.75 6.06.52-4.822 3.91 1.7 6.91z"></path></svg>
+      <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 15l-5.878 3.09L5.822 11.18 1 7.27l6.06-.52L10 1l2.94 5.75 6.06.52-4.822 3.91 1.7 6.91z"></path></svg>
+      <svg viewBox="0 0 20 20" aria-hidden="true" style="opacity:0.3"><path d="M10 15l-5.878 3.09L5.822 11.18 1 7.27l6.06-.52L10 1l2.94 5.75 6.06.52-4.822 3.91 1.7 6.91z"></path></svg>
+      <span style="color:#222; font-weight: 700;">4.0 (120 reviews)</span>
+    </div>
+    <p class="bio">
+      Experienced full stack developer specializing in React and Node.js with a passion for building scalable web applications. Dedicated to delivering high-quality code and great user experiences.
+    </p>
+  </div>
+</body>
+</html>
