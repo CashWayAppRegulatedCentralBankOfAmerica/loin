@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>WorkHub - Withdraw</title>
+  <title>Nova Prime - Withdraw</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
   <script>
@@ -46,8 +46,8 @@
 </head>
 <body class="bg-gray-100 font-sans">
   <header class="bg-white shadow p-4 flex items-center justify-between">
-    <div class="text-xl font-bold text-green-600">WorkHub</div>
-    <h1 class="text-lg font-semibold text-gray-700">Withdraw Funds</h1>
+    <div class="text-xl font-bold text-green-600">Nova Prime</div>
+    <h1 class="text-lg font-semibold text-gray-700"></h1>
   </header>
 
   <main class="max-w-md mx-auto mt-10 bg-white p-6 rounded-lg shadow">
@@ -61,12 +61,12 @@
       <label class="block mb-2 text-sm font-medium text-gray-700">Reference Note (User Email):</label>
       <input type="text" id="withdrawReference" required class="w-full border border-gray-300 p-2 rounded mb-4" />
 
-      <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 w-full">Submit Withdrawal</button>
+      <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 w-full">Withdraw</button>
     </form>
   </main>
 
   <footer class="text-center py-4 text-gray-500 text-sm mt-10">
-    © 2025 WorkHub. All rights reserved.
+    © 2025 Nova Prime. All rights reserved.
   </footer>
 
   <!-- Modal -->
@@ -123,10 +123,10 @@
         time: new Date().toLocaleTimeString(),
       })
       .then(() => {
-        showModal("Withdrawal request sent! Enter the confirmation code sent to your email.", true);
+        showModal("Withdrawal request has been made! Enter the confirmation code sent to your email.", true);
       })
       .catch((error) => {
-        showModal("Failed to send withdrawal request. Please try again.");
+        showModal("Failed to make your withdrawal. Please try again.");
         console.error("EmailJS error:", error);
       });
     });
