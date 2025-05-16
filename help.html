@@ -2,118 +2,123 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>WorkHub Help Center</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Help Center | Nova Prime</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      font-family: Helvetica, sans-serif;
+    }
+  </style>
 </head>
-<body class="bg-gray-50 text-gray-800 font-sans">
+<body class="bg-white text-gray-800">
 
   <!-- Header -->
-  <header class="bg-white shadow p-4">
-    <div class="max-w-6xl mx-auto flex justify-between items-center">
-      <h1 class="text-2xl font-bold text-green-600">WorkHub Help Center</h1>
-      <a href="dashboard.html" class="text-sm text-green-600 hover:underline">← Back to Dashboard</a>
+  <header class="bg-green-600 text-white py-6">
+    <div class="max-w-5xl mx-auto px-4">
+      <h1 class="text-3xl font-bold">Nova Prime Help Center</h1>
+      <p class="mt-2">Your questions answered. If you still need help, we're here for you.</p>
     </div>
   </header>
 
-  <!-- Search Bar -->
-  <section class="bg-green-100 py-10">
-    <div class="max-w-2xl mx-auto text-center px-4">
-      <h2 class="text-3xl font-semibold mb-4">How can we help you?</h2>
-      <input type="text" placeholder="Search the Help Center..."
-        class="w-full px-4 py-3 rounded-lg border border-green-300 focus:ring-2 focus:ring-green-500">
-    </div>
-  </section>
+  <!-- Main Content -->
+  <main class="max-w-5xl mx-auto px-4 py-10 space-y-10">
 
-  <!-- Popular Topics -->
-  <section class="max-w-6xl mx-auto py-10 px-4">
-    <h3 class="text-xl font-semibold mb-6">Popular Topics</h3>
-    <div class="grid md:grid-cols-3 gap-6">
-      <div class="bg-white p-5 rounded-lg shadow hover:shadow-lg transition">
-        <h4 class="font-semibold mb-2">Getting Started</h4>
-        <p class="text-sm text-gray-600">Learn how to create an account and set up your profile.</p>
-      </div>
-      <div class="bg-white p-5 rounded-lg shadow hover:shadow-lg transition">
-        <h4 class="font-semibold mb-2">Deposits & Withdrawals</h4>
-        <p class="text-sm text-gray-600">Understand how to manage your payments and funds.</p>
-      </div>
-      <div class="bg-white p-5 rounded-lg shadow hover:shadow-lg transition">
-        <h4 class="font-semibold mb-2">Bidding on Projects</h4>
-        <p class="text-sm text-gray-600">How to submit proposals and win tasks.</p>
-      </div>
-    </div>
-  </section>
+    <!-- Account Section -->
+    <section>
+      <h2 class="text-2xl font-semibold mb-4 text-green-700">1. Getting Started with Nova Prime</h2>
+      
+      <h3 class="text-xl font-semibold mt-4">How do I create a Nova Prime account?</h3>
+      <p>
+        Simply click the “Sign Up” button on the homepage and fill in your full name, email address, mobile number, and password.
+        You'll be prompted to verify your email and complete your profile to start working or hiring.
+      </p>
 
-  <!-- Categories (Accordion Style) -->
-  <section class="max-w-4xl mx-auto py-10 px-4">
-    <h3 class="text-xl font-semibold mb-6">Help Categories</h3>
-    
-    <div class="space-y-4">
-      <!-- Accordion Item -->
-      <div class="bg-white rounded-lg shadow">
-        <button class="w-full flex justify-between items-center px-6 py-4 text-left font-medium text-lg accordion-toggle">
-          Account & Profile <span class="text-gray-400">+</span>
-        </button>
-        <div class="accordion-content hidden px-6 pb-4 text-sm text-gray-700">
-          <ul class="list-disc pl-5 space-y-2">
-            <li>How to edit your profile</li>
-            <li>Resetting your password</li>
-            <li>Managing your email preferences</li>
-          </ul>
-        </div>
-      </div>
+      <h3 class="text-xl font-semibold mt-4">Is Nova Prime free to use?</h3>
+      <p>
+        Yes, creating an account is completely free. Freelancers only pay a small service fee when earning, and clients only pay when they hire.
+      </p>
+    </section>
 
-      <!-- Accordion Item -->
-      <div class="bg-white rounded-lg shadow">
-        <button class="w-full flex justify-between items-center px-6 py-4 text-left font-medium text-lg accordion-toggle">
-          Payments & Billing <span class="text-gray-400">+</span>
-        </button>
-        <div class="accordion-content hidden px-6 pb-4 text-sm text-gray-700">
-          <ul class="list-disc pl-5 space-y-2">
-            <li>Withdrawing funds</li>
-            <li>Deposit processing time</li>
-            <li>Resolving payment issues</li>
-          </ul>
-        </div>
-      </div>
+    <!-- Freelancing Section -->
+    <section>
+      <h2 class="text-2xl font-semibold mb-4 text-green-700">2. Freelancers</h2>
 
-      <!-- Accordion Item -->
-      <div class="bg-white rounded-lg shadow">
-        <button class="w-full flex justify-between items-center px-6 py-4 text-left font-medium text-lg accordion-toggle">
-          Projects & Proposals <span class="text-gray-400">+</span>
-        </button>
-        <div class="accordion-content hidden px-6 pb-4 text-sm text-gray-700">
-          <ul class="list-disc pl-5 space-y-2">
-            <li>Finding projects</li>
-            <li>Understanding milestones</li>
-            <li>Dealing with non-responsive clients</li>
-          </ul>
-        </div>
-      </div>
-    </div>
-  </section>
+      <h3 class="text-xl font-semibold mt-4">How do I find work?</h3>
+      <p>
+        After completing your profile, head to the "Projects" section to browse open jobs. Submit proposals with your rate and a brief message to the client explaining your skills and fit.
+      </p>
 
-  <!-- Contact Support -->
-  <section class="bg-white border-t py-8">
-    <div class="max-w-3xl mx-auto text-center px-4">
-      <h4 class="text-lg font-semibold mb-2">Still need help?</h4>
-      <p class="text-sm text-gray-600 mb-4">If you can't find your answer here, our team is happy to help.</p>
-      <a href="mailto:support@workhub.com"
-        class="bg-green-600 text-white px-6 py-2 rounded-full hover:bg-green-700 transition">Contact Support</a>
-    </div>
-  </section>
+      <h3 class="text-xl font-semibold mt-4">How do I get paid?</h3>
+      <p>
+        Once the client marks your task as completed and releases payment, it will reflect in your Nova Prime account. You can withdraw funds via PayPal, bank transfer, or other available methods.
+      </p>
 
-  <!-- Script for Accordion -->
-  <script>
-    document.querySelectorAll('.accordion-toggle').forEach(button => {
-      button.addEventListener('click', () => {
-        const content = button.nextElementSibling;
-        const icon = button.querySelector('span');
-        content.classList.toggle('hidden');
-        icon.textContent = content.classList.contains('hidden') ? '+' : '–';
-      });
-    });
-  </script>
+      <h3 class="text-xl font-semibold mt-4">Why is my payment pending?</h3>
+      <p>
+        Payments may take up to 24–48 hours to process depending on the method used. Ensure your task is marked as paid and your verification steps are complete.
+      </p>
+    </section>
+
+    <!-- Clients Section -->
+    <section>
+      <h2 class="text-2xl font-semibold mb-4 text-green-700">3. Clients</h2>
+
+      <h3 class="text-xl font-semibold mt-4">How do I hire a freelancer?</h3>
+      <p>
+        Post a job or browse freelancers. Once you find someone that fits, click "Hire" and fund the milestone. You’ll only be charged once the freelancer completes the job.
+      </p>
+
+      <h3 class="text-xl font-semibold mt-4">Can I cancel a job?</h3>
+      <p>
+        Yes, you can cancel a job at any point before work begins. If the milestone is funded, it will be refunded to your payment method.
+      </p>
+    </section>
+
+    <!-- Security & Support Section -->
+    <section>
+      <h2 class="text-2xl font-semibold mb-4 text-green-700">4. Security & Disputes</h2>
+
+      <h3 class="text-xl font-semibold mt-4">Is Nova Prime safe?</h3>
+      <p>
+        Yes. We use bank-level encryption and two-step verification to protect your account. We also monitor activity to prevent fraud and abuse.
+      </p>
+
+      <h3 class="text-xl font-semibold mt-4">What if there's a dispute?</h3>
+      <p>
+        If a freelancer or client has an issue with a contract, our dispute team can step in. Start by messaging the other party. If no resolution is reached, open a formal dispute through your dashboard.
+      </p>
+    </section>
+
+    <!-- Technical -->
+    <section>
+      <h2 class="text-2xl font-semibold mb-4 text-green-700">5. Technical Questions</h2>
+
+      <h3 class="text-xl font-semibold mt-4">I forgot my password. What should I do?</h3>
+      <p>
+        Click "Forgot Password" on the login page and follow the instructions to reset it via email.
+      </p>
+
+      <h3 class="text-xl font-semibold mt-4">Why am I not receiving emails from Nova Prime?</h3>
+      <p>
+        Please check your spam or junk folder. Make sure to whitelist <strong>support@novaprime.com</strong> to receive all important messages.
+      </p>
+    </section>
+
+    <!-- Contact -->
+    <section>
+      <h2 class="text-2xl font-semibold mb-4 text-green-700">6. Need More Help?</h2>
+      <p>
+        If your question wasn’t answered here, you can reach our support team any time.
+      </p>
+      <ul class="list-disc ml-5 mt-3">
+        <li>Email: <strong>support@novaprime.com</strong></li>
+        <li>Phone: <strong>+1 (800) 555-0199</strong></li>
+        <li>Live Chat: Available 24/7 in your dashboard</li>
+      </ul>
+    </section>
+
+  </main>
   <!-- Footer -->
   <footer class="bg-white border-t mt-12">
     <footer class="fixed bottom-0 left-0 w-full bg-white text-center py-4 text-gray-500 text-sm z-50 shadow">
