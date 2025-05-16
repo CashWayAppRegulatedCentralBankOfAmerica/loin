@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" >
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Upwork User Profile Clone</title>
+  <title>Upwork User Profile Clone with Reviews</title>
   <style>
     body {
       font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
@@ -33,26 +33,22 @@
       width: 72px;
       height: 72px;
       flex-shrink: 0;
+      border-radius: 50%;
+      padding: 3px; /* For green ring */
+      background: #21bf48; /* Upwork green ring */
+      box-sizing: border-box;
+      box-shadow: 0 0 8px 2px #21bf48aa;
+      cursor: default;
     }
     .avatar-wrapper img {
-      width: 72px;
-      height: 72px;
+      width: 100%;
+      height: 100%;
       border-radius: 50%;
       object-fit: cover;
-      border: 2px solid #e1e4e8;
-    }
-    /* Green online indicator */
-    .online-indicator {
-      position: absolute;
-      bottom: 4px;
-      right: 4px;
-      width: 18px;
-      height: 18px;
-      background-color: #21bf48; /* Upwork green */
       border: 2px solid white;
-      border-radius: 50%;
-      box-shadow: 0 0 6px #21bf48aa;
+      display: block;
     }
+
     .user-info {
       flex-grow: 1;
     }
@@ -108,11 +104,20 @@
       color: #f0b429;
       font-weight: 600;
       font-size: 1rem;
+      cursor: pointer;
+      user-select: none;
     }
     .rating svg {
       fill: #f0b429;
       width: 18px;
       height: 18px;
+    }
+    .rating .faded {
+      opacity: 0.3;
+    }
+    .rating span {
+      color: #222;
+      font-weight: 700;
     }
     .bio {
       margin-top: 18px;
@@ -120,14 +125,112 @@
       line-height: 1.4;
       color: #333;
     }
+
+    /* Reviews section - hidden initially */
+    .reviews-section {
+      margin-top: 24px;
+      border-top: 1px solid #eee;
+      padding-top: 16px;
+      display: none;
+      max-height: 400px;
+      overflow-y: auto;
+    }
+    .review {
+      background: #f9f9f9;
+      padding: 12px 16px;
+      margin-bottom: 12px;
+      border-radius: 8px;
+      box-shadow: 0 0 3px rgb(0 0 0 / 0.05);
+    }
+    .review strong {
+      display: block;
+      margin-bottom: 6px;
+      color: #21bf48;
+    }
+    .review-text {
+      font-size: 0.9rem;
+      color: #444;
+    }
+    .add-review {
+      margin-top: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .add-review textarea {
+      resize: vertical;
+      min-height: 80px;
+      padding: 8px;
+      font-size: 1rem;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      font-family: inherit;
+    }
+    .add-review input[type="text"] {
+      padding: 8px;
+      font-size: 1rem;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      font-family: inherit;
+    }
+    .add-review button {
+      background-color: #21bf48;
+      color: white;
+      font-weight: 600;
+      padding: 10px 16px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      align-self: flex-start;
+    }
+    .add-review button:hover {
+      background-color: #1a9e3a;
+    }
+
+    /* Modal styles */
+    .modal-bg {
+      position: fixed;
+      inset: 0;
+      background-color: rgba(0,0,0,0.5);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+    }
+    .modal {
+      background: white;
+      padding: 24px;
+      border-radius: 12px;
+      max-width: 320px;
+      text-align: center;
+      box-shadow: 0 5px 15px rgb(0 0 0 / 0.3);
+    }
+    .modal h3 {
+      margin-top: 0;
+      margin-bottom: 16px;
+      color: #21bf48;
+    }
+    .modal button {
+      margin-top: 16px;
+      background-color: #21bf48;
+      border: none;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+    .modal button:hover {
+      background-color: #1a9e3a;
+    }
   </style>
 </head>
 <body>
   <div class="profile-card">
     <div class="profile-header">
-      <div class="avatar-wrapper">
+      <div class="avatar-wrapper" title="User is online">
         <img src="https://randomuser.me/api/portraits/women/65.jpg" alt="User Avatar" />
-        <span class="online-indicator" title="Online"></span>
       </div>
       <div class="user-info">
         <h2 class="user-name">Tabitha Nelima</h2>
@@ -145,18 +248,130 @@
       <span class="skill">Tailwind CSS</span>
       <span class="skill">Python</span>
     </div>
-    <div class="rating" aria-label="User Rating">
+    <div class="rating" id="rating" tabindex="0" role="button" aria-pressed="false" aria-label="User rating and reviews, click to read reviews">
       <!-- 5 stars example -->
       <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 15l-5.878 3.09L5.822 11.18 1 7.27l6.06-.52L10 1l2.94 5.75 6.06.52-4.822 3.91 1.7 6.91z"></path></svg>
       <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 15l-5.878 3.09L5.822 11.18 1 7.27l6.06-.52L10 1l2.94 5.75 6.06.52-4.822 3.91 1.7 6.91z"></path></svg>
       <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 15l-5.878 3.09L5.822 11.18 1 7.27l6.06-.52L10 1l2.94 5.75 6.06.52-4.822 3.91 1.7 6.91z"></path></svg>
       <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 15l-5.878 3.09L5.822 11.18 1 7.27l6.06-.52L10 1l2.94 5.75 6.06.52-4.822 3.91 1.7 6.91z"></path></svg>
-      <svg viewBox="0 0 20 20" aria-hidden="true" style="opacity:0.3"><path d="M10 15l-5.878 3.09L5.822 11.18 1 7.27l6.06-.52L10 1l2.94 5.75 6.06.52-4.822 3.91 1.7 6.91z"></path></svg>
-      <span style="color:#222; font-weight: 700;">4.0 (120 reviews)</span>
+      <svg class="faded" viewBox="0 0 20 20" aria-hidden="true"><path d="M10 15l-5.878 3.09L5.822 11.18 1 7.27l6.06-.52L10 1l2.94 5.75 6.06.52-4.822 3.91 1.7 6.91z"></path></svg>
+      <span>(24 reviews)</span>
     </div>
     <p class="bio">
-      Experienced full stack developer specializing in React and Node.js with a passion for building scalable web applications. Dedicated to delivering high-quality code and great user experiences.
+      Experienced full stack developer specializing in building modern web apps using React and Node.js. Passionate about clean code, user experience, and scalable solutions.
     </p>
+
+    <section class="reviews-section" id="reviewsSection" aria-live="polite" aria-label="User reviews">
+      <h3>User Reviews</h3>
+      <div id="reviewsList">
+        <!-- Existing reviews -->
+      </div>
+
+      <div class="add-review">
+        <input type="text" id="reviewerId" placeholder="Your User ID" aria-label="Your User ID" />
+        <textarea id="reviewText" placeholder="Write your review here..." aria-label="Write your review"></textarea>
+        <button id="submitReviewBtn">Send Review</button>
+      </div>
+    </section>
   </div>
+
+  <!-- Modal -->
+  <div class="modal-bg" id="modalBg" role="dialog" aria-modal="true" aria-labelledby="modalTitle" tabindex="-1">
+    <div class="modal">
+      <h3 id="modalTitle">Review Submission</h3>
+      <p id="modalMessage"></p>
+      <button id="modalCloseBtn">Close</button>
+    </div>
+  </div>
+
+  <script>
+    const reviews = [
+      { reviewer: "Jacob123", text: "Great work, very professional and on time." },
+      { reviewer: "AliceW", text: "Highly recommended! Very skilled." },
+      { reviewer: "Mike_T", text: "Good communication and excellent coding skills." }
+    ];
+
+    const allowedReviewerIds = ["Jacob123", "AliceW", "Mike_T"]; // IDs allowed to review Tabitha Nelima
+
+    const reviewsSection = document.getElementById('reviewsSection');
+    const reviewsList = document.getElementById('reviewsList');
+    const submitReviewBtn = document.getElementById('submitReviewBtn');
+    const reviewTextInput = document.getElementById('reviewText');
+    const reviewerIdInput = document.getElementById('reviewerId');
+    const ratingDiv = document.getElementById('rating');
+
+    const modalBg = document.getElementById('modalBg');
+    const modalMessage = document.getElementById('modalMessage');
+    const modalCloseBtn = document.getElementById('modalCloseBtn');
+
+    function renderReviews() {
+      reviewsList.innerHTML = '';
+      if (reviews.length === 0) {
+        reviewsList.innerHTML = '<p>No reviews yet.</p>';
+        return;
+      }
+      reviews.forEach(r => {
+        const div = document.createElement('div');
+        div.className = 'review';
+        div.innerHTML = `<strong>${r.reviewer}</strong><p class="review-text">${r.text}</p>`;
+        reviewsList.appendChild(div);
+      });
+    }
+
+    function showModal(message) {
+      modalMessage.textContent = message;
+      modalBg.style.display = 'flex';
+      modalCloseBtn.focus();
+    }
+    function closeModal() {
+      modalBg.style.display = 'none';
+    }
+
+    ratingDiv.addEventListener('click', () => {
+      // Toggle reviews section visibility
+      if (reviewsSection.style.display === 'block') {
+        reviewsSection.style.display = 'none';
+        ratingDiv.setAttribute('aria-pressed', 'false');
+      } else {
+        reviewsSection.style.display = 'block';
+        ratingDiv.setAttribute('aria-pressed', 'true');
+      }
+    });
+    ratingDiv.addEventListener('keypress', e => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        ratingDiv.click();
+      }
+    });
+
+    submitReviewBtn.addEventListener('click', () => {
+      const reviewerId = reviewerIdInput.value.trim();
+      const reviewText = reviewTextInput.value.trim();
+
+      if (!reviewerId) {
+        showModal('Please enter your User ID.');
+        return;
+      }
+      if (!reviewText) {
+        showModal('Please enter your review text.');
+        return;
+      }
+      if (!allowedReviewerIds.includes(reviewerId)) {
+        showModal(`Your User ID is not associated with Tabitha Nelima. Only users who have worked with Tabitha Nelima can send a review.`);
+        return;
+      }
+      // Add review
+      reviews.push({ reviewer: reviewerId, text: reviewText });
+      renderReviews();
+      reviewerIdInput.value = '';
+      reviewTextInput.value = '';
+      showModal('Thank you for your review!');
+    });
+
+    modalCloseBtn.addEventListener('click', closeModal);
+
+    // Initial render
+    renderReviews();
+  </script>
 </body>
 </html>
