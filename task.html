@@ -13,15 +13,6 @@
 
   <main class="max-w-5xl mx-auto p-4">
     <h2 class="text-xl font-semibold mb-4">Available Tasks</h2>
-    <div class="mb-6">
-  <input
-    type="text"
-    id="searchInput"
-    placeholder="Search tasks by title..."
-    class="w-full md:w-1/2 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
-    onkeyup="filterTasks()"
-  />
-</div>
 
     <div id="taskList" class="space-y-6">
       <!-- Tasks will be dynamically inserted here -->
@@ -1120,72 +1111,6 @@
         rating: 5
       }
     ];
-
-    const tasks = [
-  { id: 1, title: "Build a Web Scraper", amount: 50, posted: "2025-05-10", bids: 3, rating: 4 },
-  { id: 2, title: "Design Logo for Brand", amount: 20, posted: "2025-05-12", bids: 5, rating: 3 },
-  { id: 3, title: "Write Blog on AI Trends", amount: 15, posted: "2025-05-14", bids: 2, rating: 5 },
-  { id: 4, title: "Translate English to French", amount: 30, posted: "2025-05-13", bids: 4, rating: 4 },
-  { id: 5, title: "Data Entry Work", amount: 10, posted: "2025-05-09", bids: 1, rating: 2 }
-];
-
-// Renders stars for each task
-function renderStars(rating, taskId) {
-  let stars = '';
-  for (let i = 1; i <= 5; i++) {
-    stars += `<span class="text-${i <= rating ? 'yellow' : 'gray'}-400 cursor-pointer text-xl" onclick="handleRating(${i}, ${taskId})">&#9733;</span>`;
-  }
-  return stars;
-}
-
-// Handles rating (simulated restriction)
-function handleRating(stars, taskId) {
-  const isAuthorized = false; // Set to true if paid/verified
-  if (!isAuthorized) {
-    document.getElementById("ratingModal").classList.remove("hidden");
-  } else {
-    alert(`You rated task #${taskId} with ${stars} stars.`);
-  }
-}
-
-// Closes the modal
-function closeModal() {
-  document.getElementById("ratingModal").classList.add("hidden");
-}
-
-// Renders all tasks, with search-based priority
-function renderTasks() {
-  const input = document.getElementById("searchInput").value.toLowerCase();
-  const container = document.getElementById("taskList");
-
-  // Filter matching and non-matching
-  const matching = tasks.filter(task => task.title.toLowerCase().includes(input));
-  const nonMatching = tasks.filter(task => !task.title.toLowerCase().includes(input));
-  const finalList = [...matching, ...nonMatching];
-
-  // Clear and re-render
-  container.innerHTML = '';
-  finalList.forEach(task => {
-    const taskCard = document.createElement("div");
-    taskCard.className = "bg-white p-4 rounded-lg shadow-md";
-    taskCard.innerHTML = `
-      <div class="flex justify-between items-center mb-2">
-        <h3 class="text-lg font-semibold text-green-700">${task.title}</h3>
-        <span class="text-sm text-gray-500">#${task.id}</span>
-      </div>
-      <p class="text-sm text-gray-600 mb-1">Amount: <span class="font-medium text-black">$${task.amount}</span></p>
-      <p class="text-sm text-gray-600 mb-1">Posted on: ${task.posted}</p>
-      <p class="text-sm text-gray-600 mb-2">Bids: ${task.bids}</p>
-      <div class="text-sm mb-2">Rating: ${renderStars(task.rating, task.id)}</div>
-      <button onclick="alert('Bid placed for task: ${task.title}')" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded">Bid Now</button>
-    `;
-    container.appendChild(taskCard);
-  });
-}
-
-// Initial render on page load
-renderTasks();
-
 
     const completedTasks = JSON.parse(localStorage.getItem('completedTasks') || '[]');
 
