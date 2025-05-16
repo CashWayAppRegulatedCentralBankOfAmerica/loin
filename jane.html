@@ -3,94 +3,102 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>User Profile</title>
+  <title>User Profile - Tabitha Nelima</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-50 min-h-screen flex items-center justify-center relative">
+<body class="bg-gray-100 min-h-screen flex items-center justify-center px-4">
 
-  <!-- WorkHub top-left label -->
-  <div class="absolute top-4 left-4 text-lg font-semibold text-green-600">Nova Prime/div>
-
-  <div class="bg-white p-6 rounded-xl shadow-md w-full max-w-sm relative">
-    <!-- Avatar and Online Status -->
+  <div class="bg-white p-6 rounded-2xl shadow-lg w-full max-w-sm text-center relative">
+    
+    <!-- Avatar -->
     <div class="relative w-24 h-24 mx-auto">
       <img src="your-user.jpg" alt="User" class="rounded-full border-4 border-green-500 w-full h-full object-cover" />
-      <div class="absolute -top-1 -right-1 flex items-center bg-white px-2 py-0.5 rounded-full shadow text-green-600 text-xs font-semibold">
+      <div class="absolute -top-2 -right-2 bg-white flex items-center px-2 py-0.5 rounded-full shadow text-green-600 text-xs font-semibold">
         <span class="w-2 h-2 bg-green-500 rounded-full mr-1"></span>
         Active
       </div>
     </div>
 
-    <!-- Name and Badge -->
-    <div class="text-center mt-4">
-      <h2 class="text-lg font-bold text-gray-800 flex items-center justify-center gap-1">
-        Tabitha Nelima
-        <svg class="w-4 h-4 text-green-500" fill="currentColor" viewBox="0 0 20 20">
-          <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-7.364 7.364a1 1 0 01-1.414 0L3.293 9.707a1 1 0 011.414-1.414L8 11.586l6.293-6.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
-        </svg>
-      </h2>
-      <p class="text-gray-500 text-sm">Web Developer | Kenya</p>
-    </div>
+    <!-- Name + Role -->
+    <h2 class="mt-4 text-xl font-semibold text-gray-800 flex items-center justify-center gap-1">
+      Tabitha Nelima
+      <svg class="w-4 h-4 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-7.364 7.364a1 1 0 01-1.414 0L3.293 9.707a1 1 0 011.414-1.414L8 11.586l6.293-6.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+      </svg>
+    </h2>
+    <p class="text-sm text-gray-500">Web Developer · Kenya</p>
 
     <!-- Ratings -->
-    <div class="flex items-center justify-center mt-3">
-      <div class="flex items-center text-yellow-400">
-        ★★★★☆
-      </div>
-      <button onclick="toggleReviews()" class="ml-2 text-sm text-green-600 underline hover:text-green-800">(24 reviews)</button>
+    <div class="mt-3 flex justify-center items-center">
+      <span class="text-yellow-400 text-lg">★★★★☆</span>
+      <button onclick="toggleReviews()" class="ml-2 text-sm text-green-600 hover:text-green-800 underline">(24 reviews)</button>
     </div>
 
-    <!-- Reviews Section (Hidden by default) -->
-    <div id="reviewSection" class="mt-4 hidden">
-      <div class="bg-gray-100 rounded p-3 text-sm space-y-2">
-        <p><strong>Jacob123:</strong> Excellent work and communication.</p>
-        <p><strong>AliceW:</strong> Very reliable and skilled!</p>
-        <p><strong>Mike_T:</strong> Will definitely hire again.</p>
-        <button onclick="openReviewModal()" class="text-green-600 text-sm underline hover:text-green-800">Add your review</button>
-      </div>
+    <!-- Reviews Section -->
+    <div id="reviewSection" class="mt-4 hidden text-left text-sm bg-gray-100 p-4 rounded space-y-2">
+      <p><strong>Jacob123:</strong> Excellent work and communication.</p>
+      <p><strong>AliceW:</strong> Very reliable and skilled!</p>
+      <p><strong>Mike_T:</strong> Will definitely hire again.</p>
+      <button onclick="openReviewModal()" class="text-green-600 hover:text-green-800 underline text-sm mt-2">Add your review</button>
     </div>
   </div>
 
   <!-- Review Modal -->
-  <div id="reviewModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-    <div class="bg-white p-6 rounded-xl shadow-md w-full max-w-md">
-      <h3 class="text-lg font-bold mb-2 text-gray-800">Submit Review</h3>
-      <textarea class="w-full border rounded p-2 mb-3" rows="4" placeholder="Write your review here..."></textarea>
+  <div id="reviewModal" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+    <div class="bg-white p-6 rounded-xl w-full max-w-md relative">
+      <h3 class="text-lg font-bold mb-3 text-gray-800">Submit Review</h3>
+      <textarea id="reviewText" class="w-full border rounded p-2 mb-3" rows="4" placeholder="Write your review here..."></textarea>
       <button onclick="submitReview()" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">Send Review</button>
     </div>
   </div>
 
   <!-- Error Modal -->
-  <div id="errorModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-    <div class="bg-white p-6 rounded-xl shadow-md w-full max-w-md text-center">
-      <p class="text-red-600 font-semibold">Your User ID is not associated with Tabitha Nelima.</p>
-      <p class="text-sm text-gray-600 mt-2">Only users who’ve worked with Tabitha Nelima can send reviews or ratings.</p>
+  <div id="errorModal" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+    <div class="bg-white p-6 rounded-xl w-full max-w-sm text-center">
+      <p class="text-red-600 font-semibold">Access Denied</p>
+      <p class="text-sm text-gray-600 mt-2">Only verified users who’ve worked with Tabitha Nelima can submit reviews.</p>
       <button onclick="closeErrorModal()" class="mt-4 bg-gray-300 hover:bg-gray-400 px-4 py-2 rounded">Close</button>
     </div>
   </div>
 
   <script>
+    const reviewSection = document.getElementById('reviewSection');
+    const reviewModal = document.getElementById('reviewModal');
+    const errorModal = document.getElementById('errorModal');
+
     function toggleReviews() {
-      const section = document.getElementById('reviewSection');
-      section.classList.toggle('hidden');
+      reviewSection.classList.toggle('hidden');
     }
 
     function openReviewModal() {
-      document.getElementById('reviewModal').classList.remove('hidden');
-    }
-
-    function submitReview() {
-      // Simulate validation
-      const userAllowed = false; // Replace with actual logic later
-      document.getElementById('reviewModal').classList.add('hidden');
-      if (!userAllowed) {
-        document.getElementById('errorModal').classList.remove('hidden');
-      }
+      reviewModal.classList.remove('hidden');
     }
 
     function closeErrorModal() {
-      document.getElementById('errorModal').classList.add('hidden');
+      errorModal.classList.add('hidden');
     }
+
+    function submitReview() {
+      const userAllowed = false; // Set to true if validated
+      reviewModal.classList.add('hidden');
+      if (!userAllowed) {
+        errorModal.classList.remove('hidden');
+      } else {
+        alert('Review submitted successfully!');
+      }
+    }
+
+    // Dismiss modals on outside click or ESC
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') {
+        reviewModal.classList.add('hidden');
+        errorModal.classList.add('hidden');
+      }
+    });
+    window.onclick = function(event) {
+      if (event.target === reviewModal) reviewModal.classList.add('hidden');
+      if (event.target === errorModal) errorModal.classList.add('hidden');
+    };
   </script>
 
 </body>
