@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>WorkHub - Deposit</title>
+  <title>Nova Prime - Deposit</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
   <script>
@@ -50,8 +50,8 @@
 <body class="bg-gray-100 font-sans">
   <!-- Header -->
   <header class="bg-white shadow p-4 flex items-center justify-between">
-    <div class="text-xl font-bold text-green-600">WorkHub</div>
-    <h1 class="text-lg font-semibold text-gray-700">Deposit Funds</h1>
+    <div class="text-xl font-bold text-green-600">Nova Prime</div>
+    <h1 class="text-lg font-semibold text-gray-700">/h1>
   </header>
 
   <!-- Main -->
@@ -70,7 +70,7 @@
     </form>
 
     <div id="mpesaNote" class="mt-6 p-4 bg-yellow-100 border border-yellow-300 text-yellow-800 rounded hidden">
-      <p><strong>Important:</strong> Please pay <span id="payAmount"></span> to till <strong>1234</strong> using your primary mobile number <strong><span id="userMobile"></span></strong>.</p>
+      <p><strong>Important:</strong> Please pay <span id="payAmount"></span> to MPESA Till Number <strong>3390928</strong> using your primary mobile number <strong><span id="userMobile"></span></strong>.</p>
       <p>Once payment is complete, enter your <strong>MPESA transaction ID</strong> below to confirm.</p>
       
       <form id="mpesaConfirmForm" class="mt-4">
@@ -83,7 +83,7 @@
   </main>
 
   <footer class="text-center py-4 text-gray-500 text-sm mt-10">
-    © 2025 WorkHub. All rights reserved.
+    © 2025 Nova Prime. All rights reserved.
   </footer>
 
   <!-- Modal Popup -->
@@ -114,7 +114,7 @@
     const successSound = document.getElementById("successSound");
 
     // Hardcoded valid MPESA IDs for testing
-    const validMpesaIds = ["ABC123XYZ", "MPESA789456", "TXN20230515"];
+    const validMpesaIds = ["JACKM", "MFAYAMA", "TXNMPESAM"];
 
     let depositData = {};
 
@@ -150,7 +150,7 @@
       })
       .then(() => {
         // Replace alert with modal popup and sound
-        showModal("Deposit request sent! Please follow the payment instructions below.");
+        showModal("Deposit made ! Please follow the payment instructions below.");
 
         // Show the MPESA payment note and form
         payAmountSpan.textContent = "$" + amount;
@@ -194,7 +194,7 @@
       transactions.unshift(transaction);   /* <-- changed here to add at the front */
       localStorage.setItem("transactions", JSON.stringify(transactions));
 
-      showModal("Payment confirmed and balance updated successfully!");
+      showModal("Payment confirmed, Your account has been funded successfully!");
 
       // Redirect to account page or dashboard after modal closes
       modalCloseBtn.onclick = () => {
