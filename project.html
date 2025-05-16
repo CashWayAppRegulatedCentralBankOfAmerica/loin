@@ -125,7 +125,7 @@
       localStorage.setItem('bids', JSON.stringify(bids));
       renderBids();
       closeModal();
-      showNotification('Payment verified successfully and balance updated!');
+      showNotification('Payment verified successfully, Your account has been funded!');
       setTimeout(() => window.location.href = 'account.html', 1500);
     } else {
       verificationInput.classList.add('border-red-500');
