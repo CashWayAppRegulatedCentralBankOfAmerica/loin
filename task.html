@@ -1121,19 +1121,51 @@
       }
     ];
 
-    const taskList = document.getElementById("taskList");
+    const tasks = [
+  { id: 1, title: "Build a Web Scraper", amount: 50, posted: "2025-05-10", bids: 3, rating: 4 },
+  { id: 2, title: "Design Logo for Brand", amount: 20, posted: "2025-05-12", bids: 5, rating: 3 },
+  { id: 3, title: "Write Blog on AI Trends", amount: 15, posted: "2025-05-14", bids: 2, rating: 5 },
+  { id: 4, title: "Translate English to French", amount: 30, posted: "2025-05-13", bids: 4, rating: 4 },
+  { id: 5, title: "Data Entry Work", amount: 10, posted: "2025-05-09", bids: 1, rating: 2 }
+];
 
-function renderStars(rating) {
+// Renders stars for each task
+function renderStars(rating, taskId) {
   let stars = '';
   for (let i = 1; i <= 5; i++) {
-    stars += `<span class="text-${i <= rating ? 'yellow' : 'gray'}-400 cursor-pointer" onclick="handleRating(${i})">&#9733;</span>`;
+    stars += `<span class="text-${i <= rating ? 'yellow' : 'gray'}-400 cursor-pointer text-xl" onclick="handleRating(${i}, ${taskId})">&#9733;</span>`;
   }
   return stars;
 }
 
+// Handles rating (simulated restriction)
+function handleRating(stars, taskId) {
+  const isAuthorized = false; // Set to true if paid/verified
+  if (!isAuthorized) {
+    document.getElementById("ratingModal").classList.remove("hidden");
+  } else {
+    alert(`You rated task #${taskId} with ${stars} stars.`);
+  }
+}
+
+// Closes the modal
+function closeModal() {
+  document.getElementById("ratingModal").classList.add("hidden");
+}
+
+// Renders all tasks, with search-based priority
 function renderTasks() {
-  taskList.innerHTML = '';
-  tasks.forEach(task => {
+  const input = document.getElementById("searchInput").value.toLowerCase();
+  const container = document.getElementById("taskList");
+
+  // Filter matching and non-matching
+  const matching = tasks.filter(task => task.title.toLowerCase().includes(input));
+  const nonMatching = tasks.filter(task => !task.title.toLowerCase().includes(input));
+  const finalList = [...matching, ...nonMatching];
+
+  // Clear and re-render
+  container.innerHTML = '';
+  finalList.forEach(task => {
     const taskCard = document.createElement("div");
     taskCard.className = "bg-white p-4 rounded-lg shadow-md";
     taskCard.innerHTML = `
@@ -1144,22 +1176,14 @@ function renderTasks() {
       <p class="text-sm text-gray-600 mb-1">Amount: <span class="font-medium text-black">$${task.amount}</span></p>
       <p class="text-sm text-gray-600 mb-1">Posted on: ${task.posted}</p>
       <p class="text-sm text-gray-600 mb-2">Bids: ${task.bids}</p>
-      <div class="text-sm">Rating: ${renderStars(task.rating)}</div>
+      <div class="text-sm mb-2">Rating: ${renderStars(task.rating, task.id)}</div>
+      <button onclick="alert('Bid placed for task: ${task.title}')" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded">Bid Now</button>
     `;
-    taskList.appendChild(taskCard);
+    container.appendChild(taskCard);
   });
 }
 
-function handleRating(stars) {
-  // Placeholder: Show modal for non-paid users
-  document.getElementById("ratingModal").classList.remove("hidden");
-}
-
-function closeModal() {
-  document.getElementById("ratingModal").classList.add("hidden");
-}
-
-// Initial render
+// Initial render on page load
 renderTasks();
 
 
