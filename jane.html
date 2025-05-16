@@ -188,6 +188,37 @@
       background-color: #1a9e3a;
     }
 
+   .avatar-wrapper {
+  position: relative;
+  display: inline-block;
+  border: 3px solid #00b341;
+  box-shadow: 0 0 0 4px #e6ffe6;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.active-status {
+  position: absolute;
+  top: 5px;
+  right: -20px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.active-status .dot {
+  width: 10px;
+  height: 10px;
+  background-color: #00b341;
+  border-radius: 50%;
+  box-shadow: 0 0 4px rgba(0, 179, 65, 0.6);
+}
+
+.active-status .active-text {
+  color: #00b341;
+  font-size: 12px;
+  font-weight: bold;
+}
     /* Modal styles */
     .modal-bg {
       position: fixed;
@@ -231,6 +262,10 @@
     <div class="profile-header">
       <div class="avatar-wrapper" title="User is online">
         <img src="https://randomuser.me/api/portraits/women/65.jpg" alt="User Avatar" />
+        <div class="active-status">
+  <span class="dot"></span>
+  <span class="active-text">Active</span>
+</div>
       </div>
       <div class="user-info">
         <h2 class="user-name">Tabitha Nelima</h2>
