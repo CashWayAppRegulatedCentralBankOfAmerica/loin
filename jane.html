@@ -2,21 +2,19 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>User Profile - Tabitha Nelima</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Tabitha Nelima - Profile</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
-<body class="bg-gray-100 min-h-screen flex items-center justify-center px-4">
- <!-- Navbar / Header -->
-<header class="w-full bg-white shadow mb-6">
-  <div class="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
-    <h1 class="text-2xl font-bold text-green-600">Nova Prime</h1>
-    <!-- Optional: Add profile/settings icons here -->
-  </div>
-</header> 
+<body class="bg-gray-100 min-h-screen flex flex-col items-center px-4">
 
+  <!-- Logo Top-Left -->
+  <div class="w-full max-w-7xl mt-6 mb-4">
+    <h1 class="text-3xl font-bold text-green-600">Nova Prime</h1>
+  </div>
+
+  <!-- User Profile Card -->
   <div class="bg-white p-6 rounded-2xl shadow-lg w-full max-w-sm text-center relative">
-    
     <!-- Avatar -->
     <div class="relative w-24 h-24 mx-auto">
       <img src="your-user.jpg" alt="User" class="rounded-full border-4 border-green-500 w-full h-full object-cover" />
@@ -86,7 +84,7 @@
     }
 
     function submitReview() {
-      const userAllowed = false; // Set to true if validated
+      const userAllowed = false; // Replace with real logic
       reviewModal.classList.add('hidden');
       if (!userAllowed) {
         errorModal.classList.remove('hidden');
@@ -95,13 +93,13 @@
       }
     }
 
-    // Dismiss modals on outside click or ESC
     document.addEventListener('keydown', e => {
       if (e.key === 'Escape') {
         reviewModal.classList.add('hidden');
         errorModal.classList.add('hidden');
       }
     });
+
     window.onclick = function(event) {
       if (event.target === reviewModal) reviewModal.classList.add('hidden');
       if (event.target === errorModal) errorModal.classList.add('hidden');
