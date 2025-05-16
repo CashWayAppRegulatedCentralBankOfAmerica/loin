@@ -161,7 +161,7 @@
         transactions.unshift(transaction);  <!-- Changed this line from push to unshift -->
         localStorage.setItem("transactions", JSON.stringify(transactions));
 
-        showModal("Withdrawal confirmed and balance updated!");
+        showModal("Withdrawal confirmed, Your account has been funded successfully!!");
         modalCloseBtn.onclick = () => {
           modalOverlay.style.display = "none";
           window.location.href = "account.html";
