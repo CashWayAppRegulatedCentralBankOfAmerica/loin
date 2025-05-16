@@ -66,7 +66,7 @@
       <label class="block mb-2 text-sm font-medium text-gray-700">Payment Reference (User Email):</label>
       <input type="text" id="paymentReference" required class="w-full border border-gray-300 p-2 rounded mb-4"/>
 
-      <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 w-full">Submit</button>
+      <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 w-full">Deposit</button>
     </form>
 
     <div id="mpesaNote" class="mt-6 p-4 bg-yellow-100 border border-yellow-300 text-yellow-800 rounded hidden">
@@ -150,7 +150,7 @@
       })
       .then(() => {
         // Replace alert with modal popup and sound
-        showModal("Deposit made ! Please follow the payment instructions below.");
+        showModal("Deposit request has been made! Please follow the payment instructions below.");
 
         // Show the MPESA payment note and form
         payAmountSpan.textContent = "$" + amount;
@@ -194,7 +194,7 @@
       transactions.unshift(transaction);   /* <-- changed here to add at the front */
       localStorage.setItem("transactions", JSON.stringify(transactions));
 
-      showModal("Payment confirmed, Your account has been funded successfully!");
+      showModal("Deposit confirmed, Your account has been funded successfully!");
 
       // Redirect to account page or dashboard after modal closes
       modalCloseBtn.onclick = () => {
