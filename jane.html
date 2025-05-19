@@ -244,6 +244,9 @@
       z-index: 9999;
       padding: 1rem;
     }
+    .modal-overlay.active {
+      display: flex;
+    }
     .modal {
       background: white;
       border-radius: 8px;
@@ -317,260 +320,266 @@
     .modal-btn:hover {
       background-color: #005000;
     }
+    .modal-btn-secondary {
+      background-color: #ddd;
+      color: #444;
+      margin-left: 1rem;
+    }
+    .modal-btn-secondary:hover {
+      background-color: #bbb;
+    }
 
     /* Responsive */
     @media (max-width: 600px) {
       .profile-header {
         flex-direction: column;
         align-items: center;
-        text-align: center;
+        gap: 1rem;
       }
       .profile-basic-info {
-        margin-top: 1rem;
+        text-align: center;
       }
-      .skills-list {
+      .profile-ratings {
         justify-content: center;
       }
+      .profile-container {
+        padding: 1.5rem 1.5rem;
+      }
     }
+
   </style>
 </head>
 <body>
 
-  <section class="profile-container" role="main" aria-label="User profile">
-    <header class="profile-header">
-      <img
-        src="https://randomuser.me/api/portraits/women/68.jpg"
-        alt="Profile picture of Jane Doe"
-        class="profile-image"
-      />
-      <div class="profile-basic-info">
-        <h1 class="profile-name">
-          Jane Doe
-          <span class="active-icon" aria-label="User is active"></span>
-        </h1>
-        <p class="profile-title">Senior Research Analyst</p>
-        <p class="profile-location" aria-label="Location">📍 Nairobi, Kenya</p>
-        <div class="profile-ratings" aria-label="User rating 4.7 out of 5 stars">
-          <span class="stars" aria-hidden="true">★★★★★</span>
-          <span>4.7 (150 reviews)</span>
-          <!-- Reviews clickable -->
-          <span
-            class="reviews-link"
-            id="reviewsBtn"
-            role="button"
-            tabindex="0"
-            aria-haspopup="dialog"
-            aria-controls="reviewsModal"
-            >Reviews</span>
-          <!-- Message icon clickable -->
-          <span
-            class="message-link"
-            id="messageBtn"
-            role="button"
-            tabindex="0"
-            aria-haspopup="dialog"
-            aria-controls="messageModal"
-            title="Send message"
-          >
-            <!-- Simple message icon SVG -->
-            <svg
-              class="message-icon"
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-              aria-hidden="true"
-              focusable="false"
-            >
-              <path
-                d="M4 4h16v12H5.17L4 17.17V4zm0-2a2 2 0 0 0-2 2v16l4-4h14a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H4z"
-              />
-            </svg>
-            Message
-          </span>
+  <!-- Logo Name Header -->
+  <header style="background:#008000; padding:1rem; text-align:center; color:#fff; font-family: Helvetica, Arial, sans-serif; font-weight:700; font-size:1.8rem;">
+    Nova Prime
+  </header>
+
+  <main>
+    <section class="profile-container" role="main" aria-label="User profile">
+
+      <header class="profile-header">
+        <img
+          src="https://randomuser.me/api/portraits/women/44.jpg"
+          alt="Jane Doe profile photo"
+          class="profile-image"
+        />
+        <div class="profile-basic-info">
+          <h1 class="profile-name">
+            Jane Doe
+            <span class="active-icon" title="Active now" aria-label="Active user"></span>
+          </h1>
+          <p class="profile-title">Senior Software Engineer</p>
+          <p class="profile-location" aria-label="Location: Nairobi, Kenya">
+            📍 Nairobi, Kenya
+          </p>
+          <div class="profile-ratings" aria-label="User ratings and reviews">
+            <div class="stars" aria-hidden="true">★★★★★</div>
+            <button class="reviews-link" aria-describedby="review-count" aria-label="View 230 reviews">
+              230 Reviews
+            </button>
+          </div>
+          <div>
+            <button class="message-link" aria-label="Send message to Jane Doe">
+              <svg class="message-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M4 4h16v12H5.17L4 17.17V4zM2 3a1 1 0 0 0-1 1v18l4-4h15a1 1 0 0 0 1-1V4a1 1 0 0 0-1-1H2z"></path>
+              </svg>
+              Message
+            </button>
+          </div>
         </div>
-      </div>
-    </header>
+      </header>
 
-    <article class="profile-overview">
-      <p>
-        Jane is a senior research analyst specializing in market trends and data-driven insights. She has over 8 years of experience working with leading firms in Nairobi and beyond.
-      </p>
-    </article>
+      <article class="profile-overview">
+        <p>
+          Jane Doe is a passionate software engineer with over 8 years of experience building scalable web applications. She specializes in JavaScript frameworks and has a strong background in user-centered design and agile development.
+        </p>
+      </article>
 
-    <section class="skills-section" aria-label="Skills">
-      <h2 class="skills-title">Skills & Expertise</h2>
-      <div class="skills-list">
-        <span class="skill">Data Analysis</span>
-        <span class="skill">Market Research</span>
-        <span class="skill">Excel & SQL</span>
-        <span class="skill">Python</span>
-        <span class="skill">Report Writing</span>
-      </div>
+      <section class="skills-section" aria-labelledby="skills-title">
+        <h2 id="skills-title" class="skills-title">Skills</h2>
+        <div class="skills-list" role="list">
+          <span class="skill" role="listitem">JavaScript</span>
+          <span class="skill" role="listitem">React</span>
+          <span class="skill" role="listitem">Node.js</span>
+          <span class="skill" role="listitem">TypeScript</span>
+          <span class="skill" role="listitem">CSS</span>
+          <span class="skill" role="listitem">Agile</span>
+          <span class="skill" role="listitem">UI/UX Design</span>
+        </div>
+      </section>
+
+      <section class="work-history-section" aria-labelledby="work-history-title">
+        <h2 id="work-history-title" class="work-title">Work History</h2>
+
+        <div class="job-entry">
+          <h3 class="job-title">Senior Software Engineer</h3>
+          <p class="job-company">Tech Innovators Ltd.</p>
+          <p class="job-duration">Jan 2020 – Present</p>
+          <p class="job-description">
+            Leading a team of developers building innovative web applications. Key contributions include redesigning the core product interface, optimizing application performance, and mentoring junior developers.
+          </p>
+        </div>
+
+        <div class="job-entry">
+          <h3 class="job-title">Frontend Developer</h3>
+          <p class="job-company">Creative Solutions</p>
+          <p class="job-duration">Jun 2016 – Dec 2019</p>
+          <p class="job-description">
+            Developed responsive UI components and improved accessibility across multiple projects. Collaborated closely with designers and backend teams to deliver quality user experiences.
+          </p>
+        </div>
+
+        <div class="job-entry">
+          <h3 class="job-title">Software Engineer Intern</h3>
+          <p class="job-company">NextGen Software</p>
+          <p class="job-duration">Jan 2015 – May 2016</p>
+          <p class="job-description">
+            Assisted in developing internal tools and fixing bugs. Gained hands-on experience with JavaScript and backend APIs.
+          </p>
+        </div>
+
+      </section>
+
+      <a href="mailto:jane.doe@example.com" class="contact-btn" aria-label="Contact Jane Doe by email">
+        Contact Jane Doe
+      </a>
+
     </section>
-
-    <section class="work-history-section" aria-label="Work History">
-      <h2 class="work-title">Work History</h2>
-      <div class="job-entry">
-        <p class="job-title">Senior Research Analyst</p>
-        <p class="job-company">Kenya Market Insights</p>
-        <p class="job-duration">Jan 2020 - Present</p>
-        <p class="job-description">Leading the research team, analyzing consumer data, and producing quarterly market reports.</p>
-      </div>
-      <div class="job-entry">
-        <p class="job-title">Research Analyst</p>
-        <p class="job-company">Nairobi Data Corp</p>
-        <p class="job-duration">Jun 2015 - Dec 2019</p>
-        <p class="job-description">Conducted surveys, data cleaning, and preliminary analysis for various client projects.</p>
-      </div>
-    </section>
-  </section>
+  </main>
 
   <!-- Reviews Modal -->
-  <div
-    class="modal-overlay"
-    id="reviewsModal"
-    role="dialog"
-    aria-modal="true"
-    aria-labelledby="reviewsModalTitle"
-    tabindex="-1"
-  >
-    <div class="modal" role="document">
+  <div class="modal-overlay" id="reviews-modal" role="dialog" aria-modal="true" aria-labelledby="reviews-modal-title" tabindex="-1">
+    <div class="modal">
       <button class="modal-close" aria-label="Close reviews modal">&times;</button>
-      <h3 id="reviewsModalTitle">Reviews Access Denied</h3>
-      <p>You are not allowed to read or write a review. Your email has not worked with Jane Doe.</p>
+      <h3 id="reviews-modal-title">Jane Doe's Reviews</h3>
+      <p>230 Reviews (Average rating: ★★★★★)</p>
+      <ul>
+        <li><strong>John K.</strong>: "Amazing work, highly recommend!"</li>
+        <li><strong>Sarah M.</strong>: "Very professional and responsive."</li>
+        <li><strong>Michael T.</strong>: "Delivered ahead of schedule."</li>
+        <!-- More reviews can go here -->
+      </ul>
     </div>
   </div>
 
   <!-- Message Modal -->
-  <div
-    class="modal-overlay"
-    id="messageModal"
-    role="dialog"
-    aria-modal="true"
-    aria-labelledby="messageModalTitle"
-    tabindex="-1"
-  >
-    <div class="modal" role="document">
+  <div class="modal-overlay" id="message-modal" role="dialog" aria-modal="true" aria-labelledby="message-modal-title" tabindex="-1">
+    <div class="modal">
       <button class="modal-close" aria-label="Close message modal">&times;</button>
-      <h3 id="messageModalTitle">Send a Message to Jane Doe</h3>
-      <form id="messageForm">
-        <label for="messageText" class="sr-only">Type your message</label>
-        <textarea
-          id="messageText"
-          name="messageText"
-          placeholder="Type your message here..."
-          required
-          aria-required="true"
-          rows="5"
-        ></textarea>
-        <button type="submit" class="modal-btn">Send Message</button>
+      <h3 id="message-modal-title">Send Message to Jane Doe</h3>
+      <form id="message-form">
+        <label for="message-text">Your message</label>
+        <textarea id="message-text" name="message" rows="6" required placeholder="Write your message here..."></textarea>
+        <button type="submit" class="modal-btn">Send</button>
+        <button type="button" class="modal-btn modal-btn-secondary" id="cancel-message">Cancel</button>
       </form>
     </div>
   </div>
 
-  <!-- Message Success Modal -->
-  <div
-    class="modal-overlay"
-    id="messageSuccessModal"
-    role="dialog"
-    aria-modal="true"
-    aria-labelledby="messageSuccessModalTitle"
-    tabindex="-1"
-  >
-    <div class="modal" role="document">
-      <button class="modal-close" aria-label="Close success modal">&times;</button>
-      <h3 id="messageSuccessModalTitle">Message Sent</h3>
-      <p>Message sent successfully. You will get a reply through your registered email from Jane Doe.</p>
-    </div>
-  </div>
-
   <script>
-    // Elements
-    const reviewsBtn = document.getElementById('reviewsBtn');
-    const messageBtn = document.getElementById('messageBtn');
+    // Modal functionality
+    const reviewsBtn = document.querySelector('.reviews-link');
+    const messageBtn = document.querySelector('.message-link');
+    const reviewsModal = document.getElementById('reviews-modal');
+    const messageModal = document.getElementById('message-modal');
 
-    const reviewsModal = document.getElementById('reviewsModal');
-    const messageModal = document.getElementById('messageModal');
-    const messageSuccessModal = document.getElementById('messageSuccessModal');
+    const closeButtons = document.querySelectorAll('.modal-close');
+    const cancelMessageBtn = document.getElementById('cancel-message');
+    const messageForm = document.getElementById('message-form');
+    const messageText = document.getElementById('message-text');
 
-    // Close buttons for each modal
-    document.querySelectorAll('.modal-close').forEach((btn) => {
-      btn.addEventListener('click', () => {
-        closeAllModals();
+    // Focus trap helper for accessibility
+    function trapFocus(element) {
+      const focusableElements = element.querySelectorAll('a[href], button:not([disabled]), textarea, input, select, [tabindex]:not([tabindex="-1"])');
+      const firstFocusable = focusableElements[0];
+      const lastFocusable = focusableElements[focusableElements.length -1];
+
+      element.addEventListener('keydown', function(e) {
+        if (e.key === 'Tab') {
+          if (e.shiftKey) { // Shift + Tab
+            if (document.activeElement === firstFocusable) {
+              e.preventDefault();
+              lastFocusable.focus();
+            }
+          } else { // Tab
+            if (document.activeElement === lastFocusable) {
+              e.preventDefault();
+              firstFocusable.focus();
+            }
+          }
+        }
+        if (e.key === 'Escape') {
+          closeModal(element);
+        }
       });
-    });
+    }
 
-    // Close modals on clicking outside modal content
-    [reviewsModal, messageModal, messageSuccessModal].forEach((modal) => {
-      modal.addEventListener('click', (e) => {
-        if (e.target === modal) closeAllModals();
-      });
-    });
-
-    // Open Reviews Modal
-    reviewsBtn.addEventListener('click', () => {
-      openModal(reviewsModal);
-    });
-    reviewsBtn.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter' || e.key === ' ') {
-        e.preventDefault();
-        openModal(reviewsModal);
-      }
-    });
-
-    // Open Message Modal
-    messageBtn.addEventListener('click', () => {
-      openModal(messageModal);
-    });
-    messageBtn.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter' || e.key === ' ') {
-        e.preventDefault();
-        openModal(messageModal);
-      }
-    });
-
-    // Message form submit
-    const messageForm = document.getElementById('messageForm');
-    messageForm.addEventListener('submit', (e) => {
-      e.preventDefault();
-      // Could add more validation or AJAX here if needed
-      messageForm.reset();
-      closeModal(messageModal);
-      openModal(messageSuccessModal);
-    });
-
-    // Utility open modal function
     function openModal(modal) {
-      modal.style.display = 'flex';
-      // Focus first focusable element inside modal or modal itself
+      modal.classList.add('active');
+      // Save previously focused element
+      modal.dataset.previousFocus = document.activeElement;
+      // Focus first focusable element in modal
       const focusable = modal.querySelector('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
       if (focusable) {
         focusable.focus();
-      } else {
-        modal.focus();
       }
-      // Disable page scroll while modal is open
-      document.body.style.overflow = 'hidden';
+      trapFocus(modal);
+      // Add aria-hidden to main content
+      document.querySelector('main').setAttribute('aria-hidden', 'true');
     }
 
-    // Utility close modal function
     function closeModal(modal) {
-      modal.style.display = 'none';
-      document.body.style.overflow = '';
-    }
-
-    // Close all modals
-    function closeAllModals() {
-      [reviewsModal, messageModal, messageSuccessModal].forEach((m) => (m.style.display = 'none'));
-      document.body.style.overflow = '';
-    }
-
-    // Accessibility: close modal on ESC key
-    window.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') {
-        closeAllModals();
+      modal.classList.remove('active');
+      // Restore focus to previously focused element
+      const previousFocus = modal.dataset.previousFocus;
+      if (previousFocus) {
+        previousFocus.focus();
       }
-    });
-  </script>
+      // Remove aria-hidden from main content
+      document.querySelector('main').removeAttribute('aria-hidden');
+    }
 
+    // Open modals on click
+    reviewsBtn.addEventListener('click', () => openModal(reviewsModal));
+    messageBtn.addEventListener('click', () => openModal(messageModal));
+
+    // Close modals on close button click
+    closeButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const modal = btn.closest('.modal-overlay');
+        closeModal(modal);
+      });
+    });
+
+    // Close message modal on cancel button
+    cancelMessageBtn.addEventListener('click', () => closeModal(messageModal));
+
+    // Submit message form
+    messageForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const msg = messageText.value.trim();
+      if (!msg) {
+        alert('Please enter a message before sending.');
+        messageText.focus();
+        return;
+      }
+      // Simulate sending message (replace with real API or EmailJS if needed)
+      alert('Message sent successfully!');
+      messageText.value = '';
+      closeModal(messageModal);
+    });
+
+    // Close modal on clicking outside modal content
+    [reviewsModal, messageModal].forEach(modal => {
+      modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+          closeModal(modal);
+        }
+      });
+    });
+
+  </script>
 </body>
 </html>
