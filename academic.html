@@ -12,7 +12,7 @@
   </header>
 
   <main class="max-w-5xl mx-auto p-4">
-    <h2 class="text-xl font-semibold mb-4">Available Tasks</h2>
+    <h2 class="text-xl font-semibold mb-4">Academic Writing Tasks</h2>
 
     <div id="taskList" class="space-y-6">
       <!-- Tasks will be dynamically inserted here -->
@@ -31,1085 +31,325 @@
   <script>
     const tasks = [
       {
-        id: 'TASK7604',
-        title: 'Social Media Manager',
-        amount: 210,
-        posted: '2025-05-12',
-        bids: 6,
-        rating: 4
-      },
-      {
-  id: 'TASK6978',
-  title: 'Logo Design for Startup',
-  amount: 150,
-  posted: '2025-05-12',
-  bids: 6,
+  id: 'TASK10001',
+  title: 'Research Paper Writing',
+  amount: 250,
+  posted: '2025-05-15',
+  bids: 20,
+  rating: 5
+},
+{
+  id: 'TASK10002',
+  title: 'Literature Review',
+  amount: 180,
+  posted: '2025-05-15',
+  bids: 15,
   rating: 4
 },
 {
-  id: 'TASK67890',
-  title: 'Web App Debugging',
-  amount: 250,
-  posted: '2025-05-13',
-  bids: 4,
+  id: 'TASK10003',
+  title: 'Thesis Proposal',
+  amount: 220,
+  posted: '2025-05-15',
+  bids: 18,
   rating: 5
 },
 {
-  id: 'TASK9843',
-  title: 'Essay on Climate',
-  amount: 133,
+  id: 'TASK10004',
+  title: 'Dissertation Editing',
+  amount: 300,
   posted: '2025-05-15',
-  bids: 28,
-  rating: 5
-},
- {
-  id: 'TASK85083',
-  title: 'News Article',
-  amount: 134,
-  posted: '2025-05-15',
-  bids: 12,
+  bids: 22,
   rating: 5
 },
 {
-  id: 'TASK41137',
-  title: 'Medical Report Typing',
-  amount: 244,
+  id: 'TASK10005',
+  title: 'Essay Writing',
+  amount: 120,
+  posted: '2025-05-15',
+  bids: 25,
+  rating: 3
+},
+{
+  id: 'TASK10006',
+  title: 'Case Study Analysis',
+  amount: 200,
+  posted: '2025-05-15',
+  bids: 17,
+  rating: 4
+},
+{
+  id: 'TASK10007',
+  title: 'Research Data Analysis',
+  amount: 210,
   posted: '2025-05-15',
   bids: 14,
   rating: 5
 },
 {
-  id: 'TASK35581',
-  title: 'Form Filling',
-  amount: 151,
+  id: 'TASK10008',
+  title: 'Annotated Bibliography',
+  amount: 140,
   posted: '2025-05-15',
-  bids: 29,
-  rating: 5
+  bids: 19,
+  rating: 4
 },
 {
-  id: 'TASK13160',
-  title: 'E-commerce Review',
-  amount: 133,
+  id: 'TASK10009',
+  title: 'Abstract Writing',
+  amount: 90,
   posted: '2025-05-15',
   bids: 12,
-  rating: 4
-},
-{
-  id: 'TASK82938',
-  title: 'Business Plan',
-  amount: 102,
-  posted: '2025-05-15',
-  bids: 26,
   rating: 3
 },
 {
-  id: 'TASK53819',
-  title: 'Thesis Formatting',
-  amount: 134,
-  posted: '2025-05-15',
-  bids: 32,
-  rating: 3
-},
-{
-  id: 'TASK15798',
-  title: 'Infographic Design',
-  amount: 53,
-  posted: '2025-05-15',
-  bids: 23,
-  rating: 3
-},
-{
-  id: 'TASK89783',
-  title: 'Research Paper Help',
-  amount: 65,
-  posted: '2025-05-15',
-  bids: 34,
-  rating: 5
-},
-{
-  id: 'TASK29492',
-  title: 'Script Writing',
-  amount: 207,
-  posted: '2025-05-15',
-  bids: 22,
-  rating: 3
-},
-{
-  id: 'TASK71198',
-  title: 'Voiceover Cleanup',
-  amount: 189,
-  posted: '2025-05-15',
-  bids: 21,
-  rating: 3
-},
-{
-  id: 'TASK97872',
-  title: 'Student Survey',
-  amount: 190,
+  id: 'TASK10010',
+  title: 'Research Methodology',
+  amount: 230,
   posted: '2025-05-15',
   bids: 20,
-  rating: 3
-},
-{
-  id: 'TASK78294',
-  title: 'Translation to French',
-  amount: 56,
-  posted: '2025-05-15',
-  bids: 18,
-  rating: 4
-},
-{
-  id: 'TASK76156',
-  title: 'Accounting Basics',
-  amount: 89,
-  posted: '2025-05-15',
-  bids: 31,
-  rating: 3
-},
-{
-  id: 'TASK2907',
-  title: 'Video Captioning',
-  amount: 137,
-  posted: '2025-05-15',
-  bids: 24,
   rating: 5
 },
 {
-  id: 'TASK8943',
-  title: 'App UI Feedback',
-  amount: 209,
+  id: 'TASK10011',
+  title: 'Proofreading and Editing',
+  amount: 150,
   posted: '2025-05-15',
-  bids: 31,
-  rating: 5
-},
-{
-  id: 'TASK42864',
-  title: 'Quiz Design',
-  amount: 141,
-  posted: '2025-05-15',
-  bids: 27,
+  bids: 21,
   rating: 4
 },
 {
-  id: 'TASK99385',
-  title: 'Tutorial Creation',
-  amount: 107,
+  id: 'TASK10012',
+  title: 'Grant Proposal Writing',
+  amount: 280,
   posted: '2025-05-15',
   bids: 18,
   rating: 5
 },
 {
-  id: 'TASK9977',
-  title: 'Crypto Blog',
-  amount: 64,
+  id: 'TASK10013',
+  title: 'Research Summary',
+  amount: 110,
   posted: '2025-05-15',
   bids: 16,
   rating: 3
 },
 {
-  id: 'TASK62028',
-  title: 'Resume Design',
-  amount: 102,
-  posted: '2025-05-15',
-  bids: 15,
-  rating: 5
-},
-{
-  id: 'TASK28216',
-  title: 'Cover Letter Draft',
-  amount: 146,
-  posted: '2025-05-15',
-  bids: 35,
-  rating: 5
-} ,  
-{
-  id: 'TASK4821',
-  title: 'Survey for Teens',
-  amount: 87,
-  posted: '2025-05-15',
-  bids: 24,
-  rating: 4
-},
-{
-  id: 'TASK2957',
-  title: 'Vlog on Education',
-  amount: 142,
-  posted: '2025-05-15',
-  bids: 32,
-  rating: 5
-},
-{
-  id: 'TASK6402',
-  title: 'Math Problem Solving',
-  amount: 97,
-  posted: '2025-05-15',
-  bids: 18,
-  rating: 4
-},
-{
-  id: 'TASK1785',
-  title: 'Video Editing Needed',
-  amount: 220,
-  posted: '2025-05-15',
-  bids: 30,
-  rating: 5
-},
-{
-  id: 'TASK3008',
-  title: 'Content on Travel',
-  amount: 145,
-  posted: '2025-05-15',
-  bids: 21,
-  rating: 4
-},
-{
-  id: 'TASK7024',
-  title: 'Philosophy Essay',
-  amount: 233,
-  posted: '2025-05-15',
-  bids: 19,
-  rating: 5
-},
-{
-  id: 'TASK6230',
-  title: 'Write Blog Post',
-  amount: 89,
-  posted: '2025-05-15',
-  bids: 17,
-  rating: 4
-},
-{
-  id: 'TASK1509',
-  title: 'Basic Data Entry',
-  amount: 65,
-  posted: '2025-05-15',
-  bids: 14,
-  rating: 3
-},
-  {
-  id: 'TASK59315',
-  title: 'Essay on Climate',
-  amount: 115,
-  posted: '2025-05-15',
-  bids: 14,
-  rating: 5
-},
-{
-  id: 'TASK7449',
-  title: 'Survey for Teens',
-  amount: 132,
-  posted: '2025-05-15',
-  bids: 32,
-  rating: 4
-},
-{
-  id: 'TASK23903',
-  title: 'Vlog on Education',
-  amount: 97,
-  posted: '2025-05-15',
-  bids: 27,
-  rating: 4
-},
-{
-  id: 'TASK5728',
-  title: 'Math Problem Solving',
-  amount: 237,
-  posted: '2025-05-15',
-  bids: 29,
-  rating: 5
-},
-{
-  id: 'TASK90852',
-  title: 'Video Editing Needed',
-  amount: 168,
-  posted: '2025-05-15',
-  bids: 34,
-  rating: 5
-},
-{
-  id: 'TASK68170',
-  title: 'Content on Travel',
-  amount: 96,
-  posted: '2025-05-15',
-  bids: 36,
-  rating: 3
-},
-{
-  id: 'TASK16641',
-  title: 'Philosophy Essay',
-  amount: 116,
-  posted: '2025-05-15',
-  bids: 22,
-  rating: 3
-},
-{
-  id: 'TASK48939',
-  title: 'Write Blog Post',
-  amount: 145,
-  posted: '2025-05-15',
-  bids: 20,
-  rating: 3
-},
- {
-  id: 'TASK37652',
-  title: 'Essay on AI',
-  amount: 145,
-  posted: '2025-05-15',
-  bids: 22,
-  rating: 5
-},
-{
-  id: 'TASK58236',
-  title: 'Editing Manuscript',
-  amount: 214,
-  posted: '2025-05-15',
-  bids: 30,
-  rating: 4
-},
-{
-  id: 'TASK96724',
-  title: 'Podcast Summary',
-  amount: 119,
-  posted: '2025-05-15',
-  bids: 25,
-  rating: 3
-},
-{
-  id: 'TASK84902',
-  title: 'Survey Analysis',
-  amount: 198,
-  posted: '2025-05-15',
-  bids: 28,
-  rating: 4
-},
-{
-  id: 'TASK16387',
-  title: 'Course Notes',
-  amount: 56,
-  posted: '2025-05-15',
-  bids: 32,
-  rating: 4
-},
-{
-  id: 'TASK61273',
-  title: 'LinkedIn Bio',
-  amount: 66,
-  posted: '2025-05-15',
-  bids: 27,
-  rating: 5
-},
-{
-  id: 'TASK37921',
-  title: 'Content Rewrite',
-  amount: 87,
-  posted: '2025-05-15',
-  bids: 29,
-  rating: 4
-},
-{
-  id: 'TASK50294',
-  title: 'Data Cleaning',
-  amount: 153,
-  posted: '2025-05-15',
-  bids: 34,
-  rating: 4
-},
-{
-  id: 'TASK84275',
-  title: 'Online Research',
-  amount: 114,
-  posted: '2025-05-15',
-  bids: 33,
-  rating: 5
-},
-{
-  id: 'TASK10963',
-  title: 'Voiceover Script',
-  amount: 200,
-  posted: '2025-05-15',
-  bids: 19,
-  rating: 4
-},
-{
-  id: 'TASK73168',
-  title: 'Marketing Plan',
-  amount: 239,
-  posted: '2025-05-15',
-  bids: 20,
-  rating: 3
-},
-{
-  id: 'TASK29534',
-  title: 'Proofread Blog',
-  amount: 122,
+  id: 'TASK10014',
+  title: 'Journal Article Submission',
+  amount: 320,
   posted: '2025-05-15',
   bids: 23,
   rating: 5
 },
 {
-  id: 'TASK86790',
-  title: 'Poster Design',
-  amount: 75,
-  posted: '2025-05-15',
-  bids: 31,
-  rating: 3
-},
-{
-  id: 'TASK63215',
-  title: 'Article Rewrite',
-  amount: 133,
-  posted: '2025-05-15',
-  bids: 26,
-  rating: 4
-},
-{
-  id: 'TASK96048',
-  title: 'CV Polish',
-  amount: 91,
-  posted: '2025-05-15',
-  bids: 24,
-  rating: 5
-},
-{
-  id: 'TASK72801',
-  title: 'Script Translation',
-  amount: 85,
-  posted: '2025-05-15',
-  bids: 21,
-  rating: 4
-},
-{
-  id: 'TASK47921',
-  title: 'Blog Research',
-  amount: 74,
-  posted: '2025-05-15',
-  bids: 17,
-  rating: 3
-},
-{
-  id: 'TASK32890',
-  title: 'Infographic Report',
-  amount: 146,
-  posted: '2025-05-15',
-  bids: 22,
-  rating: 5
-},
-{
-  id: 'TASK59402',
-  title: 'Medical Summary',
-  amount: 173,
-  posted: '2025-05-15',
-  bids: 15,
-  rating: 4
-},
-{
-  id: 'TASK16840',
-  title: 'Grammar Review',
-  amount: 138,
-  posted: '2025-05-15',
-  bids: 36,
-  rating: 4
-},
-{
-  id: 'TASK41587',
-  title: 'Academic Notes',
-  amount: 72,
+  id: 'TASK10015',
+  title: 'Plagiarism Check',
+  amount: 130,
   posted: '2025-05-15',
   bids: 20,
-  rating: 3
-},
-{
-  id: 'TASK97235',
-  title: 'Vlog Script',
-  amount: 125,
-  posted: '2025-05-15',
-  bids: 28,
   rating: 4
 },
 {
-  id: 'TASK27418',
-  title: 'Dissertation Edits',
-  amount: 221,
+  id: 'TASK10016',
+  title: 'Statistical Analysis Report',
+  amount: 240,
   posted: '2025-05-15',
-  bids: 26,
+  bids: 14,
   rating: 5
 },
 {
-  id: 'TASK14368',
-  title: 'Tutorial Video',
-  amount: 246,
-  posted: '2025-05-15',
-  bids: 31,
-  rating: 3
-},
-{
-  id: 'TASK59486',
-  title: 'Math Quiz',
-  amount: 71,
-  posted: '2025-05-15',
-  bids: 27,
-  rating: 5
-},
-{
-  id: 'TASK74501',
-  title: 'Content Ideation',
-  amount: 104,
-  posted: '2025-05-15',
-  bids: 23,
-  rating: 4
-},
-{
-  id: 'TASK82136',
-  title: 'Logo Touch-Up',
-  amount: 140,
-  posted: '2025-05-15',
-  bids: 29,
-  rating: 4
-},
-{
-  id: 'TASK68325',
-  title: 'Event Poster',
-  amount: 162,
-  posted: '2025-05-15',
-  bids: 28,
-  rating: 5
-},
-{
-  id: 'TASK14793',
-  title: 'Assignment Review',
-  amount: 127,
-  posted: '2025-05-15',
-  bids: 30,
-  rating: 3
-},
-{
-  id: 'TASK20614',
-  title: 'Poem Analysis',
-  amount: 92,
-  posted: '2025-05-15',
-  bids: 25,
-  rating: 4
-},
-{
-  id: 'TASK42058',
-  title: 'Book Summary',
-  amount: 173,
-  posted: '2025-05-15',
-  bids: 35,
-  rating: 4
-},
-{
-  id: 'TASK98942',
-  title: 'Literature Essay',
-  amount: 157,
-  posted: '2025-05-15',
-  bids: 21,
-  rating: 3
-},
-{
-  id: 'TASK36297',
-  title: 'PowerPoint Review',
-  amount: 113,
-  posted: '2025-05-15',
-  bids: 34,
-  rating: 5
-},
-{
-  id: 'TASK65019',
-  title: 'Stats Worksheet',
-  amount: 110,
-  posted: '2025-05-15',
-  bids: 15,
-  rating: 3
-},
-{
-  id: 'TASK40963',
-  title: 'Presentation Notes',
-  amount: 144,
-  posted: '2025-05-15',
-  bids: 18,
-  rating: 4
-},
-{
-  id: 'TASK76084',
-  title: 'Audio Transcription',
+  id: 'TASK10017',
+  title: 'Thesis Defense Presentation',
   amount: 190,
   posted: '2025-05-15',
-  bids: 36,
+  bids: 15,
+  rating: 4
+},
+{
+  id: 'TASK10018',
+  title: 'APA Formatting',
+  amount: 100,
+  posted: '2025-05-15',
+  bids: 18,
+  rating: 3
+},
+{
+  id: 'TASK10019',
+  title: 'Critical Review',
+  amount: 175,
+  posted: '2025-05-15',
+  bids: 16,
+  rating: 4
+},
+{
+  id: 'TASK10020',
+  title: 'Ethical Review Paper',
+  amount: 210,
+  posted: '2025-05-15',
+  bids: 13,
   rating: 5
 },
 {
-  id: 'TASK58971',
-  title: 'Product Review',
-  amount: 91,
+  id: 'TASK10021',
+  title: 'Research Outline',
+  amount: 120,
   posted: '2025-05-15',
-  bids: 24,
+  bids: 19,
   rating: 3
 },
- {
-  id: 'TASK40285',
-  title: 'Resume Update',
+{
+  id: 'TASK10022',
+  title: 'Literature Gap Analysis',
+  amount: 195,
+  posted: '2025-05-15',
+  bids: 14,
+  rating: 4
+},
+{
+  id: 'TASK10023',
+  title: 'Data Collection Plan',
+  amount: 220,
+  posted: '2025-05-15',
+  bids: 16,
+  rating: 5
+},
+{
+  id: 'TASK10024',
+  title: 'Fieldwork Report',
+  amount: 205,
+  posted: '2025-05-15',
+  bids: 12,
+  rating: 4
+},
+{
+  id: 'TASK10025',
+  title: 'Academic CV Writing',
+  amount: 115,
+  posted: '2025-05-15',
+  bids: 17,
+  rating: 3
+},
+{
+  id: 'TASK10026',
+  title: 'Conference Paper Draft',
+  amount: 260,
+  posted: '2025-05-15',
+  bids: 18,
+  rating: 5
+},
+{
+  id: 'TASK10027',
+  title: 'Editing for Clarity',
+  amount: 140,
+  posted: '2025-05-15',
+  bids: 21,
+  rating: 4
+},
+{
+  id: 'TASK10028',
+  title: 'Citation Management',
   amount: 95,
   posted: '2025-05-15',
   bids: 20,
-  rating: 4
+  rating: 3
 },
 {
-  id: 'TASK58013',
-  title: 'Case Study Summary',
-  amount: 160,
+  id: 'TASK10029',
+  title: 'Research Ethics Compliance',
+  amount: 210,
   posted: '2025-05-15',
-  bids: 34,
+  bids: 15,
   rating: 5
 },
 {
-  id: 'TASK16749',
-  title: 'History Essay',
-  amount: 143,
-  posted: '2025-05-15',
-  bids: 18,
-  rating: 3
-},
-{
-  id: 'TASK94173',
-  title: 'Course Slide Design',
-  amount: 176,
-  posted: '2025-05-15',
-  bids: 29,
-  rating: 4
-},
-{
-  id: 'TASK76294',
-  title: 'Short Blog Post',
-  amount: 71,
-  posted: '2025-05-15',
-  bids: 32,
-  rating: 4
-},
-{
-  id: 'TASK34820',
-  title: 'Speech Editing',
-  amount: 136,
-  posted: '2025-05-15',
-  bids: 30,
-  rating: 4
-},
-{
-  id: 'TASK28176',
-  title: 'Quiz Creation',
-  amount: 80,
-  posted: '2025-05-15',
-  bids: 24,
-  rating: 3
-},
-{
-  id: 'TASK56430',
-  title: 'Thesis Proposal',
-  amount: 245,
+  id: 'TASK10030',
+  title: 'Qualitative Data Analysis',
+  amount: 230,
   posted: '2025-05-15',
   bids: 19,
-  rating: 5
-},
-{
-  id: 'TASK19823',
-  title: 'Script Proofing',
-  amount: 106,
-  posted: '2025-05-15',
-  bids: 16,
   rating: 4
 },
 {
-  id: 'TASK83219',
-  title: 'Concept Paper',
-  amount: 139,
-  posted: '2025-05-15',
-  bids: 21,
-  rating: 4
-},
-{
-  id: 'TASK73094',
-  title: 'Academic Vlog',
-  amount: 123,
-  posted: '2025-05-15',
-  bids: 36,
-  rating: 5
-},
-{
-  id: 'TASK50984',
-  title: 'Infographic Design',
-  amount: 142,
-  posted: '2025-05-15',
-  bids: 28,
-  rating: 4
-},
-{
-  id: 'TASK62519',
-  title: 'News Summary',
-  amount: 88,
-  posted: '2025-05-15',
-  bids: 25,
-  rating: 3
-},
-{
-  id: 'TASK78130',
-  title: 'Interview Prep Notes',
-  amount: 112,
-  posted: '2025-05-15',
-  bids: 27,
-  rating: 4
-},
-{
-  id: 'TASK24391',
-  title: 'Grant Editing',
-  amount: 197,
-  posted: '2025-05-15',
-  bids: 26,
-  rating: 5
-},
-{
-  id: 'TASK68924',
-  title: 'Data Entry Cleanup',
-  amount: 90,
-  posted: '2025-05-15',
-  bids: 22,
-  rating: 3
-},
-{
-  id: 'TASK16890',
-  title: 'Newsletter Draft',
-  amount: 128,
-  posted: '2025-05-15',
-  bids: 33,
-  rating: 4
-},
-{
-  id: 'TASK36170',
-  title: 'Book Critique',
-  amount: 113,
-  posted: '2025-05-15',
-  bids: 24,
-  rating: 5
-},
-{
-  id: 'TASK98710',
-  title: 'Grammar Correction',
-  amount: 70,
-  posted: '2025-05-15',
-  bids: 21,
-  rating: 3
-},
-{
-  id: 'TASK47561',
-  title: 'Proof Case Brief',
-  amount: 199,
-  posted: '2025-05-15',
-  bids: 30,
-  rating: 4
-},
-{
-  id: 'TASK38072',
-  title: 'Science Abstract',
-  amount: 149,
-  posted: '2025-05-15',
-  bids: 31,
-  rating: 5
-},
-{
-  id: 'TASK85319',
-  title: 'Web Copy Update',
-  amount: 122,
-  posted: '2025-05-15',
-  bids: 28,
-  rating: 4
-},
-{
-  id: 'TASK90562',
-  title: 'Creative Writing',
-  amount: 108,
-  posted: '2025-05-15',
-  bids: 35,
-  rating: 4
-},
-{
-  id: 'TASK17852',
-  title: 'Field Survey Report',
-  amount: 176,
-  posted: '2025-05-15',
-  bids: 26,
-  rating: 3
-},
-{
-  id: 'TASK59201',
-  title: 'Social Media Plan',
-  amount: 124,
-  posted: '2025-05-15',
-  bids: 20,
-  rating: 5
-},
-{
-  id: 'TASK75430',
-  title: 'CV Tailoring',
-  amount: 84,
-  posted: '2025-05-15',
-  bids: 30,
-  rating: 4
-},
-{
-  id: 'TASK69047',
-  title: 'Case Briefing',
-  amount: 170,
-  posted: '2025-05-15',
-  bids: 23,
-  rating: 5
-},
-{
-  id: 'TASK47013',
-  title: 'Research Outline',
-  amount: 155,
-  posted: '2025-05-15',
-  bids: 29,
-  rating: 4
-},
-{
-  id: 'TASK81109',
-  title: 'Edit Survey Questions',
-  amount: 89,
-  posted: '2025-05-15',
-  bids: 21,
-  rating: 3
-},
-{
-  id: 'TASK34120',
-  title: 'Internship Report',
-  amount: 132,
-  posted: '2025-05-15',
-  bids: 27,
-  rating: 5
-},
-{
-  id: 'TASK29378',
-  title: 'Political Analysis',
+  id: 'TASK10031',
+  title: 'Quantitative Data Analysis',
   amount: 240,
-  posted: '2025-05-15',
-  bids: 25,
-  rating: 4
-},
-{
-  id: 'TASK47092',
-  title: 'Design Feedback',
-  amount: 98,
-  posted: '2025-05-15',
-  bids: 34,
-  rating: 4
-},
-{
-  id: 'TASK89476',
-  title: 'Compile Citations',
-  amount: 109,
-  posted: '2025-05-15',
-  bids: 26,
-  rating: 3
-},
-{
-  id: 'TASK92031',
-  title: 'Report Formatting',
-  amount: 148,
-  posted: '2025-05-15',
-  bids: 30,
-  rating: 5
-},
-{
-  id: 'TASK67915',
-  title: 'Edit Interview Transcript',
-  amount: 104,
-  posted: '2025-05-15',
-  bids: 36,
-  rating: 5
-},
-{
-  id: 'TASK73524',
-  title: 'Business Plan Proof',
-  amount: 215,
-  posted: '2025-05-15',
-  bids: 24,
-  rating: 4
-},
-{
-  id: 'TASK60419',
-  title: 'Market Survey Draft',
-  amount: 141,
-  posted: '2025-05-15',
-  bids: 20,
-  rating: 3
-},
-{
-  id: 'TASK48810',
-  title: 'Policy Review',
-  amount: 174,
-  posted: '2025-05-15',
-  bids: 31,
-  rating: 5
-},
-{
-  id: 'TASK51892',
-  title: 'Flashcard Set',
-  amount: 85,
-  posted: '2025-05-15',
-  bids: 22,
-  rating: 4
-},
-{
-  id: 'TASK18530',
-  title: 'Campaign Concept',
-  amount: 187,
-  posted: '2025-05-15',
-  bids: 33,
-  rating: 5
-},   
-{
-  id: 'TASK37690',
-  title: 'User Manual Draft',
-  amount: 132,
-  posted: '2025-05-15',
-  bids: 16,
-  rating: 5
-},
-{
-  id: 'TASK25483',
-  title: 'Feedback Report',
-  amount: 63,
-  posted: '2025-05-15',
-  bids: 20,
-  rating: 4
-},
-{
-  id: 'TASK69317',
-  title: 'Final Year Project',
-  amount: 240,
-  posted: '2025-05-15',
-  bids: 34,
-  rating: 5
-},
-{
-  id: 'TASK17238',
-  title: 'UX Review',
-  amount: 123,
-  posted: '2025-05-15',
-  bids: 19,
-  rating: 3
-},
-{
-  id: 'TASK51260',
-  title: 'Short Story Edit',
-  amount: 98,
-  posted: '2025-05-15',
-  bids: 27,
-  rating: 4
-} ,  
-{
-  id: 'TASK10559',
-  title: 'Basic Data Entry',
-  amount: 248,
-  posted: '2025-05-15',
-  bids: 16,
-  rating: 3
-},
-{
-  id: 'TASK31428',
-  title: 'Transcript Proofing',
-  amount: 97,
-  posted: '2025-05-15',
-  bids: 30,
-  rating: 5
-},
-{
-  id: 'TASK31514',
-  title: 'Resume Writing',
-  amount: 91,
-  posted: '2025-05-15',
-  bids: 21,
-  rating: 3
-},
-{
-  id: 'TASK84963',
-  title: 'CV Optimization',
-  amount: 70,
   posted: '2025-05-15',
   bids: 17,
-  rating: 4
-},
-{
-  id: 'TASK97478',
-  title: 'AI Model Evaluation',
-  amount: 190,
-  posted: '2025-05-15',
-  bids: 22,
-  rating: 3
-},
-{
-  id: 'TASK80164',
-  title: 'UX Feedback Survey',
-  amount: 196,
-  posted: '2025-05-15',
-  bids: 33,
   rating: 5
 },
 {
-  id: 'TASK24669',
-  title: 'Nutrition Research',
-  amount: 93,
+  id: 'TASK10032',
+  title: 'Manuscript Preparation',
+  amount: 280,
   posted: '2025-05-15',
-  bids: 26,
-  rating: 3
-},
-{
-  id: 'TASK82323',
-  title: 'Virtual Assistant Task',
-  amount: 174,
-  posted: '2025-05-15',
-  bids: 25,
-  rating: 4
-},
-{
-  id: 'TASK17102',
-  title: 'Market Analysis',
-  amount: 171,
-  posted: '2025-05-15',
-  bids: 19,
+  bids: 16,
   rating: 5
 },
 {
-  id: 'TASK77292',
-  title: 'Short Film Editing',
-  amount: 142,
-  posted: '2025-05-15',
-  bids: 35,
-  rating: 3
-},
-{
-  id: 'TASK58799',
-  title: 'Voice Over Script',
-  amount: 155,
-  posted: '2025-05-15',
-  bids: 28,
-  rating: 5
-},
-{
-  id: 'TASK72837',
-  title: 'Blog Rewrite',
-  amount: 217,
+  id: 'TASK10033',
+  title: 'Research Proposal Review',
+  amount: 175,
   posted: '2025-05-15',
   bids: 14,
   rating: 4
-},     
- {
-       id: 'TASK67890',
-        title: 'Web App Debugging',
-        amount: 250,
-        posted: '2025-05-13',
-        bids: 4,
-        rating: 5
-      }
+},
+{
+  id: 'TASK10034',
+  title: 'Editing for Grammar',
+  amount: 130,
+  posted: '2025-05-15',
+  bids: 21,
+  rating: 4
+},
+{
+  id: 'TASK10035',
+  title: 'Thesis Chapter Draft',
+  amount: 210,
+  posted: '2025-05-15',
+  bids: 18,
+  rating: 5
+},
+{
+  id: 'TASK10036',
+  title: 'Research Summary Report',
+  amount: 160,
+  posted: '2025-05-15',
+  bids: 19,
+  rating: 4
+},
+{
+  id: 'TASK10037',
+  title: 'Academic Presentation Slides',
+  amount: 140,
+  posted: '2025-05-15',
+  bids: 20,
+  rating: 3
+},
+{
+  id: 'TASK10038',
+  title: 'Dissertation Abstract',
+  amount: 110,
+  posted: '2025-05-15',
+  bids: 18,
+  rating: 4
+},
+{
+  id: 'TASK10039',
+  title: 'Proposal Budget Planning',
+  amount: 190,
+  posted: '2025-05-15',
+  bids: 13,
+  rating: 4
+},
+{
+  id: 'TASK10040',
+  title: 'Editing References',
+  amount: 120,
+  posted: '2025-05-15',
+  bids: 17,
+  rating: 3
+}
     ];
 
     const completedTasks = JSON.parse(localStorage.getItem('completedTasks') || '[]');
