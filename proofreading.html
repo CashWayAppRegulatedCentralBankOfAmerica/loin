@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nova Prime Tasks</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 font-sans">
+  <header class="bg-white shadow p-4 flex justify-between items-center">
+    <h1 class="text-2xl font-bold text-green-600">Nova Prime</h1>
+  </header>
+
+  <main class="max-w-5xl mx-auto p-4">
+    <h2 class="text-xl font-semibold mb-4">Editing and Proofreading Tasks</h2>
+
+    <div id="taskList" class="space-y-6">
+      <!-- Tasks will be dynamically inserted here -->
+    </div>
+  </main>
+
+  <!-- Rating Modal -->
+  <div id="ratingModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+    <div class="bg-white rounded-xl p-6 w-80 text-center shadow-lg">
+      <h3 class="text-lg font-bold mb-2">Rating Restricted</h3>
+      <p class="text-sm text-gray-600 mb-4">Only freelancers who completed and got paid for this task can rate it.</p>
+      <button onclick="closeModal()" class="bg-green-600 text-white px-4 py-2 rounded-lg">Close</button>
+    </div>
+  </div>
+
+  <script>
+    const tasks = [
+      {
+        {
+  id: 'TASK40131',
+  title: 'Proofread Academic Research Paper',
+  amount: 22,
+  posted: '2025-05-15',
+  bids: 14,
+  rating: 4
+},
+{
+  id: 'TASK40132',
+  title: 'Edit Business Proposal Document',
+  amount: 24,
+  posted: '2025-05-15',
+  bids: 15,
+  rating: 5
+},
+{
+  id: 'TASK40133',
+  title: 'Proofread Blog Post (1000 words)',
+  amount: 12,
+  posted: '2025-05-15',
+  bids: 13,
+  rating: 3
+},
+{
+  id: 'TASK40134',
+  title: 'Edit eBook Chapter (Fiction)',
+  amount: 20,
+  posted: '2025-05-15',
+  bids: 14,
+  rating: 4
+},
+{
+  id: 'TASK40135',
+  title: 'Grammar Check for Resume & Cover Letter',
+  amount: 15,
+  posted: '2025-05-15',
+  bids: 11,
+  rating: 4
+},
+{
+  id: 'TASK40136',
+  title: 'Proofread University Admission Essay',
+  amount: 18,
+  posted: '2025-05-15',
+  bids: 12,
+  rating: 5
+},
+{
+  id: 'TASK40137',
+  title: 'Edit Newsletter Content (Monthly)',
+  amount: 19,
+  posted: '2025-05-15',
+  bids: 12,
+  rating: 3
+},
+{
+  id: 'TASK40138',
+  title: 'Website Content Proofreading',
+  amount: 23,
+  posted: '2025-05-15',
+  bids: 16,
+  rating: 5
+},
+{
+  id: 'TASK40139',
+  title: 'Edit Grant Proposal Draft',
+  amount: 25,
+  posted: '2025-05-15',
+  bids: 18,
+  rating: 5
+},
+{
+  id: 'TASK40140',
+  title: 'Proofread Short Story (3000 words)',
+  amount: 17,
+  posted: '2025-05-15',
+  bids: 13,
+  rating: 4
+},
+{
+  id: 'TASK40141',
+  title: 'Edit Technical Report for Clarity',
+  amount: 21,
+  posted: '2025-05-15',
+  bids: 14,
+  rating: 4
+},
+{
+  id: 'TASK40142',
+  title: 'Proofread Product Descriptions',
+  amount: 16,
+  posted: '2025-05-15',
+  bids: 11,
+  rating: 3
+},
+{
+  id: 'TASK40143',
+  title: 'Edit Freelance Portfolio Bio',
+  amount: 10,
+  posted: '2025-05-15',
+  bids: 9,
+  rating: 3
+},
+{
+  id: 'TASK40144',
+  title: 'Proofread Master’s Thesis Introduction',
+  amount: 24,
+  posted: '2025-05-15',
+  bids: 17,
+  rating: 5
+},
+{
+  id: 'TASK40145',
+  title: 'Edit Journal Abstract for Publication',
+  amount: 22,
+  posted: '2025-05-15',
+  bids: 13,
+  rating: 4
+},
+{
+  id: 'TASK40146',
+  title: 'Proofread Terms and Conditions Document',
+  amount: 20,
+  posted: '2025-05-15',
+  bids: 14,
+  rating: 4
+},
+{
+  id: 'TASK40147',
+  title: 'Edit YouTube Script for Grammar',
+  amount: 15,
+  posted: '2025-05-15',
+  bids: 11,
+  rating: 3
+},
+{
+  id: 'TASK40148',
+  title: 'Proofread Company Brochure',
+  amount: 19,
+  posted: '2025-05-15',
+  bids: 13,
+  rating: 4
+},
+{
+  id: 'TASK40149',
+  title: 'Edit Interview Transcript (Clean Copy)',
+  amount: 23,
+  posted: '2025-05-15',
+  bids: 16,
+  rating: 5
+},
+{
+  id: 'TASK40150',
+  title: 'Proofread Legal Agreement',
+  amount: 25,
+  posted: '2025-05-15',
+  bids: 18,
+  rating: 5
+},
+{
+  id: 'TASK40151',
+  title: 'Edit Fictional Story Dialogue',
+  amount: 13,
+  posted: '2025-05-15',
+  bids: 10,
+  rating: 3
+},
+{
+  id: 'TASK40152',
+  title: 'Proofread Instruction Manual',
+  amount: 18,
+  posted: '2025-05-15',
+  bids: 11,
+  rating: 4
+},
+{
+  id: 'TASK40153',
+  title: 'Edit Scientific Article',
+  amount: 24,
+  posted: '2025-05-15',
+  bids: 17,
+  rating: 5
+},
+{
+  id: 'TASK40154',
+  title: 'Proofread Book Foreword',
+  amount: 14,
+  posted: '2025-05-15',
+  bids: 10,
+  rating: 3
+},
+{
+  id: 'TASK40155',
+  title: 'Edit Event Invitation Email',
+  amount: 12,
+  posted: '2025-05-15',
+  bids: 11,
+  rating: 3
+},
+{
+  id: 'TASK40156',
+  title: 'Proofread Memoir Chapter',
+  amount: 21,
+  posted: '2025-05-15',
+  bids: 15,
+  rating: 4
+},
+{
+  id: 'TASK40157',
+  title: 'Edit Funding Request Letter',
+  amount: 20,
+  posted: '2025-05-15',
+  bids: 14,
+  rating: 4
+},
+{
+  id: 'TASK40158',
+  title: 'Proofread App Store Description',
+  amount: 13,
+  posted: '2025-05-15',
+  bids: 11,
+  rating: 3
+},
+{
+  id: 'TASK40159',
+  title: 'Edit Personal Statement',
+  amount: 17,
+  posted: '2025-05-15',
+  bids: 12,
+  rating: 4
+},
+{
+  id: 'TASK40160',
+  title: 'Proofread User Guide for Software',
+  amount: 23,
+  posted: '2025-05-15',
+  bids: 16,
+  rating: 5
+},
+{
+  id: 'TASK40161',
+  title: 'Edit White Paper Draft',
+  amount: 25,
+  posted: '2025-05-15',
+  bids: 18,
+  rating: 5
+},
+{
+  id: 'TASK40162',
+  title: 'Proofread Internal Company Memo',
+  amount: 16,
+  posted: '2025-05-15',
+  bids: 11,
+  rating: 3
+},
+{
+  id: 'TASK40163',
+  title: 'Edit Academic Paper for Flow',
+  amount: 22,
+  posted: '2025-05-15',
+  bids: 14,
+  rating: 5
+},
+{
+  id: 'TASK40164',
+  title: 'Proofread Blog Comment Section',
+  amount: 11,
+  posted: '2025-05-15',
+  bids: 9,
+  rating: 2
+},
+{
+  id: 'TASK40165',
+  title: 'Edit Policy Brief Summary',
+  amount: 20,
+  posted: '2025-05-15',
+  bids: 13,
+  rating: 4
+},
+{
+  id: 'TASK40166',
+  title: 'Proofread Grant Budget Narrative',
+  amount: 19,
+  posted: '2025-05-15',
+  bids: 14,
+  rating: 4
+},
+{
+  id: 'TASK40167',
+  title: 'Edit Literature Review (2 pages)',
+  amount: 21,
+  posted: '2025-05-15',
+  bids: 12,
+  rating: 4
+},
+{
+  id: 'TASK40168',
+  title: 'Proofread Client Email Draft',
+  amount: 10,
+  posted: '2025-05-15',
+  bids: 8,
+  rating: 2
+},
+{
+  id: 'TASK40169',
+  title: 'Edit Investor Pitch Deck Notes',
+  amount: 24,
+  posted: '2025-05-15',
+  bids: 17,
+  rating: 5
+},
+{
+  id: 'TASK40170',
+  title: 'Proofread Workshop Agenda',
+  amount: 15,
+  posted: '2025-05-15',
+  bids: 11,
+  rating: 3
+}
+    ];
+
+    const completedTasks = JSON.parse(localStorage.getItem('completedTasks') || '[]');
+
+    function renderTasks() {
+      const taskList = document.getElementById('taskList');
+      taskList.innerHTML = '';
+
+      tasks.forEach(task => {
+        const div = document.createElement('div');
+        div.className = 'bg-white p-6 rounded-lg shadow';
+        div.innerHTML = `
+          <div class="flex justify-between items-start">
+            <div>
+              <h3 class="text-lg font-bold text-gray-800">${task.title}</h3>
+              <p class="text-sm text-gray-500">Task ID: ${task.id}</p>
+              <p class="text-sm text-gray-500">Posted: ${task.posted}</p>
+              <p class="text-sm text-gray-500">Bids: ${task.bids}</p>
+              <p class="text-md font-semibold text-green-600 mt-2">Amount: $${task.amount}</p>
+            </div>
+            <div class="flex flex-col items-end">
+              <a href="bid.html?taskId=${task.id}&amount=${task.amount}" class="bg-green-600 text-white px-4 py-2 rounded-lg mb-2">Bid</a>
+              <div class="flex items-center">
+                ${[1, 2, 3, 4, 5].map(i => `
+                  <svg onclick="handleRating('${task.id}', ${i})" class="w-5 h-5 cursor-pointer ${i <= task.rating ? 'text-green-600' : 'text-gray-300'}" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.974a1 1 0 00.95.69h4.18c.969 0 1.371 1.24.588 1.81l-3.39 2.46a1 1 0 00-.364 1.118l1.286 3.974c.3.921-.755 1.688-1.54 1.118l-3.39-2.46a1 1 0 00-1.175 0l-3.39 2.46c-.784.57-1.838-.197-1.539-1.118l1.285-3.974a1 1 0 00-.364-1.118l-3.39-2.46c-.784-.57-.38-1.81.588-1.81h4.18a1 1 0 00.951-.69l1.285-3.974z" />
+                  </svg>
+                `).join('')}
+              </div>
+            </div>
+          </div>
+        `;
+        taskList.appendChild(div);
+      });
+    }
+
+    function handleRating(taskId, ratingValue) {
+      if (!completedTasks.includes(taskId)) {
+        document.getElementById('ratingModal').classList.remove('hidden');
+        return;
+      }
+      alert(`Thanks for rating task ${taskId} with ${ratingValue} stars.`);
+    }
+
+    function closeModal() {
+      document.getElementById('ratingModal').classList.add('hidden');
+    }
+
+    renderTasks();
+  </script>
+  
+  <!-- Footer -->
+  <footer class="bg-white border-t mt-12">
+    <footer class="fixed bottom-0 left-0 w-full bg-white text-center py-4 text-gray-500 text-sm z-50 shadow">
+      <p>&copy; 2025 Nova Prime. All rights reserved.</p>
+      <div class="space-x-4">
+        <a href="privacy.html" class="hover:text-green-600">Privacy</a>
+        <a href="terms.html" class="hover:text-green-600">Terms</a>
+        <a href="help.html" class="hover:text-green-600">Help</a>
+      </div>
+    </div>
+  </footer>
+    
+</body>
+</html>
