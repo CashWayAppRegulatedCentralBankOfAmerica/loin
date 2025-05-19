@@ -2,119 +2,575 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Tabitha Nelima - Profile</title>
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>User Profile - Nova Prime Style</title>
+  <style>
+    /* Reset & base */
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      font-family: Helvetica, Arial, sans-serif;
+      background: #f9f9f9;
+      margin: 0;
+      color: #333;
+    }
+
+    /* Container */
+    .profile-container {
+      max-width: 900px;
+      margin: 2rem auto;
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 4px 10px rgb(0 0 0 / 0.1);
+      padding: 2rem 2.5rem;
+      position: relative;
+    }
+
+    /* Header */
+    .profile-header {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      border-bottom: 2px solid #00800033;
+      padding-bottom: 1.5rem;
+    }
+    .profile-image {
+      flex-shrink: 0;
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid #008000;
+    }
+    .profile-basic-info {
+      flex-grow: 1;
+      position: relative;
+    }
+    .profile-name {
+      font-size: 1.9rem;
+      font-weight: 700;
+      color: #008000;
+      margin-bottom: 0.3rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    /* Active icon - small green circle */
+    .active-icon {
+      width: 16px;
+      height: 16px;
+      background-color: #008000;
+      border-radius: 50%;
+      border: 2px solid white;
+      box-shadow: 0 0 5px #008000aa;
+      display: inline-block;
+      vertical-align: middle;
+    }
+
+    .profile-title {
+      font-size: 1.2rem;
+      color: #555;
+      margin-bottom: 0.5rem;
+    }
+    .profile-location {
+      font-size: 1rem;
+      color: #777;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      margin-bottom: 0.6rem;
+    }
+
+    /* Ratings & Actions */
+    .profile-ratings {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      font-weight: 600;
+      color: #008000;
+      font-size: 1rem;
+      cursor: default;
+    }
+    .stars {
+      color: #008000;
+      font-size: 1.2rem;
+    }
+
+    /* Review clickable */
+    .reviews-link {
+      text-decoration: underline;
+      cursor: pointer;
+      color: #008000;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+      user-select: none;
+    }
+    .reviews-link:hover {
+      color: #005000;
+    }
+
+    /* Message icon and clickable */
+    .message-link {
+      cursor: pointer;
+      color: #008000;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+      user-select: none;
+    }
+    .message-link:hover {
+      color: #005000;
+    }
+
+    /* Message icon SVG style */
+    .message-icon {
+      width: 18px;
+      height: 18px;
+      fill: #008000;
+    }
+
+    /* Overview */
+    .profile-overview {
+      margin-top: 1.7rem;
+      font-size: 1rem;
+      line-height: 1.5;
+      color: #444;
+    }
+
+    /* Skills */
+    .skills-section {
+      margin-top: 2rem;
+    }
+    .skills-title {
+      font-weight: 700;
+      font-size: 1.3rem;
+      color: #008000;
+      margin-bottom: 0.8rem;
+      border-bottom: 2px solid #008000;
+      display: inline-block;
+      padding-bottom: 4px;
+    }
+    .skills-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.8rem;
+    }
+    .skill {
+      background: #00800022;
+      color: #008000;
+      padding: 0.4rem 1rem;
+      border-radius: 20px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      user-select: none;
+    }
+
+    /* Work History */
+    .work-history-section {
+      margin-top: 2.5rem;
+    }
+    .work-title {
+      font-weight: 700;
+      font-size: 1.3rem;
+      color: #008000;
+      margin-bottom: 0.8rem;
+      border-bottom: 2px solid #008000;
+      display: inline-block;
+      padding-bottom: 4px;
+    }
+    .job-entry {
+      padding: 1rem 0;
+      border-bottom: 1px solid #ddd;
+    }
+    .job-entry:last-child {
+      border-bottom: none;
+    }
+    .job-title {
+      font-weight: 700;
+      color: #008000;
+      font-size: 1.1rem;
+      margin-bottom: 0.2rem;
+    }
+    .job-company {
+      font-style: italic;
+      color: #555;
+      margin-bottom: 0.2rem;
+    }
+    .job-duration {
+      color: #777;
+      font-size: 0.9rem;
+    }
+    .job-description {
+      margin-top: 0.5rem;
+      font-size: 0.95rem;
+      color: #444;
+      line-height: 1.4;
+    }
+
+    /* Contact Button */
+    .contact-btn {
+      margin-top: 2.5rem;
+      display: inline-block;
+      background-color: #008000;
+      color: white;
+      font-weight: 700;
+      padding: 0.7rem 2rem;
+      font-size: 1.1rem;
+      border: none;
+      border-radius: 30px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      text-decoration: none;
+      text-align: center;
+      user-select: none;
+    }
+    .contact-btn:hover {
+      background-color: #005000;
+    }
+
+    /* Modal base */
+    .modal-overlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.5);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      padding: 1rem;
+    }
+    .modal {
+      background: white;
+      border-radius: 8px;
+      max-width: 450px;
+      width: 100%;
+      padding: 1.8rem 2rem;
+      box-shadow: 0 8px 20px rgb(0 0 0 / 0.2);
+      position: relative;
+      font-size: 1rem;
+      color: #333;
+    }
+    .modal h3 {
+      margin-top: 0;
+      margin-bottom: 1rem;
+      color: #008000;
+      font-weight: 700;
+      font-size: 1.3rem;
+    }
+    .modal p {
+      margin-bottom: 1rem;
+      line-height: 1.4;
+    }
+    .modal-close {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      background: transparent;
+      border: none;
+      font-size: 1.4rem;
+      cursor: pointer;
+      font-weight: 700;
+      color: #555;
+      user-select: none;
+    }
+    .modal-close:hover {
+      color: #008000;
+    }
+
+    /* Textarea for message modal */
+    .modal textarea {
+      width: 100%;
+      min-height: 100px;
+      resize: vertical;
+      border-radius: 6px;
+      border: 1.5px solid #ccc;
+      padding: 0.6rem 0.8rem;
+      font-size: 1rem;
+      font-family: Helvetica, Arial, sans-serif;
+      margin-bottom: 1rem;
+      transition: border-color 0.3s ease;
+    }
+    .modal textarea:focus {
+      outline: none;
+      border-color: #008000;
+      box-shadow: 0 0 6px #008000aa;
+    }
+
+    /* Modal buttons */
+    .modal-btn {
+      background-color: #008000;
+      color: white;
+      border: none;
+      border-radius: 25px;
+      padding: 0.6rem 1.8rem;
+      font-weight: 700;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      user-select: none;
+    }
+    .modal-btn:hover {
+      background-color: #005000;
+    }
+
+    /* Responsive */
+    @media (max-width: 600px) {
+      .profile-header {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+      }
+      .profile-basic-info {
+        margin-top: 1rem;
+      }
+      .skills-list {
+        justify-content: center;
+      }
+    }
+  </style>
 </head>
-<body class="bg-gray-100 min-h-screen flex flex-col items-center px-4">
+<body>
 
-  <!-- Logo Top-Left -->
-  <div class="w-full max-w-7xl mt-6 mb-4">
-    <h1 class="text-xl font-bold text-green-600">Nova Prime</h1>
-  </div>
-
-  <!-- User Profile Card -->
-  <div class="bg-white p-6 rounded-2xl shadow-lg w-full max-w-sm text-center relative">
-    <!-- Avatar -->
-    <div class="relative w-24 h-24 mx-auto">
-      <img src="your-user.jpg" alt="User" class="rounded-full border-4 border-green-500 w-full h-full object-cover" />
-      <div class="absolute -top-2 -right-2 bg-white flex items-center px-2 py-0.5 rounded-full shadow text-green-600 text-xs font-semibold">
-        <span class="w-2 h-2 bg-green-500 rounded-full mr-1"></span>
-        Active
+  <section class="profile-container" role="main" aria-label="User profile">
+    <header class="profile-header">
+      <img
+        src="https://randomuser.me/api/portraits/women/68.jpg"
+        alt="Profile picture of Jane Doe"
+        class="profile-image"
+      />
+      <div class="profile-basic-info">
+        <h1 class="profile-name">
+          Jane Doe
+          <span class="active-icon" aria-label="User is active"></span>
+        </h1>
+        <p class="profile-title">Senior Research Analyst</p>
+        <p class="profile-location" aria-label="Location">📍 Nairobi, Kenya</p>
+        <div class="profile-ratings" aria-label="User rating 4.7 out of 5 stars">
+          <span class="stars" aria-hidden="true">★★★★★</span>
+          <span>4.7 (150 reviews)</span>
+          <!-- Reviews clickable -->
+          <span
+            class="reviews-link"
+            id="reviewsBtn"
+            role="button"
+            tabindex="0"
+            aria-haspopup="dialog"
+            aria-controls="reviewsModal"
+            >Reviews</span>
+          <!-- Message icon clickable -->
+          <span
+            class="message-link"
+            id="messageBtn"
+            role="button"
+            tabindex="0"
+            aria-haspopup="dialog"
+            aria-controls="messageModal"
+            title="Send message"
+          >
+            <!-- Simple message icon SVG -->
+            <svg
+              class="message-icon"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+              focusable="false"
+            >
+              <path
+                d="M4 4h16v12H5.17L4 17.17V4zm0-2a2 2 0 0 0-2 2v16l4-4h14a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H4z"
+              />
+            </svg>
+            Message
+          </span>
+        </div>
       </div>
-    </div>
+    </header>
 
-    <!-- Name + Role -->
-    <h2 class="mt-4 text-xl font-semibold text-gray-800 flex items-center justify-center gap-1">
-      Tabitha Nelima
-      <svg class="w-4 h-4 text-green-500" fill="currentColor" viewBox="0 0 20 20">
-        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-7.364 7.364a1 1 0 01-1.414 0L3.293 9.707a1 1 0 011.414-1.414L8 11.586l6.293-6.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
-      </svg>
-    </h2>
-    <p class="text-sm text-gray-500">Web Developer · Kenya</p>
+    <article class="profile-overview">
+      <p>
+        Jane is a senior research analyst specializing in market trends and data-driven insights. She has over 8 years of experience working with leading firms in Nairobi and beyond.
+      </p>
+    </article>
 
-    <!-- Ratings -->
-    <div class="mt-3 flex justify-center items-center">
-      <span class="text-yellow-400 text-lg">★★★★☆</span>
-      <button onclick="toggleReviews()" class="ml-2 text-sm text-green-600 hover:text-green-800 underline">(24 reviews)</button>
-    </div>
+    <section class="skills-section" aria-label="Skills">
+      <h2 class="skills-title">Skills & Expertise</h2>
+      <div class="skills-list">
+        <span class="skill">Data Analysis</span>
+        <span class="skill">Market Research</span>
+        <span class="skill">Excel & SQL</span>
+        <span class="skill">Python</span>
+        <span class="skill">Report Writing</span>
+      </div>
+    </section>
 
-    <!-- Reviews Section -->
-    <div id="reviewSection" class="mt-4 hidden text-left text-sm bg-gray-100 p-4 rounded space-y-2">
-      <p><strong>Jacob123:</strong> Excellent work and communication.</p>
-      <p><strong>AliceW:</strong> Very reliable and skilled!</p>
-      <p><strong>Mike_T:</strong> Will definitely hire again.</p>
-      <button onclick="openReviewModal()" class="text-green-600 hover:text-green-800 underline text-sm mt-2">Add your review</button>
+    <section class="work-history-section" aria-label="Work History">
+      <h2 class="work-title">Work History</h2>
+      <div class="job-entry">
+        <p class="job-title">Senior Research Analyst</p>
+        <p class="job-company">Kenya Market Insights</p>
+        <p class="job-duration">Jan 2020 - Present</p>
+        <p class="job-description">Leading the research team, analyzing consumer data, and producing quarterly market reports.</p>
+      </div>
+      <div class="job-entry">
+        <p class="job-title">Research Analyst</p>
+        <p class="job-company">Nairobi Data Corp</p>
+        <p class="job-duration">Jun 2015 - Dec 2019</p>
+        <p class="job-description">Conducted surveys, data cleaning, and preliminary analysis for various client projects.</p>
+      </div>
+    </section>
+  </section>
+
+  <!-- Reviews Modal -->
+  <div
+    class="modal-overlay"
+    id="reviewsModal"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="reviewsModalTitle"
+    tabindex="-1"
+  >
+    <div class="modal" role="document">
+      <button class="modal-close" aria-label="Close reviews modal">&times;</button>
+      <h3 id="reviewsModalTitle">Reviews Access Denied</h3>
+      <p>You are not allowed to read or write a review. Your email has not worked with Jane Doe.</p>
     </div>
   </div>
 
-  <!-- Review Modal -->
-  <div id="reviewModal" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-    <div class="bg-white p-6 rounded-xl w-full max-w-md relative">
-      <h3 class="text-lg font-bold mb-3 text-gray-800">Submit Review</h3>
-      <textarea id="reviewText" class="w-full border rounded p-2 mb-3" rows="4" placeholder="Write your review here..."></textarea>
-      <button onclick="submitReview()" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">Send Review</button>
+  <!-- Message Modal -->
+  <div
+    class="modal-overlay"
+    id="messageModal"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="messageModalTitle"
+    tabindex="-1"
+  >
+    <div class="modal" role="document">
+      <button class="modal-close" aria-label="Close message modal">&times;</button>
+      <h3 id="messageModalTitle">Send a Message to Jane Doe</h3>
+      <form id="messageForm">
+        <label for="messageText" class="sr-only">Type your message</label>
+        <textarea
+          id="messageText"
+          name="messageText"
+          placeholder="Type your message here..."
+          required
+          aria-required="true"
+          rows="5"
+        ></textarea>
+        <button type="submit" class="modal-btn">Send Message</button>
+      </form>
     </div>
   </div>
 
-  <!-- Error Modal -->
-  <div id="errorModal" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-    <div class="bg-white p-6 rounded-xl w-full max-w-sm text-center">
-      <p class="text-red-600 font-semibold">Access Denied</p>
-      <p class="text-sm text-gray-600 mt-2">Only verified users who’ve worked with Tabitha Nelima can submit reviews.</p>
-      <button onclick="closeErrorModal()" class="mt-4 bg-gray-300 hover:bg-gray-400 px-4 py-2 rounded">Close</button>
+  <!-- Message Success Modal -->
+  <div
+    class="modal-overlay"
+    id="messageSuccessModal"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="messageSuccessModalTitle"
+    tabindex="-1"
+  >
+    <div class="modal" role="document">
+      <button class="modal-close" aria-label="Close success modal">&times;</button>
+      <h3 id="messageSuccessModalTitle">Message Sent</h3>
+      <p>Message sent successfully. You will get a reply through your registered email from Jane Doe.</p>
     </div>
   </div>
 
   <script>
-    const reviewSection = document.getElementById('reviewSection');
-    const reviewModal = document.getElementById('reviewModal');
-    const errorModal = document.getElementById('errorModal');
+    // Elements
+    const reviewsBtn = document.getElementById('reviewsBtn');
+    const messageBtn = document.getElementById('messageBtn');
 
-    function toggleReviews() {
-      reviewSection.classList.toggle('hidden');
-    }
+    const reviewsModal = document.getElementById('reviewsModal');
+    const messageModal = document.getElementById('messageModal');
+    const messageSuccessModal = document.getElementById('messageSuccessModal');
 
-    function openReviewModal() {
-      reviewModal.classList.remove('hidden');
-    }
+    // Close buttons for each modal
+    document.querySelectorAll('.modal-close').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        closeAllModals();
+      });
+    });
 
-    function closeErrorModal() {
-      errorModal.classList.add('hidden');
-    }
+    // Close modals on clicking outside modal content
+    [reviewsModal, messageModal, messageSuccessModal].forEach((modal) => {
+      modal.addEventListener('click', (e) => {
+        if (e.target === modal) closeAllModals();
+      });
+    });
 
-    function submitReview() {
-      const userAllowed = false; // Replace with real logic
-      reviewModal.classList.add('hidden');
-      if (!userAllowed) {
-        errorModal.classList.remove('hidden');
-      } else {
-        alert('Review submitted successfully!');
-      }
-    }
-
-    document.addEventListener('keydown', e => {
-      if (e.key === 'Escape') {
-        reviewModal.classList.add('hidden');
-        errorModal.classList.add('hidden');
+    // Open Reviews Modal
+    reviewsBtn.addEventListener('click', () => {
+      openModal(reviewsModal);
+    });
+    reviewsBtn.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        openModal(reviewsModal);
       }
     });
 
-    window.onclick = function(event) {
-      if (event.target === reviewModal) reviewModal.classList.add('hidden');
-      if (event.target === errorModal) errorModal.classList.add('hidden');
-    };
+    // Open Message Modal
+    messageBtn.addEventListener('click', () => {
+      openModal(messageModal);
+    });
+    messageBtn.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        openModal(messageModal);
+      }
+    });
+
+    // Message form submit
+    const messageForm = document.getElementById('messageForm');
+    messageForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      // Could add more validation or AJAX here if needed
+      messageForm.reset();
+      closeModal(messageModal);
+      openModal(messageSuccessModal);
+    });
+
+    // Utility open modal function
+    function openModal(modal) {
+      modal.style.display = 'flex';
+      // Focus first focusable element inside modal or modal itself
+      const focusable = modal.querySelector('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+      if (focusable) {
+        focusable.focus();
+      } else {
+        modal.focus();
+      }
+      // Disable page scroll while modal is open
+      document.body.style.overflow = 'hidden';
+    }
+
+    // Utility close modal function
+    function closeModal(modal) {
+      modal.style.display = 'none';
+      document.body.style.overflow = '';
+    }
+
+    // Close all modals
+    function closeAllModals() {
+      [reviewsModal, messageModal, messageSuccessModal].forEach((m) => (m.style.display = 'none'));
+      document.body.style.overflow = '';
+    }
+
+    // Accessibility: close modal on ESC key
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeAllModals();
+      }
+    });
   </script>
-    <!-- Footer -->
-  <footer class="bg-white border-t mt-12">
-    <footer class="fixed bottom-0 left-0 w-full bg-white text-center py-4 text-gray-500 text-sm z-50 shadow">
-      <p>&copy; 2025 Nova Prime. All rights reserved.</p>
-      <div class="space-x-4">
-        <a href="privacy.html" class="hover:text-green-600">Privacy</a>
-        <a href="terms.html" class="hover:text-green-600">Terms</a>
-        <a href="help.html" class="hover:text-green-600">Help</a>
-      </div>
-    </div>
-  </footer>
+
 </body>
 </html>
