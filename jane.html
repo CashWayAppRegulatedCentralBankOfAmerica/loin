@@ -1,443 +1,107 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Nova Prime Profile</title>
-  <style>
-    /* Basic Reset */
-    * {
-      box-sizing: border-box;
-    }
-
-    body {
-      font-family: Helvetica, Arial, sans-serif;
-      background-color: #fff;
-      color: #222;
-      margin: 0;
-      padding: 2rem 2rem 4rem 2rem;
-      min-height: 100vh;
-      position: relative;
-    }
-
-    /* Logo top-left, not in a bar */
-    .logo {
-      position: fixed;
-      top: 1rem;
-      left: 1rem;
-      font-weight: 700;
-      font-size: 1.8rem;
-      color: #008000;
-      font-family: Helvetica, Arial, sans-serif;
-      z-index: 1000;
-      user-select: none;
-    }
-
-    main {
-      max-width: 700px;
-      margin: 0 auto;
-      padding-top: 3rem; /* space so content doesn't overlap logo */
-    }
-
-    .profile-container {
-      border: 1px solid #ddd;
-      border-radius: 8px;
-      padding: 2rem;
-      background: #f9f9f9;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.05);
-    }
-
-    .profile-header {
-      display: flex;
-      gap: 1.5rem;
-      margin-bottom: 1.5rem;
-    }
-    .profile-image {
-      width: 96px;
-      height: 96px;
-      border-radius: 50%;
-      object-fit: cover;
-      border: 3px solid #008000;
-    }
-    .profile-basic-info {
-      flex-grow: 1;
-    }
-    .profile-name {
-      font-size: 1.7rem;
-      font-weight: 700;
-      margin: 0;
-      display: flex;
-      align-items: center;
-      gap: 0.6rem;
-    }
-    .active-icon {
-      display: inline-block;
-      width: 12px;
-      height: 12px;
-      background-color: #008000;
-      border-radius: 50%;
-    }
-    .profile-title {
-      font-weight: 600;
-      margin: 0.2rem 0 0.4rem 0;
-      color: #555;
-    }
-    .profile-location {
-      font-size: 0.95rem;
-      color: #666;
-    }
-    .profile-ratings {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      margin-top: 0.5rem;
-    }
-    .stars {
-      color: #ffb400;
-      font-size: 1.2rem;
-      user-select: none;
-    }
-    .reviews-link {
-      background: none;
-      border: none;
-      color: #008000;
-      font-weight: 600;
-      cursor: pointer;
-      padding: 0;
-      font-size: 1rem;
-      text-decoration: underline;
-    }
-    .reviews-link:hover,
-    .message-link:hover {
-      color: #005000;
-    }
-    .message-link {
-      margin-top: 1rem;
-      display: inline-flex;
-      align-items: center;
-      gap: 0.4rem;
-      cursor: pointer;
-      background: none;
-      border: 1px solid #008000;
-      padding: 0.3rem 0.9rem;
-      border-radius: 4px;
-      font-weight: 600;
-      color: #008000;
-      user-select: none;
-    }
-    .message-icon {
-      fill: currentColor;
-      width: 18px;
-      height: 18px;
-    }
-    .profile-overview {
-      margin-bottom: 1.5rem;
-      font-size: 1rem;
-      line-height: 1.5;
-      color: #333;
-    }
-
-    .skills-section {
-      margin-bottom: 1.5rem;
-    }
-    .skills-title {
-      font-weight: 700;
-      font-size: 1.3rem;
-      margin-bottom: 0.5rem;
-      color: #008000;
-    }
-    .skills-list {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.6rem;
-    }
-    .skill {
-      background: #008000;
-      color: white;
-      padding: 0.3rem 0.7rem;
-      border-radius: 15px;
-      font-size: 0.9rem;
-      user-select: none;
-    }
-
-    .work-history-section {
-      margin-bottom: 2rem;
-    }
-    .work-title {
-      font-weight: 700;
-      font-size: 1.3rem;
-      margin-bottom: 0.5rem;
-      color: #008000;
-    }
-    .job-entry {
-      margin-bottom: 1rem;
-    }
-    .job-title {
-      font-weight: 700;
-      margin: 0;
-      color: #004d00;
-    }
-    .job-company {
-      font-weight: 600;
-      margin: 0.1rem 0;
-      color: #006600;
-    }
-    .job-duration {
-      font-size: 0.9rem;
-      font-style: italic;
-      margin: 0 0 0.3rem 0;
-      color: #666;
-    }
-    .job-description {
-      margin: 0;
-      font-size: 0.95rem;
-      color: #333;
-    }
-
-    .contact-btn {
-      display: inline-block;
-      background-color: #008000;
-      color: #fff;
-      font-weight: 700;
-      padding: 0.7rem 1.4rem;
-      border-radius: 5px;
-      text-decoration: none;
-      user-select: none;
-    }
-    .contact-btn:hover {
-      background-color: #005000;
-    }
-
-    /* Modal overlay */
-    .modal-overlay {
-      position: fixed;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(0,0,0,0.45);
-      display: none;
-      align-items: center;
-      justify-content: center;
-      z-index: 9999;
-      padding: 1rem;
-    }
-    .modal-overlay.active {
-      display: flex;
-    }
-    .modal {
-      background: white;
-      max-width: 400px;
-      width: 100%;
-      border-radius: 8px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-      padding: 1.5rem 2rem 2rem 2rem;
-      position: relative;
-    }
-    .modal h3 {
-      margin-top: 0;
-      margin-bottom: 1rem;
-      font-weight: 700;
-      color: #008000;
-    }
-    .modal-close {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      background: none;
-      border: none;
-      font-size: 1.4rem;
-      cursor: pointer;
-      color: #444;
-    }
-    .modal-close:hover {
-      color: #008000;
-    }
-
-    .modal-btn {
-      background-color: #008000;
-      border: none;
-      color: white;
-      padding: 0.6rem 1.4rem;
-      font-weight: 700;
-      border-radius: 4px;
-      cursor: pointer;
-      margin-top: 1rem;
-    }
-    .modal-btn:hover {
-      background-color: #005000;
-    }
-    .modal-btn-secondary {
-      background-color: #ddd;
-      color: #444;
-      margin-left: 1rem;
-      padding: 0.6rem 1.4rem;
-      border-radius: 4px;
-      border: none;
-      cursor: pointer;
-    }
-    .modal-btn-secondary:hover {
-      background-color: #bbb;
-    }
-    textarea {
-      width: 100%;
-      resize: vertical;
-      font-family: inherit;
-      font-size: 1rem;
-      padding: 0.5rem;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-      box-sizing: border-box;
-    }
-    label {
-      display: block;
-      font-weight: 600;
-      margin-bottom: 0.3rem;
-      color: #008000;
-    }
-
-    /* Responsive */
-    @media (max-width: 600px) {
-      .profile-header {
-        flex-direction: column;
-        align-items: center;
-        gap: 1rem;
-      }
-      .profile-basic-info {
-        text-align: center;
-      }
-      .profile-ratings {
-        justify-content: center;
-      }
-      main {
-        padding: 3rem 1rem 3rem 1rem;
-      }
-    }
-  </style>
+  <title>Tailwind Modal Example</title>
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
+<body class="bg-gray-50 min-h-screen relative font-sans">
 
-  <!-- Logo top-left -->
-  <div class="logo" aria-label="Nova Prime Logo">NOVA PRIME</div>
+  <!-- Fixed Logo top-left -->
+  <div class="fixed top-4 left-4 z-50">
+    <img src="https://tailwindcss.com/_next/static/media/tailwind-logo.8a7c73a9.svg" alt="Logo" class="w-12 h-12" />
+  </div>
 
-  <main>
-    <section class="profile-container" role="main" aria-label="User profile">
+  <!-- Main Content -->
+  <main class="max-w-4xl mx-auto p-6 mt-16">
 
-      <header class="profile-header">
-        <img
-          src="https://randomuser.me/api/portraits/women/44.jpg"
-          alt="Jane Doe profile photo"
-          class="profile-image"
-        />
-        <div class="profile-basic-info">
-          <h1 class="profile-name">
-            Jane Doe
-            <span class="active-icon" title="Active now" aria-label="Active user"></span>
-          </h1>
-          <p class="profile-title">Senior Software Engineer</p>
-          <p class="profile-location" aria-label="Location: Nairobi, Kenya">
-            📍 Nairobi, Kenya
-          </p>
-          <div class="profile-ratings" aria-label="User ratings and reviews">
-            <div class="stars" aria-hidden="true">★★★★★</div>
-            <button class="reviews-link" aria-describedby="review-count" aria-label="View 230 reviews" type="button">
-              230 Reviews
-            </button>
-          </div>
-          <div>
-            <button class="message-link" aria-label="Send message to Jane Doe" type="button">
-              <svg class="message-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-                <path d="M4 4h16v12H5.17L4 17.17V4zM2 3a1 1 0 0 0-1 1v18l4-4h15a1 1 0 0 0 1-1V4a1 1 0 0 0-1-1H2z"></path>
-              </svg>
-              Message
-            </button>
-          </div>
-        </div>
-      </header>
+    <h1 class="text-3xl font-bold mb-6 text-gray-800">Welcome to Tailwind Modal Demo</h1>
 
-      <article class="profile-overview">
-        <p>
-          Jane Doe is a passionate software engineer with over 8 years of experience building scalable web applications. She specializes in JavaScript frameworks and loves mentoring new developers.
-        </p>
-      </article>
+    <p class="mb-4 text-gray-700">
+      This page demonstrates a reusable modal popup built with Tailwind CSS to replace JavaScript alerts.
+    </p>
 
-      <section class="skills-section" aria-labelledby="skills-title">
-        <h2 id="skills-title" class="skills-title">Skills</h2>
-        <div class="skills-list">
-          <span class="skill">JavaScript</span>
-          <span class="skill">React</span>
-          <span class="skill">Node.js</span>
-          <span class="skill">TypeScript</span>
-          <span class="skill">AWS</span>
-          <span class="skill">Docker</span>
-        </div>
-      </section>
+    <button
+      id="show-modal-btn"
+      class="px-5 py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition"
+      type="button"
+    >
+      Show Info Modal
+    </button>
 
-      <section class="work-history-section" aria-labelledby="work-history-title">
-        <h2 id="work-history-title" class="work-title">Work History</h2>
-
-        <article class="job-entry">
-          <h3 class="job-title">Senior Software Engineer</h3>
-          <p class="job-company">Tech Innovations Ltd</p>
-          <p class="job-duration">Jan 2020 - Present</p>
-          <p class="job-description">
-            Lead developer for the company's flagship product, managing a team of 5 engineers and delivering quarterly releases.
-          </p>
-        </article>
-
-        <article class="job-entry">
-          <h3 class="job-title">Software Engineer</h3>
-          <p class="job-company">Creative Solutions</p>
-          <p class="job-duration">May 2016 - Dec 2019</p>
-          <p class="job-description">
-            Developed full-stack applications, improved code quality, and participated in agile ceremonies.
-          </p>
-        </article>
-      </section>
-    </section>
   </main>
 
-  <!-- Modal for messages -->
-  <div class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-title" id="modal">
-    <div class="modal" role="document">
-      <button class="modal-close" aria-label="Close modal" id="modal-close">&times;</button>
-      <h3 id="modal-title"></h3>
-      <p id="modal-message"></p>
-      <button class="modal-btn" id="modal-ok">OK</button>
+  <!-- Modal Overlay & Container -->
+  <div
+    id="modal"
+    class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 opacity-0 pointer-events-none transition-opacity duration-300"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="modal-title"
+    aria-describedby="modal-desc"
+  >
+    <div class="bg-white rounded-lg shadow-lg max-w-md w-full p-6 relative">
+      <button
+        id="modal-close"
+        aria-label="Close modal"
+        class="absolute top-3 right-3 text-gray-500 hover:text-gray-800 transition text-2xl font-bold"
+      >
+        &times;
+      </button>
+
+      <h2 id="modal-title" class="text-xl font-semibold mb-2 text-gray-900"></h2>
+      <p id="modal-desc" class="mb-6 text-gray-700"></p>
+
+      <button
+        id="modal-ok"
+        class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1"
+      >
+        OK
+      </button>
     </div>
   </div>
 
   <script>
-    // Modal elements
-    const modal = document.getElementById('modal');
-    const modalTitle = document.getElementById('modal-title');
-    const modalMessage = document.getElementById('modal-message');
-    const modalClose = document.getElementById('modal-close');
-    const modalOk = document.getElementById('modal-ok');
+    const modal = document.getElementById("modal");
+    const modalTitle = document.getElementById("modal-title");
+    const modalDesc = document.getElementById("modal-desc");
+    const modalCloseBtn = document.getElementById("modal-close");
+    const modalOkBtn = document.getElementById("modal-ok");
+    const showModalBtn = document.getElementById("show-modal-btn");
 
     function showModal(title, message) {
       modalTitle.textContent = title;
-      modalMessage.textContent = message;
-      modal.classList.add('active');
-      modalOk.focus();
+      modalDesc.textContent = message;
+      modal.classList.remove("opacity-0", "pointer-events-none");
+      modalOkBtn.focus();
     }
 
     function closeModal() {
-      modal.classList.remove('active');
+      modal.classList.add("opacity-0", "pointer-events-none");
     }
 
-    modalClose.addEventListener('click', closeModal);
-    modalOk.addEventListener('click', closeModal);
+    modalCloseBtn.addEventListener("click", closeModal);
+    modalOkBtn.addEventListener("click", closeModal);
 
-    // Example of replacing alert with modal
-    // For demo, let's replace the message button click alert with modal
-    const messageBtn = document.querySelector('.message-link');
-    messageBtn.addEventListener('click', () => {
-      // Instead of alert("Message feature coming soon!");
-      showModal('Info', 'Message feature coming soon!');
+    // Optional: Close modal on clicking outside content
+    modal.addEventListener("click", (e) => {
+      if (e.target === modal) {
+        closeModal();
+      }
     });
 
-    // If you had any other alerts in your real app, replace them similarly
-    // Example usage:
-    // showModal('Error', 'Please enter a message.');
-    // showModal('Success', 'Message sent successfully!');
+    // Show modal button example
+    showModalBtn.addEventListener("click", () => {
+      showModal("Info", "This is a modal popup using Tailwind CSS, replacing alert().");
+    });
+
+    // Close modal on ESC key press
+    window.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && !modal.classList.contains("opacity-0")) {
+        closeModal();
+      }
+    });
   </script>
 </body>
 </html>
