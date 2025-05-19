@@ -1,214 +1,93 @@
 <!DOCTYPE html>
-<html lang="en" >
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Nova Prime - Freelancer Profile</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Responsive Modals - Message & Hire</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-100 font-sans min-h-screen flex flex-col">
+<body class="bg-gray-100 text-gray-800">
 
-  <!-- Top Bar (Logo & Brand) -->
-  <header class="bg-white shadow p-4 flex justify-between items-center">
-    <h1 class="text-2xl font-bold text-green-600 select-none">Nova Prime</h1>
-  </header>
+  <!-- Main Section -->
+  <main class="min-h-screen flex flex-col items-center justify-center px-4">
+    <h1 class="text-3xl font-bold mb-6 text-center">Welcome to My Portfolio</h1>
 
-  <!-- Main content -->
-  <main class="flex-grow p-6 flex justify-center">
-
-    <!-- Profile Card -->
-    <section class="bg-white p-8 rounded-2xl shadow-lg max-w-md w-full text-center relative">
-      
-      <!-- Avatar -->
-      <div class="relative w-28 h-28 mx-auto">
-        <img
-          src="your-user.jpg"
-          alt="User Avatar"
-          class="rounded-full border-4 border-green-500 w-full h-full object-cover"
-          loading="lazy"
-        />
-        <div class="absolute -top-2 -right-2 bg-white flex items-center px-2 py-0.5 rounded-full shadow text-green-600 text-xs font-semibold select-none">
-          <span class="w-2 h-2 bg-green-500 rounded-full mr-1"></span>
-          Active
-        </div>
-      </div>
-
-      <!-- Name and Role -->
-      <h2 class="mt-5 text-2xl font-semibold text-gray-800 flex items-center justify-center gap-2 select-text">
-        Tabitha Nelima
-        <svg
-          class="w-5 h-5 text-green-500"
-          fill="currentColor"
-          viewBox="0 0 20 20"
-          aria-hidden="true"
-        >
-          <path
-            fill-rule="evenodd"
-            d="M16.707 5.293a1 1 0 010 1.414l-7.364 7.364a1 1 0 01-1.414 0L3.293 9.707a1 1 0 011.414-1.414L8 11.586l6.293-6.293a1 1 0 011.414 0z"
-            clip-rule="evenodd"
-          />
-        </svg>
-      </h2>
-      <p class="text-sm text-gray-500 mt-1">Web Developer · Kenya</p>
-
-      <!-- Skills -->
-      <div class="mt-4 flex flex-wrap justify-center gap-2">
-        <span class="bg-green-100 text-green-700 text-xs font-semibold px-3 py-1 rounded-full select-none">JavaScript</span>
-        <span class="bg-green-100 text-green-700 text-xs font-semibold px-3 py-1 rounded-full select-none">React</span>
-        <span class="bg-green-100 text-green-700 text-xs font-semibold px-3 py-1 rounded-full select-none">Tailwind CSS</span>
-        <span class="bg-green-100 text-green-700 text-xs font-semibold px-3 py-1 rounded-full select-none">Node.js</span>
-      </div>
-
-      <!-- Portfolio Link -->
-      <div class="mt-5">
-        <a href="https://portfolio.example.com" target="_blank" rel="noopener" class="inline-block text-green-600 hover:text-green-800 underline font-medium">
-          View Portfolio
-        </a>
-      </div>
-
-      <!-- Contact Buttons -->
-      <div class="mt-6 flex justify-center gap-4">
-        <button
-          type="button"
-          class="bg-green-600 text-white px-6 py-2 rounded-lg shadow hover:bg-green-700 transition select-none"
-          aria-label="Send message to Tabitha Nelima"
-        >
-          Message
-        </button>
-        <button
-          type="button"
-          class="bg-white border border-green-600 text-green-600 px-6 py-2 rounded-lg shadow hover:bg-green-50 transition select-none"
-          aria-label="Hire Tabitha Nelima"
-        >
-          Hire Me
-        </button>
-      </div>
-
-      <!-- Ratings -->
-      <div class="mt-7 flex justify-center items-center text-lg select-none">
-        <span class="text-yellow-400">★★★★☆</span>
-        <button onclick="toggleReviews()" class="ml-2 text-sm text-green-600 hover:text-green-800 underline focus:outline-none">
-          (24 reviews)
-        </button>
-      </div>
-
-      <!-- Reviews Section -->
-      <div id="reviewSection" class="mt-5 hidden text-left text-sm bg-gray-50 p-4 rounded space-y-3 max-h-48 overflow-y-auto">
-        <p><strong>Jacob123:</strong> Excellent work and communication.</p>
-        <p><strong>AliceW:</strong> Very reliable and skilled!</p>
-        <p><strong>Mike_T:</strong> Will definitely hire again.</p>
-        <button onclick="openReviewModal()" class="text-green-600 hover:text-green-800 underline text-sm mt-2 focus:outline-none">
-          Add your review
-        </button>
-      </div>
-
-    </section>
+    <!-- Buttons -->
+    <div class="flex flex-wrap gap-4 justify-center">
+      <button onclick="openMessageModal()" class="bg-green-600 text-white px-5 py-2 rounded hover:bg-green-700 transition">Message</button>
+      <button onclick="openHireModal()" class="bg-blue-600 text-white px-5 py-2 rounded hover:bg-blue-700 transition">Hire Me</button>
+    </div>
   </main>
 
-  <!-- Review Modal -->
-  <div
-    id="reviewModal"
-    class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-50 px-4"
-    role="dialog"
-    aria-modal="true"
-    aria-labelledby="reviewModalTitle"
-  >
-    <div class="bg-white p-6 rounded-xl max-w-md w-full relative">
-      <h3 id="reviewModalTitle" class="text-lg font-bold mb-3 text-gray-800">Submit Review</h3>
-      <textarea
-        id="reviewText"
-        class="w-full border border-gray-300 rounded p-2 mb-3 resize-y focus:outline-green-600"
-        rows="4"
-        placeholder="Write your review here..."
-        aria-label="Review text"
-      ></textarea>
-      <div class="flex justify-end gap-3">
-        <button onclick="closeReviewModal()" class="px-4 py-2 rounded border border-gray-300 hover:bg-gray-100 focus:outline-green-600">Cancel</button>
-        <button onclick="submitReview()" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 focus:outline-green-600">
-          Send Review
-        </button>
+  <!-- Message Modal -->
+  <div id="messageModal" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+    <div class="bg-white p-6 rounded-xl w-full max-w-md relative mx-4">
+      <h3 class="text-lg font-bold text-gray-800 mb-3">Send a Message</h3>
+      <textarea id="messageText" class="w-full border rounded p-2 mb-3" rows="4" placeholder="Type your message here..."></textarea>
+      <div class="flex justify-end">
+        <button onclick="sendMessage()" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition">Send</button>
       </div>
     </div>
   </div>
 
-  <!-- Error Modal -->
-  <div
-    id="errorModal"
-    class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-50 px-4"
-    role="alertdialog"
-    aria-modal="true"
-    aria-labelledby="errorTitle"
-  >
-    <div class="bg-white p-6 rounded-xl max-w-sm w-full text-center">
-      <p id="errorTitle" class="text-red-600 font-semibold text-lg">Access Denied</p>
-      <p class="text-sm text-gray-600 mt-2">Only verified users who’ve worked with Tabitha Nelima can submit reviews.</p>
-      <button
-        onclick="closeErrorModal()"
-        class="mt-4 bg-gray-300 hover:bg-gray-400 px-4 py-2 rounded focus:outline-green-600"
-      >
-        Close
-      </button>
+  <!-- Message Success Modal -->
+  <div id="messageSuccessModal" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+    <div class="bg-white p-6 rounded-xl text-center w-full max-w-sm mx-4">
+      <p class="text-green-600 font-semibold text-lg">Message sent successfully!</p>
+      <p class="text-sm text-gray-600 mt-2">You will receive a response via your email.</p>
+      <button onclick="closeAllModals()" class="mt-4 bg-gray-300 hover:bg-gray-400 px-4 py-2 rounded transition">Close</button>
     </div>
   </div>
 
+  <!-- Hire Modal -->
+  <div id="hireModal" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+    <div class="bg-white p-6 rounded-xl text-center w-full max-w-sm mx-4">
+      <p class="text-blue-600 font-semibold text-lg">Your hire request has been sent!</p>
+      <p class="text-sm text-gray-600 mt-2">Wait for the response via your email.</p>
+      <button onclick="closeAllModals()" class="mt-4 bg-gray-300 hover:bg-gray-400 px-4 py-2 rounded transition">Close</button>
+    </div>
+  </div>
+
+  <!-- Scripts -->
   <script>
-    const reviewSection = document.getElementById('reviewSection');
-    const reviewModal = document.getElementById('reviewModal');
-    const errorModal = document.getElementById('errorModal');
+    const messageModal = document.getElementById("messageModal");
+    const messageSuccessModal = document.getElementById("messageSuccessModal");
+    const hireModal = document.getElementById("hireModal");
 
-    function toggleReviews() {
-      reviewSection.classList.toggle('hidden');
+    function openMessageModal() {
+      messageModal.classList.remove("hidden");
     }
 
-    function openReviewModal() {
-      reviewModal.classList.remove('hidden');
-      document.getElementById('reviewText').value = '';
-      document.getElementById('reviewText').focus();
-    }
+    function sendMessage() {
+      const text = document.getElementById("messageText").value.trim();
+      messageModal.classList.add("hidden");
 
-    function closeReviewModal() {
-      reviewModal.classList.add('hidden');
-    }
-
-    function closeErrorModal() {
-      errorModal.classList.add('hidden');
-    }
-
-    function submitReview() {
-      const userAllowed = false; // Replace with real auth logic here
-      reviewModal.classList.add('hidden');
-      if (!userAllowed) {
-        errorModal.classList.remove('hidden');
-      } else {
-        alert('Review submitted successfully!');
+      if (text) {
+        messageSuccessModal.classList.remove("hidden");
+        document.getElementById("messageText").value = ""; // Clear message
       }
     }
 
-    // Close modals with Escape key
-    document.addEventListener('keydown', e => {
-      if (e.key === 'Escape') {
-        closeReviewModal();
-        closeErrorModal();
-      }
+    function openHireModal() {
+      hireModal.classList.remove("hidden");
+    }
+
+    function closeAllModals() {
+      messageModal.classList.add("hidden");
+      messageSuccessModal.classList.add("hidden");
+      hireModal.classList.add("hidden");
+    }
+
+    // Close on ESC or background click
+    window.addEventListener("keydown", e => {
+      if (e.key === "Escape") closeAllModals();
     });
 
-    // Close modals when clicking outside content
-    window.onclick = function (event) {
-      if (event.target === reviewModal) closeReviewModal();
-      if (event.target === errorModal) closeErrorModal();
+    window.onclick = function(event) {
+      if (event.target === messageModal) messageModal.classList.add("hidden");
+      if (event.target === messageSuccessModal) messageSuccessModal.classList.add("hidden");
+      if (event.target === hireModal) hireModal.classList.add("hidden");
     };
   </script>
-
-  <!-- Footer -->
-  <footer class="bg-white border-t mt-12">
-    <div class="fixed bottom-0 left-0 w-full bg-white text-center py-4 text-gray-500 text-sm z-50 shadow select-none">
-      <p>&copy; 2025 Nova Prime. All rights reserved.</p>
-      <nav class="space-x-4">
-        <a href="privacy.html" class="hover:text-green-600">Privacy</a>
-        <a href="terms.html" class="hover:text-green-600">Terms</a>
-        <a href="help.html" class="hover:text-green-600">Help</a>
-      </nav>
-    </div>
-  </footer>
 </body>
 </html>
