@@ -1,70 +1,153 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" >
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Nova Prime</title>
+  <title>Nova Prime - Freelancer Profile</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-100 font-sans min-h-screen flex flex-col">
 
-  <!-- Top Bar -->
+  <!-- Top Bar (Logo & Brand) -->
   <header class="bg-white shadow p-4 flex justify-between items-center">
-    <h1 class="text-2xl font-bold text-green-600">Nova Prime</h1>
+    <h1 class="text-2xl font-bold text-green-600 select-none">Nova Prime</h1>
   </header>
 
-  <main class="flex-grow p-6">
+  <!-- Main content -->
+  <main class="flex-grow p-6 flex justify-center">
 
-  <!-- User Profile Card -->
-  <div class="bg-white p-6 rounded-2xl shadow-lg w-full max-w-sm text-center relative">
-    <!-- Avatar -->
-    <div class="relative w-24 h-24 mx-auto">
-      <img src="your-user.jpg" alt="User" class="rounded-full border-4 border-green-500 w-full h-full object-cover" />
-      <div class="absolute -top-2 -right-2 bg-white flex items-center px-2 py-0.5 rounded-full shadow text-green-600 text-xs font-semibold">
-        <span class="w-2 h-2 bg-green-500 rounded-full mr-1"></span>
-        Active
+    <!-- Profile Card -->
+    <section class="bg-white p-8 rounded-2xl shadow-lg max-w-md w-full text-center relative">
+      
+      <!-- Avatar -->
+      <div class="relative w-28 h-28 mx-auto">
+        <img
+          src="your-user.jpg"
+          alt="User Avatar"
+          class="rounded-full border-4 border-green-500 w-full h-full object-cover"
+          loading="lazy"
+        />
+        <div class="absolute -top-2 -right-2 bg-white flex items-center px-2 py-0.5 rounded-full shadow text-green-600 text-xs font-semibold select-none">
+          <span class="w-2 h-2 bg-green-500 rounded-full mr-1"></span>
+          Active
+        </div>
       </div>
-    </div>
 
-    <!-- Name + Role -->
-    <h2 class="mt-4 text-xl font-semibold text-gray-800 flex items-center justify-center gap-1">
-      Tabitha Nelima
-      <svg class="w-4 h-4 text-green-500" fill="currentColor" viewBox="0 0 20 20">
-        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-7.364 7.364a1 1 0 01-1.414 0L3.293 9.707a1 1 0 011.414-1.414L8 11.586l6.293-6.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
-      </svg>
-    </h2>
-    <p class="text-sm text-gray-500">Web Developer · Kenya</p>
+      <!-- Name and Role -->
+      <h2 class="mt-5 text-2xl font-semibold text-gray-800 flex items-center justify-center gap-2 select-text">
+        Tabitha Nelima
+        <svg
+          class="w-5 h-5 text-green-500"
+          fill="currentColor"
+          viewBox="0 0 20 20"
+          aria-hidden="true"
+        >
+          <path
+            fill-rule="evenodd"
+            d="M16.707 5.293a1 1 0 010 1.414l-7.364 7.364a1 1 0 01-1.414 0L3.293 9.707a1 1 0 011.414-1.414L8 11.586l6.293-6.293a1 1 0 011.414 0z"
+            clip-rule="evenodd"
+          />
+        </svg>
+      </h2>
+      <p class="text-sm text-gray-500 mt-1">Web Developer · Kenya</p>
 
-    <!-- Ratings -->
-    <div class="mt-3 flex justify-center items-center">
-      <span class="text-yellow-400 text-lg">★★★★☆</span>
-      <button onclick="toggleReviews()" class="ml-2 text-sm text-green-600 hover:text-green-800 underline">(24 reviews)</button>
-    </div>
+      <!-- Skills -->
+      <div class="mt-4 flex flex-wrap justify-center gap-2">
+        <span class="bg-green-100 text-green-700 text-xs font-semibold px-3 py-1 rounded-full select-none">JavaScript</span>
+        <span class="bg-green-100 text-green-700 text-xs font-semibold px-3 py-1 rounded-full select-none">React</span>
+        <span class="bg-green-100 text-green-700 text-xs font-semibold px-3 py-1 rounded-full select-none">Tailwind CSS</span>
+        <span class="bg-green-100 text-green-700 text-xs font-semibold px-3 py-1 rounded-full select-none">Node.js</span>
+      </div>
 
-    <!-- Reviews Section -->
-    <div id="reviewSection" class="mt-4 hidden text-left text-sm bg-gray-100 p-4 rounded space-y-2">
-      <p><strong>Jacob123:</strong> Excellent work and communication.</p>
-      <p><strong>AliceW:</strong> Very reliable and skilled!</p>
-      <p><strong>Mike_T:</strong> Will definitely hire again.</p>
-      <button onclick="openReviewModal()" class="text-green-600 hover:text-green-800 underline text-sm mt-2">Add your review</button>
-    </div>
-  </div>
+      <!-- Portfolio Link -->
+      <div class="mt-5">
+        <a href="https://portfolio.example.com" target="_blank" rel="noopener" class="inline-block text-green-600 hover:text-green-800 underline font-medium">
+          View Portfolio
+        </a>
+      </div>
+
+      <!-- Contact Buttons -->
+      <div class="mt-6 flex justify-center gap-4">
+        <button
+          type="button"
+          class="bg-green-600 text-white px-6 py-2 rounded-lg shadow hover:bg-green-700 transition select-none"
+          aria-label="Send message to Tabitha Nelima"
+        >
+          Message
+        </button>
+        <button
+          type="button"
+          class="bg-white border border-green-600 text-green-600 px-6 py-2 rounded-lg shadow hover:bg-green-50 transition select-none"
+          aria-label="Hire Tabitha Nelima"
+        >
+          Hire Me
+        </button>
+      </div>
+
+      <!-- Ratings -->
+      <div class="mt-7 flex justify-center items-center text-lg select-none">
+        <span class="text-yellow-400">★★★★☆</span>
+        <button onclick="toggleReviews()" class="ml-2 text-sm text-green-600 hover:text-green-800 underline focus:outline-none">
+          (24 reviews)
+        </button>
+      </div>
+
+      <!-- Reviews Section -->
+      <div id="reviewSection" class="mt-5 hidden text-left text-sm bg-gray-50 p-4 rounded space-y-3 max-h-48 overflow-y-auto">
+        <p><strong>Jacob123:</strong> Excellent work and communication.</p>
+        <p><strong>AliceW:</strong> Very reliable and skilled!</p>
+        <p><strong>Mike_T:</strong> Will definitely hire again.</p>
+        <button onclick="openReviewModal()" class="text-green-600 hover:text-green-800 underline text-sm mt-2 focus:outline-none">
+          Add your review
+        </button>
+      </div>
+
+    </section>
+  </main>
 
   <!-- Review Modal -->
-  <div id="reviewModal" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-    <div class="bg-white p-6 rounded-xl w-full max-w-md relative">
-      <h3 class="text-lg font-bold mb-3 text-gray-800">Submit Review</h3>
-      <textarea id="reviewText" class="w-full border rounded p-2 mb-3" rows="4" placeholder="Write your review here..."></textarea>
-      <button onclick="submitReview()" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">Send Review</button>
+  <div
+    id="reviewModal"
+    class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-50 px-4"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="reviewModalTitle"
+  >
+    <div class="bg-white p-6 rounded-xl max-w-md w-full relative">
+      <h3 id="reviewModalTitle" class="text-lg font-bold mb-3 text-gray-800">Submit Review</h3>
+      <textarea
+        id="reviewText"
+        class="w-full border border-gray-300 rounded p-2 mb-3 resize-y focus:outline-green-600"
+        rows="4"
+        placeholder="Write your review here..."
+        aria-label="Review text"
+      ></textarea>
+      <div class="flex justify-end gap-3">
+        <button onclick="closeReviewModal()" class="px-4 py-2 rounded border border-gray-300 hover:bg-gray-100 focus:outline-green-600">Cancel</button>
+        <button onclick="submitReview()" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 focus:outline-green-600">
+          Send Review
+        </button>
+      </div>
     </div>
   </div>
 
   <!-- Error Modal -->
-  <div id="errorModal" class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-    <div class="bg-white p-6 rounded-xl w-full max-w-sm text-center">
-      <p class="text-red-600 font-semibold">Access Denied</p>
+  <div
+    id="errorModal"
+    class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-50 px-4"
+    role="alertdialog"
+    aria-modal="true"
+    aria-labelledby="errorTitle"
+  >
+    <div class="bg-white p-6 rounded-xl max-w-sm w-full text-center">
+      <p id="errorTitle" class="text-red-600 font-semibold text-lg">Access Denied</p>
       <p class="text-sm text-gray-600 mt-2">Only verified users who’ve worked with Tabitha Nelima can submit reviews.</p>
-      <button onclick="closeErrorModal()" class="mt-4 bg-gray-300 hover:bg-gray-400 px-4 py-2 rounded">Close</button>
+      <button
+        onclick="closeErrorModal()"
+        class="mt-4 bg-gray-300 hover:bg-gray-400 px-4 py-2 rounded focus:outline-green-600"
+      >
+        Close
+      </button>
     </div>
   </div>
 
@@ -79,6 +162,12 @@
 
     function openReviewModal() {
       reviewModal.classList.remove('hidden');
+      document.getElementById('reviewText').value = '';
+      document.getElementById('reviewText').focus();
+    }
+
+    function closeReviewModal() {
+      reviewModal.classList.add('hidden');
     }
 
     function closeErrorModal() {
@@ -86,7 +175,7 @@
     }
 
     function submitReview() {
-      const userAllowed = false; // Replace with real logic
+      const userAllowed = false; // Replace with real auth logic here
       reviewModal.classList.add('hidden');
       if (!userAllowed) {
         errorModal.classList.remove('hidden');
@@ -95,27 +184,30 @@
       }
     }
 
+    // Close modals with Escape key
     document.addEventListener('keydown', e => {
       if (e.key === 'Escape') {
-        reviewModal.classList.add('hidden');
-        errorModal.classList.add('hidden');
+        closeReviewModal();
+        closeErrorModal();
       }
     });
 
-    window.onclick = function(event) {
-      if (event.target === reviewModal) reviewModal.classList.add('hidden');
-      if (event.target === errorModal) errorModal.classList.add('hidden');
+    // Close modals when clicking outside content
+    window.onclick = function (event) {
+      if (event.target === reviewModal) closeReviewModal();
+      if (event.target === errorModal) closeErrorModal();
     };
   </script>
-    <!-- Footer -->
+
+  <!-- Footer -->
   <footer class="bg-white border-t mt-12">
-    <footer class="fixed bottom-0 left-0 w-full bg-white text-center py-4 text-gray-500 text-sm z-50 shadow">
+    <div class="fixed bottom-0 left-0 w-full bg-white text-center py-4 text-gray-500 text-sm z-50 shadow select-none">
       <p>&copy; 2025 Nova Prime. All rights reserved.</p>
-      <div class="space-x-4">
+      <nav class="space-x-4">
         <a href="privacy.html" class="hover:text-green-600">Privacy</a>
         <a href="terms.html" class="hover:text-green-600">Terms</a>
         <a href="help.html" class="hover:text-green-600">Help</a>
-      </div>
+      </nav>
     </div>
   </footer>
 </body>
