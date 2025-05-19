@@ -16,20 +16,6 @@
 
     <div id="taskList" class="space-y-6">
       <!-- Tasks will be dynamically inserted here -->
-    </div>
-  </main>
-
-  <!-- Rating Modal -->
-  <div id="ratingModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-    <div class="bg-white rounded-xl p-6 w-80 text-center shadow-lg">
-      <h3 class="text-lg font-bold mb-2">Rating Restricted</h3>
-      <p class="text-sm text-gray-600 mb-4">Only freelancers who completed and got paid for this task can rate it.</p>
-      <button onclick="closeModal()" class="bg-green-600 text-white px-4 py-2 rounded-lg">Close</button>
-    </div>
-  </div>
-
-  <script>
-    const tasks = [
       {
         {
   id: 'TASK10001',
@@ -360,7 +346,21 @@
         rating: 5
       }
     ];
+    </div>
+  </main>
 
+  <!-- Rating Modal -->
+  <div id="ratingModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+    <div class="bg-white rounded-xl p-6 w-80 text-center shadow-lg">
+      <h3 class="text-lg font-bold mb-2">Rating Restricted</h3>
+      <p class="text-sm text-gray-600 mb-4">Only freelancers who completed and got paid for this task can rate it.</p>
+      <button onclick="closeModal()" class="bg-green-600 text-white px-4 py-2 rounded-lg">Close</button>
+    </div>
+  </div>
+
+  <script>
+    const tasks = [
+      
     const completedTasks = JSON.parse(localStorage.getItem('completedTasks') || '[]');
 
     function renderTasks() {
