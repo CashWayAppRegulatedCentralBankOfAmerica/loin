@@ -3,244 +3,219 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>User Profile - Nova Prime Style</title>
+  <title>Nova Prime Profile</title>
   <style>
-    /* Reset & base */
+    /* Basic Reset */
     * {
       box-sizing: border-box;
     }
+
     body {
       font-family: Helvetica, Arial, sans-serif;
-      background: #f9f9f9;
+      background-color: #fff;
+      color: #222;
       margin: 0;
-      color: #333;
-    }
-
-    /* Container */
-    .profile-container {
-      max-width: 900px;
-      margin: 2rem auto;
-      background: white;
-      border-radius: 8px;
-      box-shadow: 0 4px 10px rgb(0 0 0 / 0.1);
-      padding: 2rem 2.5rem;
+      padding: 2rem 2rem 4rem 2rem;
+      min-height: 100vh;
       position: relative;
     }
 
-    /* Header */
+    /* Logo top-left, not in a bar */
+    .logo {
+      position: fixed;
+      top: 1rem;
+      left: 1rem;
+      font-weight: 700;
+      font-size: 1.8rem;
+      color: #008000;
+      font-family: Helvetica, Arial, sans-serif;
+      z-index: 1000;
+      user-select: none;
+    }
+
+    main {
+      max-width: 700px;
+      margin: 0 auto;
+      padding-top: 3rem; /* space so content doesn't overlap logo */
+    }
+
+    .profile-container {
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 2rem;
+      background: #f9f9f9;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+    }
+
     .profile-header {
       display: flex;
-      align-items: center;
       gap: 1.5rem;
-      border-bottom: 2px solid #00800033;
-      padding-bottom: 1.5rem;
+      margin-bottom: 1.5rem;
     }
     .profile-image {
-      flex-shrink: 0;
-      width: 120px;
-      height: 120px;
+      width: 96px;
+      height: 96px;
       border-radius: 50%;
       object-fit: cover;
       border: 3px solid #008000;
     }
     .profile-basic-info {
       flex-grow: 1;
-      position: relative;
     }
     .profile-name {
-      font-size: 1.9rem;
+      font-size: 1.7rem;
       font-weight: 700;
-      color: #008000;
-      margin-bottom: 0.3rem;
-      display: inline-flex;
+      margin: 0;
+      display: flex;
       align-items: center;
       gap: 0.6rem;
     }
-
-    /* Active icon - small green circle */
     .active-icon {
-      width: 16px;
-      height: 16px;
+      display: inline-block;
+      width: 12px;
+      height: 12px;
       background-color: #008000;
       border-radius: 50%;
-      border: 2px solid white;
-      box-shadow: 0 0 5px #008000aa;
-      display: inline-block;
-      vertical-align: middle;
     }
-
     .profile-title {
-      font-size: 1.2rem;
+      font-weight: 600;
+      margin: 0.2rem 0 0.4rem 0;
       color: #555;
-      margin-bottom: 0.5rem;
     }
     .profile-location {
-      font-size: 1rem;
-      color: #777;
-      display: flex;
-      align-items: center;
-      gap: 0.4rem;
-      margin-bottom: 0.6rem;
+      font-size: 0.95rem;
+      color: #666;
     }
-
-    /* Ratings & Actions */
     .profile-ratings {
       display: flex;
       align-items: center;
-      gap: 1.5rem;
-      font-weight: 600;
-      color: #008000;
-      font-size: 1rem;
-      cursor: default;
+      gap: 1rem;
+      margin-top: 0.5rem;
     }
     .stars {
-      color: #008000;
+      color: #ffb400;
       font-size: 1.2rem;
+      user-select: none;
     }
-
-    /* Review clickable */
     .reviews-link {
+      background: none;
+      border: none;
+      color: #008000;
+      font-weight: 600;
+      cursor: pointer;
+      padding: 0;
+      font-size: 1rem;
       text-decoration: underline;
-      cursor: pointer;
-      color: #008000;
-      font-weight: 600;
-      display: flex;
-      align-items: center;
-      gap: 0.3rem;
-      user-select: none;
     }
-    .reviews-link:hover {
-      color: #005000;
-    }
-
-    /* Message icon and clickable */
-    .message-link {
-      cursor: pointer;
-      color: #008000;
-      font-weight: 600;
-      display: flex;
-      align-items: center;
-      gap: 0.3rem;
-      user-select: none;
-    }
+    .reviews-link:hover,
     .message-link:hover {
       color: #005000;
     }
-
-    /* Message icon SVG style */
+    .message-link {
+      margin-top: 1rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      cursor: pointer;
+      background: none;
+      border: 1px solid #008000;
+      padding: 0.3rem 0.9rem;
+      border-radius: 4px;
+      font-weight: 600;
+      color: #008000;
+      user-select: none;
+    }
     .message-icon {
+      fill: currentColor;
       width: 18px;
       height: 18px;
-      fill: #008000;
     }
-
-    /* Overview */
     .profile-overview {
-      margin-top: 1.7rem;
+      margin-bottom: 1.5rem;
       font-size: 1rem;
       line-height: 1.5;
-      color: #444;
+      color: #333;
     }
 
-    /* Skills */
     .skills-section {
-      margin-top: 2rem;
+      margin-bottom: 1.5rem;
     }
     .skills-title {
       font-weight: 700;
       font-size: 1.3rem;
+      margin-bottom: 0.5rem;
       color: #008000;
-      margin-bottom: 0.8rem;
-      border-bottom: 2px solid #008000;
-      display: inline-block;
-      padding-bottom: 4px;
     }
     .skills-list {
       display: flex;
       flex-wrap: wrap;
-      gap: 0.8rem;
+      gap: 0.6rem;
     }
     .skill {
-      background: #00800022;
-      color: #008000;
-      padding: 0.4rem 1rem;
-      border-radius: 20px;
-      font-weight: 600;
+      background: #008000;
+      color: white;
+      padding: 0.3rem 0.7rem;
+      border-radius: 15px;
       font-size: 0.9rem;
       user-select: none;
     }
 
-    /* Work History */
     .work-history-section {
-      margin-top: 2.5rem;
+      margin-bottom: 2rem;
     }
     .work-title {
       font-weight: 700;
       font-size: 1.3rem;
+      margin-bottom: 0.5rem;
       color: #008000;
-      margin-bottom: 0.8rem;
-      border-bottom: 2px solid #008000;
-      display: inline-block;
-      padding-bottom: 4px;
     }
     .job-entry {
-      padding: 1rem 0;
-      border-bottom: 1px solid #ddd;
-    }
-    .job-entry:last-child {
-      border-bottom: none;
+      margin-bottom: 1rem;
     }
     .job-title {
       font-weight: 700;
-      color: #008000;
-      font-size: 1.1rem;
-      margin-bottom: 0.2rem;
+      margin: 0;
+      color: #004d00;
     }
     .job-company {
-      font-style: italic;
-      color: #555;
-      margin-bottom: 0.2rem;
+      font-weight: 600;
+      margin: 0.1rem 0;
+      color: #006600;
     }
     .job-duration {
-      color: #777;
       font-size: 0.9rem;
+      font-style: italic;
+      margin: 0 0 0.3rem 0;
+      color: #666;
     }
     .job-description {
-      margin-top: 0.5rem;
+      margin: 0;
       font-size: 0.95rem;
-      color: #444;
-      line-height: 1.4;
+      color: #333;
     }
 
-    /* Contact Button */
     .contact-btn {
-      margin-top: 2.5rem;
       display: inline-block;
       background-color: #008000;
-      color: white;
+      color: #fff;
       font-weight: 700;
-      padding: 0.7rem 2rem;
-      font-size: 1.1rem;
-      border: none;
-      border-radius: 30px;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
+      padding: 0.7rem 1.4rem;
+      border-radius: 5px;
       text-decoration: none;
-      text-align: center;
       user-select: none;
     }
     .contact-btn:hover {
       background-color: #005000;
     }
 
-    /* Modal base */
+    /* Modal overlay */
     .modal-overlay {
       position: fixed;
       top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(0,0,0,0.5);
+      background: rgba(0,0,0,0.45);
       display: none;
-      justify-content: center;
       align-items: center;
+      justify-content: center;
       z-index: 9999;
       padding: 1rem;
     }
@@ -249,73 +224,42 @@
     }
     .modal {
       background: white;
-      border-radius: 8px;
-      max-width: 450px;
+      max-width: 400px;
       width: 100%;
-      padding: 1.8rem 2rem;
-      box-shadow: 0 8px 20px rgb(0 0 0 / 0.2);
+      border-radius: 8px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+      padding: 1.5rem 2rem 2rem 2rem;
       position: relative;
-      font-size: 1rem;
-      color: #333;
     }
     .modal h3 {
       margin-top: 0;
       margin-bottom: 1rem;
-      color: #008000;
       font-weight: 700;
-      font-size: 1.3rem;
-    }
-    .modal p {
-      margin-bottom: 1rem;
-      line-height: 1.4;
+      color: #008000;
     }
     .modal-close {
       position: absolute;
-      top: 12px;
-      right: 12px;
-      background: transparent;
+      top: 10px;
+      right: 10px;
+      background: none;
       border: none;
       font-size: 1.4rem;
       cursor: pointer;
-      font-weight: 700;
-      color: #555;
-      user-select: none;
+      color: #444;
     }
     .modal-close:hover {
       color: #008000;
     }
 
-    /* Textarea for message modal */
-    .modal textarea {
-      width: 100%;
-      min-height: 100px;
-      resize: vertical;
-      border-radius: 6px;
-      border: 1.5px solid #ccc;
-      padding: 0.6rem 0.8rem;
-      font-size: 1rem;
-      font-family: Helvetica, Arial, sans-serif;
-      margin-bottom: 1rem;
-      transition: border-color 0.3s ease;
-    }
-    .modal textarea:focus {
-      outline: none;
-      border-color: #008000;
-      box-shadow: 0 0 6px #008000aa;
-    }
-
-    /* Modal buttons */
     .modal-btn {
       background-color: #008000;
-      color: white;
       border: none;
-      border-radius: 25px;
-      padding: 0.6rem 1.8rem;
+      color: white;
+      padding: 0.6rem 1.4rem;
       font-weight: 700;
-      font-size: 1rem;
+      border-radius: 4px;
       cursor: pointer;
-      transition: background-color 0.3s ease;
-      user-select: none;
+      margin-top: 1rem;
     }
     .modal-btn:hover {
       background-color: #005000;
@@ -324,9 +268,29 @@
       background-color: #ddd;
       color: #444;
       margin-left: 1rem;
+      padding: 0.6rem 1.4rem;
+      border-radius: 4px;
+      border: none;
+      cursor: pointer;
     }
     .modal-btn-secondary:hover {
       background-color: #bbb;
+    }
+    textarea {
+      width: 100%;
+      resize: vertical;
+      font-family: inherit;
+      font-size: 1rem;
+      padding: 0.5rem;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-sizing: border-box;
+    }
+    label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 0.3rem;
+      color: #008000;
     }
 
     /* Responsive */
@@ -342,19 +306,16 @@
       .profile-ratings {
         justify-content: center;
       }
-      .profile-container {
-        padding: 1.5rem 1.5rem;
+      main {
+        padding: 3rem 1rem 3rem 1rem;
       }
     }
-
   </style>
 </head>
 <body>
 
-  <!-- Logo Name Header -->
-  <header style="background:#008000; padding:1rem; text-align:center; color:#fff; font-family: Helvetica, Arial, sans-serif; font-weight:700; font-size:1.8rem;">
-    Nova Prime
-  </header>
+  <!-- Logo top-left -->
+  <div class="logo" aria-label="Nova Prime Logo">NOVA PRIME</div>
 
   <main>
     <section class="profile-container" role="main" aria-label="User profile">
@@ -376,12 +337,12 @@
           </p>
           <div class="profile-ratings" aria-label="User ratings and reviews">
             <div class="stars" aria-hidden="true">★★★★★</div>
-            <button class="reviews-link" aria-describedby="review-count" aria-label="View 230 reviews">
+            <button class="reviews-link" aria-describedby="review-count" aria-label="View 230 reviews" type="button">
               230 Reviews
             </button>
           </div>
           <div>
-            <button class="message-link" aria-label="Send message to Jane Doe">
+            <button class="message-link" aria-label="Send message to Jane Doe" type="button">
               <svg class="message-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M4 4h16v12H5.17L4 17.17V4zM2 3a1 1 0 0 0-1 1v18l4-4h15a1 1 0 0 0 1-1V4a1 1 0 0 0-1-1H2z"></path>
               </svg>
@@ -393,193 +354,90 @@
 
       <article class="profile-overview">
         <p>
-          Jane Doe is a passionate software engineer with over 8 years of experience building scalable web applications. She specializes in JavaScript frameworks and has a strong background in user-centered design and agile development.
+          Jane Doe is a passionate software engineer with over 8 years of experience building scalable web applications. She specializes in JavaScript frameworks and loves mentoring new developers.
         </p>
       </article>
 
       <section class="skills-section" aria-labelledby="skills-title">
         <h2 id="skills-title" class="skills-title">Skills</h2>
-        <div class="skills-list" role="list">
-          <span class="skill" role="listitem">JavaScript</span>
-          <span class="skill" role="listitem">React</span>
-          <span class="skill" role="listitem">Node.js</span>
-          <span class="skill" role="listitem">TypeScript</span>
-          <span class="skill" role="listitem">CSS</span>
-          <span class="skill" role="listitem">Agile</span>
-          <span class="skill" role="listitem">UI/UX Design</span>
+        <div class="skills-list">
+          <span class="skill">JavaScript</span>
+          <span class="skill">React</span>
+          <span class="skill">Node.js</span>
+          <span class="skill">TypeScript</span>
+          <span class="skill">AWS</span>
+          <span class="skill">Docker</span>
         </div>
       </section>
 
       <section class="work-history-section" aria-labelledby="work-history-title">
         <h2 id="work-history-title" class="work-title">Work History</h2>
 
-        <div class="job-entry">
+        <article class="job-entry">
           <h3 class="job-title">Senior Software Engineer</h3>
-          <p class="job-company">Tech Innovators Ltd.</p>
-          <p class="job-duration">Jan 2020 – Present</p>
+          <p class="job-company">Tech Innovations Ltd</p>
+          <p class="job-duration">Jan 2020 - Present</p>
           <p class="job-description">
-            Leading a team of developers building innovative web applications. Key contributions include redesigning the core product interface, optimizing application performance, and mentoring junior developers.
+            Lead developer for the company's flagship product, managing a team of 5 engineers and delivering quarterly releases.
           </p>
-        </div>
+        </article>
 
-        <div class="job-entry">
-          <h3 class="job-title">Frontend Developer</h3>
+        <article class="job-entry">
+          <h3 class="job-title">Software Engineer</h3>
           <p class="job-company">Creative Solutions</p>
-          <p class="job-duration">Jun 2016 – Dec 2019</p>
+          <p class="job-duration">May 2016 - Dec 2019</p>
           <p class="job-description">
-            Developed responsive UI components and improved accessibility across multiple projects. Collaborated closely with designers and backend teams to deliver quality user experiences.
+            Developed full-stack applications, improved code quality, and participated in agile ceremonies.
           </p>
-        </div>
-
-        <div class="job-entry">
-          <h3 class="job-title">Software Engineer Intern</h3>
-          <p class="job-company">NextGen Software</p>
-          <p class="job-duration">Jan 2015 – May 2016</p>
-          <p class="job-description">
-            Assisted in developing internal tools and fixing bugs. Gained hands-on experience with JavaScript and backend APIs.
-          </p>
-        </div>
-
+        </article>
       </section>
-
-      <a href="mailto:jane.doe@example.com" class="contact-btn" aria-label="Contact Jane Doe by email">
-        Contact Jane Doe
-      </a>
-
     </section>
   </main>
 
-  <!-- Reviews Modal -->
-  <div class="modal-overlay" id="reviews-modal" role="dialog" aria-modal="true" aria-labelledby="reviews-modal-title" tabindex="-1">
-    <div class="modal">
-      <button class="modal-close" aria-label="Close reviews modal">&times;</button>
-      <h3 id="reviews-modal-title">Jane Doe's Reviews</h3>
-      <p>230 Reviews (Average rating: ★★★★★)</p>
-      <ul>
-        <li><strong>John K.</strong>: "Amazing work, highly recommend!"</li>
-        <li><strong>Sarah M.</strong>: "Very professional and responsive."</li>
-        <li><strong>Michael T.</strong>: "Delivered ahead of schedule."</li>
-        <!-- More reviews can go here -->
-      </ul>
-    </div>
-  </div>
-
-  <!-- Message Modal -->
-  <div class="modal-overlay" id="message-modal" role="dialog" aria-modal="true" aria-labelledby="message-modal-title" tabindex="-1">
-    <div class="modal">
-      <button class="modal-close" aria-label="Close message modal">&times;</button>
-      <h3 id="message-modal-title">Send Message to Jane Doe</h3>
-      <form id="message-form">
-        <label for="message-text">Your message</label>
-        <textarea id="message-text" name="message" rows="6" required placeholder="Write your message here..."></textarea>
-        <button type="submit" class="modal-btn">Send</button>
-        <button type="button" class="modal-btn modal-btn-secondary" id="cancel-message">Cancel</button>
-      </form>
+  <!-- Modal for messages -->
+  <div class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-title" id="modal">
+    <div class="modal" role="document">
+      <button class="modal-close" aria-label="Close modal" id="modal-close">&times;</button>
+      <h3 id="modal-title"></h3>
+      <p id="modal-message"></p>
+      <button class="modal-btn" id="modal-ok">OK</button>
     </div>
   </div>
 
   <script>
-    // Modal functionality
-    const reviewsBtn = document.querySelector('.reviews-link');
-    const messageBtn = document.querySelector('.message-link');
-    const reviewsModal = document.getElementById('reviews-modal');
-    const messageModal = document.getElementById('message-modal');
+    // Modal elements
+    const modal = document.getElementById('modal');
+    const modalTitle = document.getElementById('modal-title');
+    const modalMessage = document.getElementById('modal-message');
+    const modalClose = document.getElementById('modal-close');
+    const modalOk = document.getElementById('modal-ok');
 
-    const closeButtons = document.querySelectorAll('.modal-close');
-    const cancelMessageBtn = document.getElementById('cancel-message');
-    const messageForm = document.getElementById('message-form');
-    const messageText = document.getElementById('message-text');
-
-    // Focus trap helper for accessibility
-    function trapFocus(element) {
-      const focusableElements = element.querySelectorAll('a[href], button:not([disabled]), textarea, input, select, [tabindex]:not([tabindex="-1"])');
-      const firstFocusable = focusableElements[0];
-      const lastFocusable = focusableElements[focusableElements.length -1];
-
-      element.addEventListener('keydown', function(e) {
-        if (e.key === 'Tab') {
-          if (e.shiftKey) { // Shift + Tab
-            if (document.activeElement === firstFocusable) {
-              e.preventDefault();
-              lastFocusable.focus();
-            }
-          } else { // Tab
-            if (document.activeElement === lastFocusable) {
-              e.preventDefault();
-              firstFocusable.focus();
-            }
-          }
-        }
-        if (e.key === 'Escape') {
-          closeModal(element);
-        }
-      });
-    }
-
-    function openModal(modal) {
+    function showModal(title, message) {
+      modalTitle.textContent = title;
+      modalMessage.textContent = message;
       modal.classList.add('active');
-      // Save previously focused element
-      modal.dataset.previousFocus = document.activeElement;
-      // Focus first focusable element in modal
-      const focusable = modal.querySelector('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
-      if (focusable) {
-        focusable.focus();
-      }
-      trapFocus(modal);
-      // Add aria-hidden to main content
-      document.querySelector('main').setAttribute('aria-hidden', 'true');
+      modalOk.focus();
     }
 
-    function closeModal(modal) {
+    function closeModal() {
       modal.classList.remove('active');
-      // Restore focus to previously focused element
-      const previousFocus = modal.dataset.previousFocus;
-      if (previousFocus) {
-        previousFocus.focus();
-      }
-      // Remove aria-hidden from main content
-      document.querySelector('main').removeAttribute('aria-hidden');
     }
 
-    // Open modals on click
-    reviewsBtn.addEventListener('click', () => openModal(reviewsModal));
-    messageBtn.addEventListener('click', () => openModal(messageModal));
+    modalClose.addEventListener('click', closeModal);
+    modalOk.addEventListener('click', closeModal);
 
-    // Close modals on close button click
-    closeButtons.forEach(btn => {
-      btn.addEventListener('click', () => {
-        const modal = btn.closest('.modal-overlay');
-        closeModal(modal);
-      });
+    // Example of replacing alert with modal
+    // For demo, let's replace the message button click alert with modal
+    const messageBtn = document.querySelector('.message-link');
+    messageBtn.addEventListener('click', () => {
+      // Instead of alert("Message feature coming soon!");
+      showModal('Info', 'Message feature coming soon!');
     });
 
-    // Close message modal on cancel button
-    cancelMessageBtn.addEventListener('click', () => closeModal(messageModal));
-
-    // Submit message form
-    messageForm.addEventListener('submit', (e) => {
-      e.preventDefault();
-      const msg = messageText.value.trim();
-      if (!msg) {
-        alert('Please enter a message before sending.');
-        messageText.focus();
-        return;
-      }
-      // Simulate sending message (replace with real API or EmailJS if needed)
-      alert('Message sent successfully!');
-      messageText.value = '';
-      closeModal(messageModal);
-    });
-
-    // Close modal on clicking outside modal content
-    [reviewsModal, messageModal].forEach(modal => {
-      modal.addEventListener('click', (e) => {
-        if (e.target === modal) {
-          closeModal(modal);
-        }
-      });
-    });
-
+    // If you had any other alerts in your real app, replace them similarly
+    // Example usage:
+    // showModal('Error', 'Please enter a message.');
+    // showModal('Success', 'Message sent successfully!');
   </script>
 </body>
 </html>
