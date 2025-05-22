@@ -56,21 +56,24 @@
       <h2 class="text-3xl sm:text-4xl font-bold mb-4">Hire Freelancers or Find Work Easily</h2>
       <p class="mb-6 sm:mb-8 text-base sm:text-lg">Work with the best talent. Anytime. Anywhere.</p>
 
-<section class="w-full max-w-2xl mx-auto my-6">
-  <div id="active-users-bar" class="relative flex items-center justify-center bg-green-600 text-white font-semibold rounded-md shadow-md px-6 py-3 select-none" style="min-height:60px; overflow: hidden;">
-    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-3 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-      <path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-3-3h-4a3 3 0 00-3 3v2h5zM9 20h5v-2a3 3 0 00-3-3H7a3 3 0 00-3 3v2h5zM12 12a5 5 0 100-10 5 5 0 000 10z"/>
-    </svg>
-    <span id="active-users-text" class="text-lg tracking-wide">
-      You and <strong>0</strong> others are Active on this site
-    </span>
+<!-- Replace your original search bar container with this -->
+<div 
+  id="active-users-bar" 
+  class="relative flex items-center justify-center w-full max-w-2xl mx-auto bg-green-600 text-white font-semibold rounded-md shadow-md px-4 py-2 select-none"
+  style="height: 40px; overflow: hidden;"
+>
+  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-3 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+    <path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-3-3h-4a3 3 0 00-3 3v2h5zM9 20h5v-2a3 3 0 00-3-3H7a3 3 0 00-3 3v2h5zM12 12a5 5 0 100-10 5 5 0 000 10z"/>
+  </svg>
 
-    <!-- Container for animated user dots -->
-    <div id="user-dots-container" class="absolute right-4 top-1/2 -translate-y-1/2 flex space-x-1 overflow-visible" style="width: 120px; height: 24px;">
-      <!-- Circles will be dynamically inserted here -->
-    </div>
+  <span id="active-users-text" class="text-sm tracking-wide">
+    You and <strong>0</strong> others are Active on this site
+  </span>
+
+  <div id="user-dots-container" class="absolute right-3 top-1/2 -translate-y-1/2 flex space-x-1 overflow-visible" style="width: 80px; height: 16px;">
+    <!-- Animated circles representing users will appear here -->
   </div>
-</section>
+</div>
 
   <!-- Categories -->
 <section class="py-12 sm:py-16">
