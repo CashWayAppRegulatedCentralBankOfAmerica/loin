@@ -56,22 +56,23 @@
       <h2 class="text-3xl sm:text-4xl font-bold mb-4">Hire Freelancers or Find Work Easily</h2>
       <p class="mb-6 sm:mb-8 text-base sm:text-lg">Work with the best talent. Anytime. Anywhere.</p>
 
-<!-- Replace your original search bar container with this -->
-<div 
-  id="active-users-bar" 
-  class="relative flex items-center justify-center w-full max-w-2xl mx-auto bg-green-600 text-white font-semibold rounded-md shadow-md px-4 py-2 select-none"
-  style="height: 40px; overflow: hidden;"
->
-  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-3 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-    <path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-3-3h-4a3 3 0 00-3 3v2h5zM9 20h5v-2a3 3 0 00-3-3H7a3 3 0 00-3 3v2h5zM12 12a5 5 0 100-10 5 5 0 000 10z"/>
-  </svg>
-
-  <span id="active-users-text" class="text-sm tracking-wide">
-    You and <strong>0</strong> others are Active on this site
-  </span>
-
-  <div id="user-dots-container" class="absolute right-3 top-1/2 -translate-y-1/2 flex space-x-1 overflow-visible" style="width: 80px; height: 16px;">
-    <!-- Animated circles representing users will appear here -->
+<!-- Replace this entire block where search bar was -->
+<div id="active-users-container" class="flex items-center justify-center w-full max-w-2xl mx-auto bg-white rounded-lg shadow px-6 py-3">
+  <div class="flex items-center space-x-4">
+    <!-- User circles animation -->
+    <div class="flex space-x-1 relative w-24 h-8">
+      <!-- Circles representing users -->
+      <span class="user-circle bg-green-400 animate-pulse"></span>
+      <span class="user-circle bg-green-500 animate-pulse delay-200"></span>
+      <span class="user-circle bg-green-600 animate-pulse delay-400"></span>
+      <span class="user-circle bg-green-700 animate-pulse delay-600"></span>
+      <span class="user-circle bg-green-800 animate-pulse delay-800"></span>
+    </div>
+    
+    <!-- Text showing active users count -->
+    <p class="text-gray-800 font-semibold text-lg select-none">
+      You and <span id="active-users-count" class="text-green-600">644</span> other users are active on this site
+    </p>
   </div>
 </div>
 
