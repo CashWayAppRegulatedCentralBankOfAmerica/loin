@@ -56,24 +56,13 @@
       <h2 class="text-3xl sm:text-4xl font-bold mb-4">Hire Freelancers or Find Work Easily</h2>
       <p class="mb-6 sm:mb-8 text-base sm:text-lg">Work with the best talent. Anytime. Anywhere.</p>
 
-      <!-- Responsive search row -->
-      <div class="flex w-full max-w-2xl mx-auto">
-        <input 
-          type="text" 
-          id="search-input"
-          placeholder="Search for jobs or talent..."
-          class="flex-grow px-4 py-2 border border-gray-300 rounded-l focus:outline-none" />
-        <button 
-          onclick="handleSearch()"
-          class="px-6 py-2 bg-green-600 text-white font-semibold rounded-r hover:bg-green-700">
-          Search
-        </button>
-      </div>
-      <div id="search-results" class="mt-4">
-        <!-- Search results will appear here dynamically -->
-      </div>
-    </div>
-  </section>
+<!-- Active Users Display -->
+<div id="active-users" class="flex items-center justify-center w-full max-w-2xl mx-auto p-4 bg-green-100 rounded-md text-green-800 font-semibold text-lg">
+  <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-3-3h-4a3 3 0 00-3 3v2h5zM9 20h5v-2a3 3 0 00-3-3H7a3 3 0 00-3 3v2h5zM12 12a5 5 0 100-10 5 5 0 000 10z" />
+  </svg>
+  <span id="active-users-text">You and <strong>0</strong> others are Active on this site</span>
+</div>
 
   <!-- Categories -->
 <section class="py-12 sm:py-16">
@@ -152,5 +141,89 @@
       }
     }
   </script>
+  <script>
+  const activeUsersText = document.getElementById('active-users-text');
+
+  // Define time ranges in 24hr format and corresponding min/max active users
+  // Each range: [startHour, endHour, minUsers, maxUsers]
+  const timeRanges = [
+    [2, 4, 226, 422],     // 2am - 4am
+    [4, 8, 226, 282],     // 4am - 8am (gradually increase to 282)
+    [8, 11, 282, 400],    // 8am - 11am
+    [11, 20, 400, 842],   // 11am - 8pm (longest range for daytime)
+    [20, 24, 600, 1200],  // 8pm - midnight
+    [0, 2, 600, 1200],    // midnight - 2am (same as above)
+  ];
+
+  // Helper: get current range and calculate dynamic min/max based on time
+  function getCurrentRange() {
+    const now = new Date();
+    const hour = now.getHours() + now.getMinutes()/60; // fractional hour
+
+    // Find range where current hour falls
+    for (const [start, end, minUsers, maxUsers] of timeRanges) {
+      if (start <= end) {
+        if (hour >= start && hour < end) return {minUsers, maxUsers, start, end};
+      } else {
+        // range crosses midnight
+        if (hour >= start || hour < end) return {minUsers, maxUsers, start, end};
+      }
+    }
+    // fallback default range
+    return {minUsers: 226, maxUsers: 282, start: 0, end: 8};
+  }
+
+  // Smoothly interpolate between min and max based on current time within range
+  function interpolateUsers(minUsers, maxUsers, startHour, endHour, currentHour) {
+    // Handle midnight crossing
+    let totalHours = endHour - startHour;
+    if (totalHours <= 0) totalHours += 24;
+
+    let elapsed = currentHour - startHour;
+    if (elapsed < 0) elapsed += 24;
+
+    // Calculate progress [0..1]
+    let progress = elapsed / totalHours;
+
+    // To make it more natural, let's oscillate the count using sine wave so it doesn't only increase but fluctuates smoothly
+    // Map progress to radians [0..pi], so count goes min->max->min
+    const radians = progress * Math.PI;
+    // oscillate between min and max
+    const value = minUsers + (Math.sin(radians) * (maxUsers - minUsers));
+    return Math.round(value);
+  }
+
+  let currentCount = 0;
+
+  function updateActiveUsers() {
+    const now = new Date();
+    const hour = now.getHours() + now.getMinutes()/60;
+    const {minUsers, maxUsers, start, end} = getCurrentRange();
+
+    const newCount = interpolateUsers(minUsers, maxUsers, start, end, hour);
+
+    // Smoothly transition displayed number towards newCount (optional)
+    if (currentCount === 0) currentCount = newCount; // initialize first time
+
+    // Update currentCount slowly towards newCount
+    if (currentCount < newCount) {
+      currentCount++;
+    } else if (currentCount > newCount) {
+      currentCount--;
+    }
+
+    // Clamp to never go below 226 or above 1448
+    currentCount = Math.min(Math.max(currentCount, 226), 1448);
+
+    activeUsersText.innerHTML = `You and <strong>${currentCount}</strong> others are Active on this site`;
+  }
+
+  // Initial update
+  updateActiveUsers();
+
+  // Update every 2 minutes (120000 ms)
+  setInterval(updateActiveUsers, 120000);
+</script>  
+    
 </body>
 </html>
