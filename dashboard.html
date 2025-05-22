@@ -56,25 +56,24 @@
       <h2 class="text-3xl sm:text-4xl font-bold mb-4">Hire Freelancers or Find Work Easily</h2>
       <p class="mb-6 sm:mb-8 text-base sm:text-lg">Work with the best talent. Anytime. Anywhere.</p>
 
-<!-- Replace this entire block where search bar was -->
-<div id="active-users-container" class="flex items-center justify-center w-full max-w-2xl mx-auto bg-white rounded-lg shadow px-6 py-3">
-  <div class="flex items-center space-x-4">
-    <!-- User circles animation -->
-    <div class="flex space-x-1 relative w-24 h-8">
-      <!-- Circles representing users -->
-      <span class="user-circle bg-green-400 animate-pulse"></span>
-      <span class="user-circle bg-green-500 animate-pulse delay-200"></span>
-      <span class="user-circle bg-green-600 animate-pulse delay-400"></span>
-      <span class="user-circle bg-green-700 animate-pulse delay-600"></span>
-      <span class="user-circle bg-green-800 animate-pulse delay-800"></span>
+      <!-- Responsive search row -->
+      <div class="flex w-full max-w-2xl mx-auto">
+        <input 
+          type="text" 
+          id="search-input"
+          placeholder="Search for jobs or talent..."
+          class="flex-grow px-4 py-2 border border-gray-300 rounded-l focus:outline-none" />
+        <button 
+          onclick="handleSearch()"
+          class="px-6 py-2 bg-green-600 text-white font-semibold rounded-r hover:bg-green-700">
+          Search
+        </button>
+      </div>
+      <div id="search-results" class="mt-4">
+        <!-- Search results will appear here dynamically -->
+      </div>
     </div>
-    
-    <!-- Text showing active users count -->
-    <p class="text-gray-800 font-semibold text-lg select-none">
-      You and <span id="active-users-count" class="text-green-600">644</span> other users are active on this site
-    </p>
-  </div>
-</div>
+  </section>
 
   <!-- Categories -->
 <section class="py-12 sm:py-16">
@@ -153,171 +152,5 @@
       }
     }
   </script>
- <script>
-  const activeUsersText = document.getElementById('active-users-text');
-  const userDotsContainer = document.getElementById('user-dots-container');
-
-  const timeRanges = [
-    [2, 4, 226, 422],
-    [4, 8, 226, 282],
-    [8, 11, 282, 400],
-    [11, 20, 400, 842],
-    [20, 24, 600, 1200],
-    [0, 2, 600, 1200],
-  ];
-
-  function getCurrentRange() {
-    const now = new Date();
-    const hour = now.getHours() + now.getMinutes() / 60;
-
-    for (const [start, end, minUsers, maxUsers] of timeRanges) {
-      if (start <= end) {
-        if (hour >= start && hour < end) return { minUsers, maxUsers, start, end };
-      } else {
-        if (hour >= start || hour < end) return { minUsers, maxUsers, start, end };
-      }
-    }
-    return { minUsers: 226, maxUsers: 282, start: 0, end: 8 };
-  }
-
-  function interpolateUsers(minUsers, maxUsers, startHour, endHour, currentHour) {
-    let totalHours = endHour - startHour;
-    if (totalHours <= 0) totalHours += 24;
-
-    let elapsed = currentHour - startHour;
-    if (elapsed < 0) elapsed += 24;
-
-    let progress = elapsed / totalHours;
-    const radians = progress * Math.PI;
-    return Math.round(minUsers + Math.sin(radians) * (maxUsers - minUsers));
-  }
-
-  let currentCount = 0;
-
-  // Animate number fade
-  function updateNumber(count) {
-    const strongTag = activeUsersText.querySelector('strong');
-    if (!strongTag) return;
-
-    strongTag.style.opacity = '0';
-    setTimeout(() => {
-      strongTag.textContent = count;
-      strongTag.style.opacity = '1';
-    }, 300);
-  }
-
-  // Create a single user dot with animation
-  function createUserDot(delay = 0) {
-    const dot = document.createElement('div');
-    dot.className = 'user-dot';
-    dot.style.animationDelay = `${delay}s`;
-    userDotsContainer.appendChild(dot);
-
-    // Remove dot after animation ends
-    dot.addEventListener('animationend', () => {
-      dot.remove();
-    });
-  }
-
-  // Update the active user count gradually towards target
-  function updateActiveUsers() {
-    const now = new Date();
-    const hour = now.getHours() + now.getMinutes() / 60;
-    const { minUsers, maxUsers, start, end } = getCurrentRange();
-
-    const targetCount = interpolateUsers(minUsers, maxUsers, start, end, hour);
-
-    if (currentCount === 0) currentCount = targetCount;
-
-    if (currentCount < targetCount) {
-      currentCount++;
-      // Add user dot when user comes in
-      createUserDot(0);
-    } else if (currentCount > targetCount) {
-      currentCount--;
-      // Add user dot with reverse animation (we'll use fade out)
-      createUserDot(0);
-    }
-
-    currentCount = Math.min(Math.max(currentCount, 226), 1448);
-
-    updateNumber(currentCount);
-
-    // Pulse the number with scale animation
-    activeUsersText.querySelector('strong').style.animation = 'pulse 1.8s ease infinite';
-  }
-
-  // Initial run
-  updateActiveUsers();
-
-  // Update every 2 minutes
-  setInterval(updateActiveUsers, 120000);
-
-  // Also, create some random dots every 3 seconds for a lively feel
-  setInterval(() => {
-    createUserDot(Math.random() * 2);
-  }, 3000);
-</script>
-
-<style>
-  #active-users-bar {
-    position: relative;
-  }
-
-  #active-users-bar strong {
-    transition: opacity 0.3s ease;
-    display: inline-block;
-  }
-
-  /* User dots styling */
-  #user-dots-container {
-    pointer-events: none; /* no interaction */
-  }
-
-  .user-dot {
-    width: 10px;
-    height: 10px;
-    background-color: rgba(255, 255, 255, 0.9);
-    border-radius: 50%;
-    margin-left: 6px;
-    opacity: 0;
-    animation-name: userDotFloatIn;
-    animation-duration: 4s;
-    animation-timing-function: ease-in-out;
-    animation-fill-mode: forwards;
-  }
-
-  /* Animation: float dots from right to left, fade in and out */
-  @keyframes userDotFloatIn {
-    0% {
-      transform: translateX(30px) scale(0.5);
-      opacity: 0;
-    }
-    10% {
-      opacity: 1;
-      transform: translateX(0) scale(1);
-    }
-    80% {
-      opacity: 1;
-      transform: translateX(-20px) scale(1);
-    }
-    100% {
-      transform: translateX(-40px) scale(0.5);
-      opacity: 0;
-    }
-  }
-
-  /* Pulse animation on number */
-  @keyframes pulse {
-    0%, 100% {
-      transform: scale(1);
-      color: white;
-    }
-    50% {
-      transform: scale(1.1);
-      color: #bbf7d0; /* lighter green */
-    }
-  }
-</style>
 </body>
 </html>
