@@ -7,122 +7,66 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     body {
-      font-family: 'Courier New', Courier, monospace;
-      background-color: #fdfdfd;
-      color: #222;
-      font-size: 0.85rem;
-      line-height: 1.7;
-    }
-
-    .contract-container {
-      max-width: 8.5in;
-      min-height: 11in;
-      margin: 2rem auto;
-      background-color: #fff;
-      padding: 2.5rem;
-      box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
-      border: 1px solid #e5e7eb;
-    }
-
-    h1, h2, h3 {
-      font-family: 'Georgia', serif;
-      margin-top: 2rem;
-      color: #1a1a1a;
-    }
-
-    h1 {
-      font-size: 1.5rem;
-      text-align: center;
-      font-weight: bold;
-      margin-bottom: 1.5rem;
-    }
-
-    h2 {
-      font-size: 1.1rem;
-      font-weight: bold;
-    }
-
-    h3 {
-      font-size: 1rem;
-      font-weight: bold;
-      margin-top: 1.2rem;
-    }
-
-    ul {
-      list-style-type: disc;
-      margin-left: 1.5rem;
-    }
-
-    footer a {
-      font-size: 0.75rem;
+      font-family: Helvetica, sans-serif;
     }
   </style>
 </head>
-<body>
+<body class="bg-gray-50 text-gray-800">
 
-  <div class="contract-container">
-    <h1>Nova Prime Help Center</h1>
-    <p><em>Your questions answered. If you still need help, we're here for you.</em></p>
+  <!-- Header -->
+  <header class="bg-green-600 text-white py-6 shadow">
+    <div class="max-w-5xl mx-auto px-4">
+      <h1 class="text-3xl font-bold">Help Center</h1>
+      <p class="mt-1 text-sm opacity-90">Find answers to common questions below.</p>
+    </div>
+  </header>
 
-    <h2>1. Getting Started with Nova Prime</h2>
+  <!-- Main Content -->
+  <main class="max-w-5xl mx-auto px-4 py-10 space-y-10">
+    <section>
+      <h2 class="text-xl font-semibold mb-2">1. Getting Started</h2>
+      <p>To use Nova Prime, sign up as either a freelancer or client. After registration, you can create projects or apply to jobs immediately.</p>
+    </section>
 
-    <h3>How do I create a Nova Prime account?</h3>
-    <p>Click the “Sign Up” button on the homepage and fill in your full name, email address, mobile number, and password. You'll be prompted to verify your email and complete your profile to begin.</p>
+    <section>
+      <h2 class="text-xl font-semibold mb-2">2. How to Post a Job</h2>
+      <p>Clients can post jobs by navigating to the dashboard and selecting "Post New Job". Fill in all relevant details and submit for review.</p>
+    </section>
 
-    <h3>Is Nova Prime free to use?</h3>
-    <p>Yes. Creating an account is completely free. Freelancers pay a small service fee when earning, and clients only pay when hiring.</p>
+    <section>
+      <h2 class="text-xl font-semibold mb-2">3. How to Apply for a Job</h2>
+      <p>Freelancers can browse available jobs on the listings page. Click on a job to view details and submit your application or proposal directly.</p>
+    </section>
 
-    <h2>2. Freelancers</h2>
+    <section>
+      <h2 class="text-xl font-semibold mb-2">4. Payment Questions</h2>
+      <p>Nova Prime uses secure payment processors. Funds are held in escrow until the job is marked complete. Payments are usually released within 3 business days.</p>
+    </section>
 
-    <h3>How do I find work?</h3>
-    <p>Complete your profile, go to "Find Work" and submit bids. Nova Prime will notify you on task details after selection.</p>
+    <section>
+      <h2 class="text-xl font-semibold mb-2">5. Dispute Resolution</h2>
+      <p>If a dispute arises, contact support with project details. We’ll investigate and mediate between parties to reach a fair resolution.</p>
+    </section>
 
-    <h3>How do I get paid?</h3>
-    <p>After task completion, once payment is released by the client, a verification code is sent to your email. Use this under "My Projects" > "Verify" to mark as Paid. Funds reflect immediately in your account. Withdrawal options include PayPal, bank, etc.</p>
+    <section>
+      <h2 class="text-xl font-semibold mb-2">6. Need More Help?</h2>
+      <p>
+        Contact our support team at:<br>
+        <strong>Email:</strong> support@novaprime.com<br>
+        <strong>Phone:</strong> +1 (800) 555-0199
+      </p>
+    </section>
+  </main>
 
-    <h3>Why is my payment Unpaid?</h3>
-    <p>Payments may take 24–48 hours after task submission. If marked "Unpaid" beyond 48 hours, an email will explain whether due to rejections or client delays.</p>
-
-    <h2>3. Clients</h2>
-
-    <h3>How do I hire a freelancer?</h3>
-    <p>Send a job to <strong>client@1234</strong>. We’ll list it on the platform. You’ll receive bids via email. Reply with “Hire” to start work. Payment is charged only after task completion.</p>
-
-    <h3>Can I cancel a job?</h3>
-    <p>Yes, anytime before work begins. Funded milestones will be refunded to your method of payment.</p>
-
-    <h2>4. Security & Disputes</h2>
-
-    <h3>Is Nova Prime safe?</h3>
-    <p>Yes. We use bank-level encryption and two-step verification. Activity is monitored to prevent fraud.</p>
-
-    <h3>What if there's a dispute?</h3>
-    <p>Try contacting the other party. If unresolved, open a formal dispute from your dashboard for team intervention.</p>
-
-    <h2>5. Technical Questions</h2>
-
-    <h3>I forgot my password. What should I do?</h3>
-    <p>Click “Forgot Password” on login and follow the reset instructions sent to your email.</p>
-
-    <h3>Why am I not receiving emails from Nova Prime?</h3>
-    <p>Check your spam/junk folder. Whitelist <strong>support@novaprime.com</strong> to receive all alerts and task updates.</p>
-
-    <h2>6. Need More Help?</h2>
-    <p>Contact us through the channels below:</p>
-    <ul>
-      <li>Email: <strong>support@novaprime.com</strong></li>
-      <li>Phone: <strong>+1 (800) 555-0199</strong></li>
-      <li>Live Chat: 24/7 via your dashboard</li>
-    </ul>
-  </div>
-
-  <footer class="text-center py-6 text-sm text-gray-600">
+  <!-- Footer -->
+  <footer class="bg-white border-t mt-12 py-6 text-center text-gray-600 text-sm shadow-inner">
     <p>&copy; 2025 Nova Prime. All rights reserved.</p>
-    <div class="space-x-4">
-      <a href="privacy.html" class="hover:underline">Privacy</a>
-      <a href="terms.html" class="hover:underline">Terms</a>
-      <a href="help.html" class="hover:underline">Help</a>
+    <div class="space-x-4 mt-2">
+      <a href="privacy.html" class="hover:text-green-600">Privacy</a>
+      <a href="terms.html" class="hover:text-green-600">Terms</a>
+      <a href="help.html" class="hover:text-green-600">Help</a>
     </div>
   </footer>
+
 </body>
 </html>
