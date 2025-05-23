@@ -7,127 +7,121 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     body {
-      font-family: Helvetica, sans-serif;
+      font-family: 'Courier New', Courier, monospace;
+      background-color: #fdfdfd;
+      color: #222;
+      font-size: 0.85rem;
+      line-height: 1.7;
+    }
+
+    .contract-container {
+      max-width: 8.5in;
+      min-height: 11in;
+      margin: 2rem auto;
+      background-color: #fff;
+      padding: 2.5rem;
+      box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+      border: 1px solid #e5e7eb;
+    }
+
+    h1, h2, h3 {
+      font-family: 'Georgia', serif;
+      margin-top: 2rem;
+      color: #1a1a1a;
+    }
+
+    h1 {
+      font-size: 1.5rem;
+      text-align: center;
+      font-weight: bold;
+      margin-bottom: 1.5rem;
+    }
+
+    h2 {
+      font-size: 1.1rem;
+      font-weight: bold;
+    }
+
+    h3 {
+      font-size: 1rem;
+      font-weight: bold;
+      margin-top: 1.2rem;
+    }
+
+    ul {
+      list-style-type: disc;
+      margin-left: 1.5rem;
+    }
+
+    footer a {
+      font-size: 0.75rem;
     }
   </style>
 </head>
-<body class="bg-white text-gray-800">
+<body>
 
-  <!-- Header -->
-  <header class="bg-green-600 text-white py-6">
-    <div class="max-w-5xl mx-auto px-4">
-      <h1 class="text-3xl font-bold">Nova Prime Help Center</h1>
-      <p class="mt-2">Your questions answered. If you still need help, we're here for you.</p>
-    </div>
-  </header>
+  <div class="contract-container">
+    <h1>Nova Prime Help Center</h1>
+    <p><em>Your questions answered. If you still need help, we're here for you.</em></p>
 
-  <!-- Main Content -->
-  <main class="max-w-5xl mx-auto px-4 py-10 space-y-10">
+    <h2>1. Getting Started with Nova Prime</h2>
 
-    <!-- Account Section -->
-    <section>
-      <h2 class="text-2xl font-semibold mb-4 text-green-700">1. Getting Started with Nova Prime</h2>
-      
-      <h3 class="text-xl font-semibold mt-4">How do I create a Nova Prime account?</h3>
-      <p>
-        Simply click the “Sign Up” button on the homepage and fill in your full name, email address, mobile number, and password.
-        You'll be prompted to verify your email and complete your profile to start working or hiring.
-      </p>
+    <h3>How do I create a Nova Prime account?</h3>
+    <p>Click the “Sign Up” button on the homepage and fill in your full name, email address, mobile number, and password. You'll be prompted to verify your email and complete your profile to begin.</p>
 
-      <h3 class="text-xl font-semibold mt-4">Is Nova Prime free to use?</h3>
-      <p>
-        Yes, creating an account is completely free. Freelancers only pay a small service fee when earning, and clients only pay when they hire.
-      </p>
-    </section>
+    <h3>Is Nova Prime free to use?</h3>
+    <p>Yes. Creating an account is completely free. Freelancers pay a small service fee when earning, and clients only pay when hiring.</p>
 
-    <!-- Freelancing Section -->
-    <section>
-      <h2 class="text-2xl font-semibold mb-4 text-green-700">2. Freelancers</h2>
+    <h2>2. Freelancers</h2>
 
-      <h3 class="text-xl font-semibold mt-4">How do I find work?</h3>
-      <p>
-        After completing your profile, head to the "Find Work" section to browse open jobs. Submit bid and wait for an email from Nova Prime on how you will work on the task and produce your task after completion.
-      </p>
+    <h3>How do I find work?</h3>
+    <p>Complete your profile, go to "Find Work" and submit bids. Nova Prime will notify you on task details after selection.</p>
 
-      <h3 class="text-xl font-semibold mt-4">How do I get paid?</h3>
-      <p>
-        Once the client marks your task as completed and releases payment, we will send you an email with the Payment verification code, which you will head to "My Projects" click on verify, input the CODE and your payment will reflect as "Paid", your funds will reflect in your Nova Prime account Immediately. You can withdraw funds via PayPal, bank transfer, or other available methods depending on your Country.
-      </p>
+    <h3>How do I get paid?</h3>
+    <p>After task completion, once payment is released by the client, a verification code is sent to your email. Use this under "My Projects" > "Verify" to mark as Paid. Funds reflect immediately in your account. Withdrawal options include PayPal, bank, etc.</p>
 
-      <h3 class="text-xl font-semibold mt-4">Why is my payment Unpaid?</h3>
-      <p>
-        Payments may take up to 24–48 hours AFTER you submited your Task to process Unpaid. If your task is marked as Unpaid after 48 hours then you will receive an email on the reason towards that which includes: Rejected Work or Delays from the Client.
-      </p>
-    </section>
+    <h3>Why is my payment Unpaid?</h3>
+    <p>Payments may take 24–48 hours after task submission. If marked "Unpaid" beyond 48 hours, an email will explain whether due to rejections or client delays.</p>
 
-    <!-- Clients Section -->
-    <section>
-      <h2 class="text-2xl font-semibold mb-4 text-green-700">3. Clients</h2>
+    <h2>3. Clients</h2>
 
-      <h3 class="text-xl font-semibold mt-4">How do I hire a freelancer?</h3>
-      <p>
-        Sent a job to our email at client@1234 and it will be uploaded to our Platform for a Freelancer to bid, when a Freelancer bids you will receive an email Instantly, Once you find someone that fits, reply with "Hire". An automated email will be sent to the Freelancer Instantly with your Task ID for he or she to start working on your Task. You’ll only be charged once the freelancer completes the job.
-      </p>
+    <h3>How do I hire a freelancer?</h3>
+    <p>Send a job to <strong>client@1234</strong>. We’ll list it on the platform. You’ll receive bids via email. Reply with “Hire” to start work. Payment is charged only after task completion.</p>
 
-      <h3 class="text-xl font-semibold mt-4">Can I cancel a job?</h3>
-      <p>
-        Yes, you can cancel a job at any point before work begins. If the milestone is funded, it will be refunded to your payment method.
-      </p>
-    </section>
+    <h3>Can I cancel a job?</h3>
+    <p>Yes, anytime before work begins. Funded milestones will be refunded to your method of payment.</p>
 
-    <!-- Security & Support Section -->
-    <section>
-      <h2 class="text-2xl font-semibold mb-4 text-green-700">4. Security & Disputes</h2>
+    <h2>4. Security & Disputes</h2>
 
-      <h3 class="text-xl font-semibold mt-4">Is Nova Prime safe?</h3>
-      <p>
-        Yes. We use bank-level encryption and two-step verification to protect your account. We also monitor activity to prevent fraud and abuse.
-      </p>
+    <h3>Is Nova Prime safe?</h3>
+    <p>Yes. We use bank-level encryption and two-step verification. Activity is monitored to prevent fraud.</p>
 
-      <h3 class="text-xl font-semibold mt-4">What if there's a dispute?</h3>
-      <p>
-        If a freelancer or client has an issue with a contract, our dispute team can step in. Start by messaging the other party. If no resolution is reached, open a formal dispute through your dashboard.
-      </p>
-    </section>
+    <h3>What if there's a dispute?</h3>
+    <p>Try contacting the other party. If unresolved, open a formal dispute from your dashboard for team intervention.</p>
 
-    <!-- Technical -->
-    <section>
-      <h2 class="text-2xl font-semibold mb-4 text-green-700">5. Technical Questions</h2>
+    <h2>5. Technical Questions</h2>
 
-      <h3 class="text-xl font-semibold mt-4">I forgot my password. What should I do?</h3>
-      <p>
-        Click "Forgot Password" on the login page and follow the instructions to reset it via email.
-      </p>
+    <h3>I forgot my password. What should I do?</h3>
+    <p>Click “Forgot Password” on login and follow the reset instructions sent to your email.</p>
 
-      <h3 class="text-xl font-semibold mt-4">Why am I not receiving emails from Nova Prime?</h3>
-      <p>
-        Please check your spam or junk folder. Make sure to whitelist <strong>support@novaprime.com</strong> to receive all important messages.
-      </p>
-    </section>
+    <h3>Why am I not receiving emails from Nova Prime?</h3>
+    <p>Check your spam/junk folder. Whitelist <strong>support@novaprime.com</strong> to receive all alerts and task updates.</p>
 
-    <!-- Contact -->
-    <section>
-      <h2 class="text-2xl font-semibold mb-4 text-green-700">6. Need More Help?</h2>
-      <p>
-        If your question wasn’t answered here, you can reach our support team any time.
-      </p>
-      <ul class="list-disc ml-5 mt-3">
-        <li>Email: <strong>support@novaprime.com</strong></li>
-        <li>Phone: <strong>+1 (800) 555-0199</strong></li>
-        <li>Live Chat: Available 24/7 in your dashboard</li>
-      </ul>
-    </section>
+    <h2>6. Need More Help?</h2>
+    <p>Contact us through the channels below:</p>
+    <ul>
+      <li>Email: <strong>support@novaprime.com</strong></li>
+      <li>Phone: <strong>+1 (800) 555-0199</strong></li>
+      <li>Live Chat: 24/7 via your dashboard</li>
+    </ul>
+  </div>
 
-  </main>
-  <!-- Footer -->
-  <footer class="bg-white border-t mt-12">
-    <footer class="fixed bottom-0 left-0 w-full bg-white text-center py-4 text-gray-500 text-sm z-50 shadow">
-      <p>&copy; 2025 Nova Prime. All rights reserved.</p>
-      <div class="space-x-4">
-        <a href="privacy" class="hover:text-green-600">Privacy</a>
-        <a href="terms" class="hover:text-green-600">Terms</a>
-        <a href="help.html" class="hover:text-green-600">Help</a>
-      </div>
+  <footer class="text-center py-6 text-sm text-gray-600">
+    <p>&copy; 2025 Nova Prime. All rights reserved.</p>
+    <div class="space-x-4">
+      <a href="privacy.html" class="hover:underline">Privacy</a>
+      <a href="terms.html" class="hover:underline">Terms</a>
+      <a href="help.html" class="hover:underline">Help</a>
     </div>
   </footer>
 </body>
