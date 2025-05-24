@@ -34,6 +34,7 @@
           id: 'TALENT2001',
           client_name: 'Mr. John Carter',
           location: 'United States',
+          client_joined: '2021-05',
           title: 'Blog Writers for Tech Reviews',
           description: 'Writers needed to create engaging tech product reviews.',
           amount: '20-30',
@@ -50,6 +51,7 @@
           id: 'TALENT2002',
           client_name: 'Ms. Ruth Wanjiku',
           location: 'Kenya',
+          client_joined: '2020-11',
           title: 'Case Study Writers for KMTC Research',
           description: 'Writers required to handle KMTC research case studies and summaries.',
           amount: '18-25',
@@ -67,6 +69,12 @@
 
     const completedTasks = JSON.parse(localStorage.getItem('completedTasks') || '[]');
 
+    function formatClientJoined(dateString) {
+      const [year, month] = dateString.split('-');
+      const date = new Date(year, month - 1);
+      return date.toLocaleString('default', { month: 'long', year: 'numeric' });
+    }
+
     function renderTasks() {
       const taskList = document.getElementById('taskList');
       taskList.innerHTML = '';
@@ -79,7 +87,9 @@
             <div class="w-full">
               <h3 class="text-lg font-bold text-gray-800">${task.title}</h3>
               <p class="text-sm text-gray-600">Client: ${task.client_name}</p>
-              <p class="text-sm text-gray-600 mb-2">Location: ${task.location}</p>
+              <p class="text-sm text-gray-600">Location: ${task.location}</p>
+              <p class="text-sm text-gray-600 mb-1"><strong>Requirements Needed:</strong> ${task.requirements}</p>
+              <p class="text-sm text-gray-600 mb-4"><strong>Client Joined:</strong> ${formatClientJoined(task.client_joined)}</p>
               <p class="text-sm text-gray-500">Task ID: ${task.id}</p>
               <p class="text-sm text-gray-500">Posted: ${task.posted}</p>
               <p class="text-sm text-gray-500 mb-2">Bids: ${task.bids}</p>
@@ -124,15 +134,13 @@
     renderTasks();
   </script>
 
-  <footer class="bg-white border-t mt-12">
-    <footer class="fixed bottom-0 left-0 w-full bg-white text-center py-4 text-gray-500 text-sm z-50 shadow">
-      <p>&copy; 2025 Nova Prime. All rights reserved.</p>
-      <div class="space-x-4">
-        <a href="privacy.html" class="hover:text-green-600">Privacy</a>
-        <a href="terms.html" class="hover:text-green-600">Terms</a>
-        <a href="help.html" class="hover:text-green-600">Help</a>
-      </div>
-    </footer>
+  <footer class="fixed bottom-0 left-0 w-full bg-white text-center py-4 text-gray-500 text-sm z-50 shadow">
+    <p>&copy; 2025 Nova Prime. All rights reserved.</p>
+    <div class="space-x-4">
+      <a href="privacy.html" class="hover:text-green-600">Privacy</a>
+      <a href="terms.html" class="hover:text-green-600">Terms</a>
+      <a href="help.html" class="hover:text-green-600">Help</a>
+    </div>
   </footer>
 </body>
 </html>
