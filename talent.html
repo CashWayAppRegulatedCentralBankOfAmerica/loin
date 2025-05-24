@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" >
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Nova Prime - Task Opportunities</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
@@ -13,54 +13,62 @@
   </div>
 
   <script>
+    // Data with all fields including bids, talents needed, client info, requirements, etc.
     const tasks = [
-      [
-        {
-          id: 'TALENT2001',
-          client_name: 'Mr. John Carter',
-          location: 'United States',
-          client_since: 'January 2022',
-          title: 'Blog Writers for Tech Reviews',
-          description: 'Writers needed to create engaging tech product reviews.',
-          amount: '20-30',
-          posted: '2025-05-15',
-          requirements: 'Basic tech knowledge, SEO writing',
-          talents_needed: 25,
-          bids: 19,
-          submitted_tasks: 16,
-          accepted_talents: 12,
-          paid_talents: 10,
-          rating: 4.8
-        },
-        {
-          id: 'TALENT2002',
-          client_name: 'Ms. Ruth Wanjiku',
-          location: 'Kenya',
-          client_since: 'May 2023',
-          title: 'Case Study Writers for KMTC Research',
-          description: 'Writers required to handle KMTC research case studies and summaries.',
-          amount: '18-25',
-          posted: '2025-05-15',
-          requirements: 'Case study formatting, good grammar',
-          talents_needed: 20,
-          bids: 16,
-          submitted_tasks: 12,
-          accepted_talents: 9,
-          paid_talents: 8,
-          rating: 4.7
-        }
-      ]
+      {
+        id: 'TALENT2001',
+        client_name: 'Mr. John Carter',
+        location: 'United States',
+        client_since: 'January 2022',
+        title: 'Blog Writers for Tech Reviews',
+        description: 'Writers needed to create engaging tech product reviews.',
+        amount: '20-30',
+        posted: '2025-05-15',
+        requirements: 'Basic tech knowledge, SEO writing',
+        talents_needed: 25,
+        bids: 19,
+        submitted_tasks: 16,
+        accepted_talents: 12,
+        paid_talents: 10,
+        rating: 4.8
+      },
+      {
+        id: 'TALENT2002',
+        client_name: 'Ms. Ruth Wanjiku',
+        location: 'Kenya',
+        client_since: 'May 2023',
+        title: 'Case Study Writers for KMTC Research',
+        description: 'Writers required to handle KMTC research case studies and summaries.',
+        amount: '18-25',
+        posted: '2025-05-15',
+        requirements: 'Case study formatting, good grammar',
+        talents_needed: 20,
+        bids: 16,
+        submitted_tasks: 12,
+        accepted_talents: 9,
+        paid_talents: 8,
+        rating: 4.7
+      }
     ];
 
     const container = document.getElementById('task-container');
 
-    tasks[0].forEach(task => {
+    // Function to handle Bid button click
+    function handleBid(taskId) {
+      // Here you can add any logic before redirecting, e.g. tracking, validation, etc.
+      alert(`Redirecting to bid page for Task ID: ${taskId}`);
+      // Redirect user to bidding page, e.g., /bid.html?taskId=...
+      window.location.href = `/bid.html?taskId=${taskId}`;
+    }
+
+    // Render tasks dynamically
+    tasks.forEach(task => {
       const card = document.createElement('div');
       card.className = 'bg-white p-6 rounded-2xl shadow-md hover:shadow-lg transition duration-300';
 
       card.innerHTML = `
-        <div class="flex justify-between items-start">
-          <div class="w-full">
+        <div class="flex justify-between items-start flex-col sm:flex-row">
+          <div class="w-full sm:w-3/4">
             <h3 class="text-lg font-bold text-gray-800">${task.title}</h3>
             <p class="text-sm text-gray-600">Client: ${task.client_name}</p>
             <p class="text-sm text-gray-600">Location: ${task.location}</p>
@@ -79,6 +87,15 @@
             </div>
 
             <div class="text-sm text-yellow-600 font-medium">Client Rating: ${task.rating} ⭐</div>
+          </div>
+
+          <div class="w-full sm:w-1/4 flex justify-center items-center mt-4 sm:mt-0">
+            <button
+              class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-lg shadow-md transition duration-300"
+              onclick="handleBid('${task.id}')"
+            >
+              Bid
+            </button>
           </div>
         </div>
       `;
