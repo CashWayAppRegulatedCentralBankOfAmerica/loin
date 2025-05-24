@@ -3,28 +3,13 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Nova Prime Tasks</title>
+  <title>Nova Prime - Task Opportunities</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-100 font-sans">
-  <header class="bg-white shadow p-4 flex justify-between items-center">
-    <h1 class="text-2xl font-bold text-green-600">Nova Prime</h1>
-  </header>
-
-  <main class="max-w-5xl mx-auto p-4">
-    <h2 class="text-xl font-semibold mb-4">Long Term Talents</h2>
-    <div id="taskList" class="space-y-6">
-      <!-- Tasks will be dynamically inserted here -->
-    </div>
-  </main>
-
-  <!-- Rating Modal -->
-  <div id="ratingModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-    <div class="bg-white rounded-xl p-6 w-80 text-center shadow-lg">
-      <h3 class="text-lg font-bold mb-2">Rating Restricted</h3>
-      <p class="text-sm text-gray-600 mb-4">Only freelancers who completed and got paid for this task can rate it.</p>
-      <button onclick="closeModal()" class="bg-green-600 text-white px-4 py-2 rounded-lg">Close</button>
-    </div>
+<body class="bg-gray-100 text-gray-900">
+  <div class="max-w-5xl mx-auto p-4">
+    <h1 class="text-3xl font-bold mb-6 text-center">Nova Prime Opportunities</h1>
+    <div id="task-container" class="space-y-6"></div>
   </div>
 
   <script>
@@ -34,6 +19,7 @@
           id: 'TALENT2001',
           client_name: 'Mr. John Carter',
           location: 'United States',
+          client_since: 'January 2022',
           title: 'Blog Writers for Tech Reviews',
           description: 'Writers needed to create engaging tech product reviews.',
           amount: '20-30',
@@ -50,6 +36,7 @@
           id: 'TALENT2002',
           client_name: 'Ms. Ruth Wanjiku',
           location: 'Kenya',
+          client_since: 'May 2023',
           title: 'Case Study Writers for KMTC Research',
           description: 'Writers required to handle KMTC research case studies and summaries.',
           amount: '18-25',
@@ -65,74 +52,39 @@
       ]
     ];
 
-    const completedTasks = JSON.parse(localStorage.getItem('completedTasks') || '[]');
+    const container = document.getElementById('task-container');
 
-    function renderTasks() {
-      const taskList = document.getElementById('taskList');
-      taskList.innerHTML = '';
+    tasks[0].forEach(task => {
+      const card = document.createElement('div');
+      card.className = 'bg-white p-6 rounded-2xl shadow-md hover:shadow-lg transition duration-300';
 
-      tasks[0].forEach(task => {
-        const div = document.createElement('div');
-        div.className = 'bg-white p-6 rounded-lg shadow';
-        div.innerHTML = `
-          <div class="flex justify-between items-start">
-            <div class="w-full">
-              <h3 class="text-lg font-bold text-gray-800">${task.title}</h3>
-              <p class="text-sm text-gray-600">Client: ${task.client_name}</p>
-              <p class="text-sm text-gray-600 mb-2">Location: ${task.location}</p>
-              <p class="text-sm text-gray-500">Task ID: ${task.id}</p>
-              <p class="text-sm text-gray-500">Posted: ${task.posted}</p>
-              <p class="text-sm text-gray-500 mb-2">Bids: ${task.bids}</p>
-              <p class="text-md font-semibold text-green-600 mb-4">Amount: $${task.amount}</p>
+      card.innerHTML = `
+        <div class="flex justify-between items-start">
+          <div class="w-full">
+            <h3 class="text-lg font-bold text-gray-800">${task.title}</h3>
+            <p class="text-sm text-gray-600">Client: ${task.client_name}</p>
+            <p class="text-sm text-gray-600">Location: ${task.location}</p>
+            <p class="text-sm text-gray-500 mb-1">Client Since: ${task.client_since}</p>
+            <p class="text-sm text-gray-500">Task ID: ${task.id}</p>
+            <p class="text-sm text-gray-500">Posted: ${task.posted}</p>
+            <p class="text-sm text-gray-500 mb-2">Bids: ${task.bids}</p>
+            <p class="text-md font-semibold text-green-600 mb-1">Amount: $${task.amount}</p>
+            <p class="text-sm text-gray-700 mb-4"><strong>Requirements:</strong> ${task.requirements}</p>
 
-              <div class="grid grid-cols-2 gap-4 text-sm text-gray-700 mb-4">
-                <div><strong>Talents Needed:</strong> ${task.talents_needed}</div>
-                <div><strong>Submitted Tasks:</strong> ${task.submitted_tasks}</div>
-                <div><strong>Accepted Talents:</strong> ${task.accepted_talents}</div>
-                <div><strong>Paid Talents:</strong> ${task.paid_talents}</div>
-              </div>
+            <div class="grid grid-cols-2 gap-4 text-sm text-gray-700 mb-4">
+              <div><strong>Talents Needed:</strong> ${task.talents_needed}</div>
+              <div><strong>Submitted Tasks:</strong> ${task.submitted_tasks}</div>
+              <div><strong>Accepted Talents:</strong> ${task.accepted_talents}</div>
+              <div><strong>Paid Talents:</strong> ${task.paid_talents}</div>
             </div>
 
-            <div class="flex flex-col items-end ml-4">
-              <a href="bid.html?taskId=${task.id}&amount=${task.amount}" class="bg-green-600 text-white px-4 py-2 rounded-lg mb-2">Bid</a>
-              <div class="flex items-center">
-                ${[1, 2, 3, 4, 5].map(i => `
-                  <svg onclick="handleRating('${task.id}', ${i})" class="w-5 h-5 cursor-pointer ${i <= task.rating ? 'text-green-600' : 'text-gray-300'}" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.974a1 1 0 00.95.69h4.18c.969 0 1.371 1.24.588 1.81l-3.39 2.46a1 1 0 00-.364 1.118l1.286 3.974c.3.921-.755 1.688-1.54 1.118l-3.39-2.46a1 1 0 00-1.175 0l-3.39 2.46c-.784.57-1.838-.197-1.539-1.118l1.285-3.974a1 1 0 00-.364-1.118l-3.39-2.46c-.784-.57-.38-1.81.588-1.81h4.18a1 1 0 00.951-.69l1.285-3.974z" />
-                  </svg>
-                `).join('')}
-              </div>
-            </div>
+            <div class="text-sm text-yellow-600 font-medium">Client Rating: ${task.rating} ⭐</div>
           </div>
-        `;
-        taskList.appendChild(div);
-      });
-    }
+        </div>
+      `;
 
-    function handleRating(taskId, ratingValue) {
-      if (!completedTasks.includes(taskId)) {
-        document.getElementById('ratingModal').classList.remove('hidden');
-        return;
-      }
-      alert(`Thanks for rating task ${taskId} with ${ratingValue} stars.`);
-    }
-
-    function closeModal() {
-      document.getElementById('ratingModal').classList.add('hidden');
-    }
-
-    renderTasks();
+      container.appendChild(card);
+    });
   </script>
-
-  <footer class="bg-white border-t mt-12">
-    <footer class="fixed bottom-0 left-0 w-full bg-white text-center py-4 text-gray-500 text-sm z-50 shadow">
-      <p>&copy; 2025 Nova Prime. All rights reserved.</p>
-      <div class="space-x-4">
-        <a href="privacy.html" class="hover:text-green-600">Privacy</a>
-        <a href="terms.html" class="hover:text-green-600">Terms</a>
-        <a href="help.html" class="hover:text-green-600">Help</a>
-      </div>
-    </footer>
-  </footer>
 </body>
 </html>
