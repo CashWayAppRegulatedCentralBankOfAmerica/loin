@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Nova Prime Tasks</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
@@ -61,8 +61,7 @@
           accepted_talents: 9,
           paid_talents: 8,
           rating: 4.7
-        },
-        // ... [REMAINING TASKS OMITTED FOR BREVITY]
+        }
       ]
     ];
 
@@ -77,14 +76,24 @@
         div.className = 'bg-white p-6 rounded-lg shadow';
         div.innerHTML = `
           <div class="flex justify-between items-start">
-            <div>
+            <div class="w-full">
               <h3 class="text-lg font-bold text-gray-800">${task.title}</h3>
+              <p class="text-sm text-gray-600">Client: ${task.client_name}</p>
+              <p class="text-sm text-gray-600 mb-2">Location: ${task.location}</p>
               <p class="text-sm text-gray-500">Task ID: ${task.id}</p>
               <p class="text-sm text-gray-500">Posted: ${task.posted}</p>
-              <p class="text-sm text-gray-500">Bids: ${task.bids}</p>
-              <p class="text-md font-semibold text-green-600 mt-2">Amount: $${task.amount}</p>
+              <p class="text-sm text-gray-500 mb-2">Bids: ${task.bids}</p>
+              <p class="text-md font-semibold text-green-600 mb-4">Amount: $${task.amount}</p>
+
+              <div class="grid grid-cols-2 gap-4 text-sm text-gray-700 mb-4">
+                <div><strong>Talents Needed:</strong> ${task.talents_needed}</div>
+                <div><strong>Submitted Tasks:</strong> ${task.submitted_tasks}</div>
+                <div><strong>Accepted Talents:</strong> ${task.accepted_talents}</div>
+                <div><strong>Paid Talents:</strong> ${task.paid_talents}</div>
+              </div>
             </div>
-            <div class="flex flex-col items-end">
+
+            <div class="flex flex-col items-end ml-4">
               <a href="bid.html?taskId=${task.id}&amount=${task.amount}" class="bg-green-600 text-white px-4 py-2 rounded-lg mb-2">Bid</a>
               <div class="flex items-center">
                 ${[1, 2, 3, 4, 5].map(i => `
@@ -115,7 +124,6 @@
     renderTasks();
   </script>
 
-  <!-- Footer -->
   <footer class="bg-white border-t mt-12">
     <footer class="fixed bottom-0 left-0 w-full bg-white text-center py-4 text-gray-500 text-sm z-50 shadow">
       <p>&copy; 2025 Nova Prime. All rights reserved.</p>
