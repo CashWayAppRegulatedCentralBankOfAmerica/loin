@@ -152,5 +152,54 @@
       }
     }
   </script>
+   <script>
+  // Sample mock data (simulate fetched records)
+  const mockData = [
+    { id: 'T123', type: 'task', title: 'Build a React Dashboard', link: 'task/T123.html' },
+    { id: 'T124', type: 'task', title: 'Fix Tailwind CSS Bugs', link: 'task/T124.html' },
+    { id: 'U301', type: 'talent', title: 'Jane Doe - Frontend Developer', link: 'talent/U301.html' },
+    { id: 'U302', type: 'talent', title: 'John Smith - UX Designer', link: 'talent/U302.html' },
+    { id: 'T125', type: 'task', title: 'Create Marketing Landing Page', link: 'task/T125.html' },
+    { id: 'U303', type: 'talent', title: 'Ali Khan - Backend Engineer', link: 'talent/U303.html' }
+  ];
+
+  // Live search function triggered on every keystroke
+  function handleSearch() {
+    const query = document.getElementById('search-input').value.trim().toLowerCase();
+    const resultsContainer = document.getElementById('search-results');
+    resultsContainer.innerHTML = ''; // Clear previous results
+
+    if (!query) return; // If input is empty, do nothing
+
+    // Filter data by ID or title
+    const matches = mockData.filter(item =>
+      item.title.toLowerCase().includes(query) || item.id.toLowerCase().includes(query)
+    );
+
+    if (matches.length === 0) {
+      resultsContainer.innerHTML = '<p class="text-gray-500">No results found.</p>';
+      return;
+    }
+
+    // Render clickable results
+    matches.forEach(match => {
+      const div = document.createElement('div');
+      div.innerHTML = `
+        <a href="${match.link}" class="block bg-white p-3 rounded shadow hover:bg-green-50 transition">
+          <strong>${match.title}</strong><br />
+          <span class="text-sm text-gray-500">${match.type.toUpperCase()} • ID: ${match.id}</span>
+        </a>
+      `;
+      resultsContainer.appendChild(div);
+    });
+  }
+
+  // Attach input listener once DOM is fully loaded
+  document.addEventListener('DOMContentLoaded', () => {
+    const input = document.getElementById('search-input');
+    input.addEventListener('input', handleSearch); // Instant search on typing
+  });
+</script>
+ 
 </body>
 </html>
