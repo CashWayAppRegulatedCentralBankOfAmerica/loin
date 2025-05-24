@@ -10,9 +10,9 @@
     function searchItems(query) {
       // Normally here we would fetch from a database or API
       const items = [
-        { name: 'UI/UX Designer', link: '/freelancers/ui-ux-designer.html' },
-        { name: 'Web Developer', link: '/freelancers/web-developer.html' },
-        { name: 'Content Writer', link: '/freelancers/content-writer.html' }
+        { name: 'UI/UX Designer', link: 'task.html' },
+        { name: 'Web Developer', link: 'task.html' },
+        { name: 'Content Writer', link: 'task.html' }
       ];
       
       return items.filter(item => item.name.toLowerCase().includes(query.toLowerCase()));
