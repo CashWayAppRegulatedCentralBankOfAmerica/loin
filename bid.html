@@ -15,7 +15,7 @@
     <form onsubmit="handleBidSubmit(event)" class="space-y-4">
       <input type="text" name="taskId" id="taskId" placeholder="Task ID" required class="border border-gray-300 p-2 rounded w-full" readonly />
       <input type="text" name="bidAmount" id="bidAmount" placeholder="Bid Amount (USD)" required class="border border-gray-300 p-2 rounded w-full" readonly />
-      <button type="submit" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded w-full">
+      <button type="submit" id="submitBidBtn" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded w-full">
         Submit Bid (Cost: 1 Credit)
       </button>
     </form>
@@ -25,7 +25,7 @@
   <div id="creditModal" class="hidden fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
     <div class="bg-white p-6 rounded-lg shadow-lg text-center max-w-sm">
       <h2 class="text-xl font-semibold text-red-600 mb-4">Insufficient Credits</h2>
-      <p class="text-gray-600 mb-4">You need at least 1 credit to place a bid.</p>
+      <p class="text-gray-600 mb-4">You need at least <span id="requiredCredits"></span> credit<span id="requiredCreditsPlural"></span> to place a bid.</p>
       <a href="account.html" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded">Buy Credits</a>
       <button onclick="document.getElementById('creditModal').classList.add('hidden')" class="mt-2 text-sm text-gray-500">Close</button>
     </div>
@@ -43,18 +43,25 @@
   </div>
 
   <script>
-    // Fetch task details and bidFee from URL
+    // Get task details from URL
     const urlParams = new URLSearchParams(window.location.search);
-    const taskId = urlParams.get('taskId');
-    const taskAmount = urlParams.get('amount');
-    const bidFee = parseFloat(urlParams.get('bidFee')) || 1;  // default 1 credit
+    const taskId = urlParams.get('taskId') || '';
+    const taskAmount = urlParams.get('amount') || '';
 
-    document.getElementById('taskId').value = taskId || '';
+    // Determine bid fee by task ID prefix:
+    // If taskId starts with "TALENT", charge 3 credits; else 1 credit
+    const bidFee = taskId.startsWith('TALENT') ? 3 : 1;
+
+    document.getElementById('taskId').value = taskId;
     document.getElementById('bidAmount').value = taskAmount ? `$${taskAmount}` : '';
 
-    // Update submit button text dynamically
-    const submitBtn = document.querySelector('button[type="submit"]');
+    // Update submit button text
+    const submitBtn = document.getElementById('submitBidBtn');
     submitBtn.textContent = `Submit Bid (Cost: ${bidFee} Credit${bidFee > 1 ? 's' : ''})`;
+
+    // Update insufficient credits modal
+    document.getElementById('requiredCredits').textContent = bidFee;
+    document.getElementById('requiredCreditsPlural').textContent = bidFee > 1 ? 's' : '';
 
     // Show current credits
     let credits = parseFloat(localStorage.getItem('credits') || '0');
@@ -69,7 +76,7 @@
         credits -= bidFee;
         localStorage.setItem('credits', credits.toFixed(2));
 
-        // Save bid info
+        // Save bid data with fee
         const bid = {
           taskId: taskId,
           amount: taskAmount,
@@ -83,11 +90,10 @@
         bids.push(bid);
         localStorage.setItem('bids', JSON.stringify(bids));
 
-        // Update modal text for credits deducted (handle plural)
+        // Update success modal text
         document.getElementById('creditsDeducted').textContent = bidFee;
         document.getElementById('creditsPlural').textContent = bidFee > 1 ? 's' : '';
 
-        // Show success modal
         document.getElementById('successModal').classList.remove('hidden');
       } else {
         document.getElementById('creditModal').classList.remove('hidden');
