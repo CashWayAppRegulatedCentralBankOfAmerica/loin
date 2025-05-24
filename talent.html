@@ -86,9 +86,9 @@
           <div class="flex justify-between items-start">
             <div class="w-full">
               <h3 class="text-lg font-bold text-gray-800">${task.title}</h3>
+              <p class="text-sm text-gray-600 mb-1"><strong>Requirements Needed:</strong> ${task.requirements}</p>
               <p class="text-sm text-gray-600">Client: ${task.client_name}</p>
               <p class="text-sm text-gray-600">Location: ${task.location}</p>
-              <p class="text-sm text-gray-600 mb-1"><strong>Requirements Needed:</strong> ${task.requirements}</p>
               <p class="text-sm text-gray-600 mb-4"><strong>Client Joined:</strong> ${formatClientJoined(task.client_joined)}</p>
               <p class="text-sm text-gray-500">Task ID: ${task.id}</p>
               <p class="text-sm text-gray-500">Posted: ${task.posted}</p>
