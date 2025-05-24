@@ -35,7 +35,7 @@
   <div id="successModal" class="hidden fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
     <div class="bg-white p-6 rounded-lg shadow-lg text-center max-w-sm">
       <h2 class="text-xl font-semibold text-green-600 mb-4">Bid Submitted</h2>
-      <p class="text-gray-600 mb-4">Your bid was placed successfully. 1 credit has been deducted.</p>
+      <p class="text-gray-600 mb-4">Your bid was placed successfully. <span id="creditsDeducted">1</span> credit<span id="creditsPlural"></span> has been deducted.</p>
       <button onclick="window.location.href='project.html'" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded">
         Continue
       </button>
@@ -43,17 +43,21 @@
   </div>
 
   <script>
-    // Fetch task details from URL parameters
+    // Fetch task details and bidFee from URL
     const urlParams = new URLSearchParams(window.location.search);
     const taskId = urlParams.get('taskId');
     const taskAmount = urlParams.get('amount');
+    const bidFee = parseFloat(urlParams.get('bidFee')) || 1;  // default 1 credit
 
     document.getElementById('taskId').value = taskId || '';
     document.getElementById('bidAmount').value = taskAmount ? `$${taskAmount}` : '';
 
-    let credits = parseFloat(localStorage.getItem('credits') || '0');
+    // Update submit button text dynamically
+    const submitBtn = document.querySelector('button[type="submit"]');
+    submitBtn.textContent = `Submit Bid (Cost: ${bidFee} Credit${bidFee > 1 ? 's' : ''})`;
 
     // Show current credits
+    let credits = parseFloat(localStorage.getItem('credits') || '0');
     document.addEventListener('DOMContentLoaded', () => {
       document.getElementById('currentCredits').textContent = credits.toFixed(2);
     });
@@ -61,24 +65,29 @@
     function handleBidSubmit(event) {
       event.preventDefault();
 
-      if (credits >= 1) {
-        credits -= 1;
+      if (credits >= bidFee) {
+        credits -= bidFee;
         localStorage.setItem('credits', credits.toFixed(2));
 
-        // Save bid
+        // Save bid info
         const bid = {
           taskId: taskId,
           amount: taskAmount,
           date: new Date().toLocaleDateString(),
           time: new Date().toLocaleTimeString(),
-          status: 'Unpaid'
+          status: 'Unpaid',
+          bidFee: bidFee
         };
 
         const bids = JSON.parse(localStorage.getItem('bids') || '[]');
         bids.push(bid);
         localStorage.setItem('bids', JSON.stringify(bids));
 
-        // Show sleek success modal
+        // Update modal text for credits deducted (handle plural)
+        document.getElementById('creditsDeducted').textContent = bidFee;
+        document.getElementById('creditsPlural').textContent = bidFee > 1 ? 's' : '';
+
+        // Show success modal
         document.getElementById('successModal').classList.remove('hidden');
       } else {
         document.getElementById('creditModal').classList.remove('hidden');
@@ -94,7 +103,7 @@
         <a href="terms.html" class="hover:text-green-600">Terms</a>
         <a href="help.html" class="hover:text-green-600">Help</a>
       </div>
-    </div>
+    </footer>
   </footer>
 </body>
 </html>
