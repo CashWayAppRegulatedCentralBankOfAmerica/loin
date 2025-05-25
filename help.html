@@ -8,7 +8,7 @@
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
       margin: 0;
-      padding: 0;
+      padding-bottom: 80px; /* space for fixed footer */
       background-color: #f9f9f9;
       color: #333;
       line-height: 1.6;
@@ -49,10 +49,28 @@
       text-align: justify;
     }
     footer {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background: #fff;
+      border-top: 1px solid #ddd;
       text-align: center;
-      padding: 2rem;
+      padding: 1rem 0;
       font-size: 0.9rem;
       color: #777;
+      box-shadow: 0 -2px 6px rgba(0,0,0,0.1);
+      z-index: 1000;
+    }
+    footer a {
+      margin: 0 12px;
+      color: #2e7d32;
+      text-decoration: none;
+      font-weight: 600;
+      transition: color 0.3s ease;
+    }
+    footer a:hover {
+      color: #1b4d23;
     }
   </style>
 </head>
@@ -363,19 +381,15 @@
 <h3>100. Acceptance of Terms</h3>
 <p>By accessing or using Nova Prime Writers, users acknowledge that they have read, understood, and agree to be bound by these Terms and Conditions. Continued use after changes constitutes acceptance of updates. Users who do not agree should discontinue use immediately. Acceptance is a prerequisite for participation in the platform’s services. Users confirm their authority to enter into these agreements. The platform may require explicit consent during registration or access. Acceptance establishes a contractual relationship governed by these Terms. Nova Prime Writers reserves the right to enforce compliance and take appropriate actions against violations. The clause reinforces the binding nature of the agreement. Users should review Terms regularly to stay informed and compliant.</p>
 
-  </main>
+</main>
   
-  </script>
-  <footer class="bg-white border-t mt-12">
-    <footer class="fixed bottom-0 left-0 w-full bg-white text-center py-4 text-gray-500 text-sm z-50 shadow">
-      <p>&copy; 2025 Nova Prime. All rights reserved.</p>
-      <div class="space-x-4">
-        <a href="privacy.html" class="hover:text-green-600">Privacy</a>
-        <a href="terms.html" class="hover:text-green-600">Terms</a>
-        <a href="help.html" class="hover:text-green-600">Help</a>
-      </div>
+  <footer>
+    &copy; 2025 Nova Prime Writers. All rights reserved.
+    <div>
+      <a href="privacy.html">Privacy</a>
+      <a href="terms.html">Terms</a>
+      <a href="help.html">Help</a>
     </div>
   </footer>
-    
 </body>
 </html>
