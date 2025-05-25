@@ -28,6 +28,24 @@
     </div>
   </div>
 
+  <!-- Notice Modal -->
+<div id="noticeModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+  <div class="bg-white max-w-lg w-full rounded-xl shadow-lg p-6 text-center">
+    <h2 class="text-xl font-bold text-green-600 mb-4">Notice</h2>
+    <p class="text-gray-700 mb-4">
+      All tasks, talents, and services currently listed on <strong>Nova Prime</strong> are <strong>open and available for bidding</strong>. Any listings that have reached their target have been <strong>removed at the client’s request</strong>.
+    </p>
+    <p class="text-gray-700 mb-6">
+      We guarantee that <strong>no listings are removed with pending payments</strong> — all payments are fully processed before removal.
+      Everything you see is <strong>live, active, and ready</strong>. Your skills are needed and welcomed.
+    </p>
+    <button onclick="closeNoticeModal()" class="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg">
+      Got it
+    </button>
+  </div>
+</div>
+
+
   <script>
     const tasks = [
 {
@@ -5724,6 +5742,32 @@
       </div>
     </div>
   </footer>
-    
+
+    <script>
+  const modalKey = 'nova_notice_last_seen';
+  const sixHours = 6 * 60 * 60 * 1000;
+
+  function shouldShowNotice() {
+    const lastSeen = localStorage.getItem(modalKey);
+    if (!lastSeen) return true;
+    return Date.now() - parseInt(lastSeen, 10) > sixHours;
+  }
+
+  function showNoticeModal() {
+    document.getElementById('noticeModal').classList.remove('hidden');
+  }
+
+  function closeNoticeModal() {
+    document.getElementById('noticeModal').classList.add('hidden');
+    localStorage.setItem(modalKey, Date.now().toString());
+  }
+
+  window.addEventListener('DOMContentLoaded', () => {
+    if (shouldShowNotice()) {
+      showNoticeModal();
+    }
+  });
+</script>
+
 </body>
 </html>
