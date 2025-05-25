@@ -1,211 +1,152 @@
 <!DOCTYPE html>
-<html lang="en" >
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>My Bids - Nova Prime</title>
+  <title>Nova Prime - Account Overview</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <style>
-    #notifyToast {
-      position: fixed;
-      top: 1rem;
-      right: 1rem;
-      background-color: #16a34a;
-      color: white;
-      padding: 1rem 1.5rem;
-      border-radius: 0.5rem;
-      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-      display: none;
-      z-index: 9999;
-      font-weight: 600;
-      min-width: 250px;
-    }
-
-    .modal {
-      display: none;
-      position: fixed;
-      z-index: 99999;
-      left: 0;
-      top: 0;
-      width: 100%;
-      height: 100%;
-      overflow: auto;
-      background-color: rgba(0,0,0,0.4);
-    }
-
-    .modal-content {
-      background-color: #fff;
-      margin: 15% auto;
-      padding: 2rem;
-      border: 1px solid #ccc;
-      width: 90%;
-      max-width: 400px;
-      border-radius: 0.5rem;
-    }
-  </style>
 </head>
-<body class="bg-gray-100 font-sans">
-
-  <!-- ✅ Fixed Full-Width Header -->
-  <header class="fixed top-0 left-0 w-full bg-white shadow p-4 flex justify-between items-center z-50">
+<body class="bg-gray-100 font-sans min-h-screen flex flex-col">
+  <!-- Top Bar -->
+  <header class="bg-white shadow p-4 flex justify-between items-center">
     <h1 class="text-2xl font-bold text-green-600">Nova Prime</h1>
-    <div class="text-sm text-gray-600 text-right">
+    <div class="text-sm text-gray-600">
       <span id="welcomeName">User</span><br />
       <span class="text-xs text-gray-500">User ID: <span id="userId">0000000000</span></span>
     </div>
   </header>
 
-  <!-- Main Content With Padding -->
-  <main class="pt-24 px-6">
-    <div class="max-w-4xl mx-auto bg-white p-6 rounded-lg shadow-md">
-      <h1 class="text-2xl font-bold text-green-600 mb-6">My Bids</h1>
-      <div id="bidsContainer" class="space-y-4"></div>
-    </div>
+  <!-- Main Section -->
+  <main class="max-w-5xl mx-auto mt-8 p-4 flex-grow">
+    <!-- Balance Overview -->
+    <section class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+      <div class="bg-white p-4 sm:p-6 rounded-xl shadow text-center">
+        <p class="text-gray-500 text-sm sm:text-base">Total Balance</p>
+        <h2 id="totalBalance" class="text-xl sm:text-2xl font-bold text-green-600">$0.00</h2>
+      </div>
+      <div class="bg-white p-4 sm:p-6 rounded-xl shadow text-center">
+        <p class="text-gray-500 text-sm sm:text-base">Available</p>
+        <h2 id="availableBalance" class="text-lg sm:text-xl font-semibold">$0.00</h2>
+      </div>
+      <div class="bg-white p-4 sm:p-6 rounded-xl shadow text-center">
+        <p class="text-gray-500 text-sm sm:text-base">Pending</p>
+        <h2 class="text-lg sm:text-xl font-semibold">$0.00</h2>
+      </div>
+      <div class="bg-white p-4 sm:p-6 rounded-xl shadow text-center">
+        <p class="text-gray-500 text-sm sm:text-base">Credits</p>
+        <h2 id="creditBalance" class="text-lg sm:text-xl font-semibold">$0.00</h2>
+      </div>
+    </section>
+
+    <!-- Action Buttons -->
+    <section class="flex flex-wrap gap-4 mb-6">
+      <a href="deposit.html" class="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg">Deposit</a>
+      <a href="withdraw.html" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg">Withdraw</a>
+      <a href="transfer.html" class="bg-gray-600 hover:bg-gray-700 text-white px-6 py-2 rounded-lg">Transfer</a>
+    </section>
+
+    <!-- Recent Transactions -->
+    <section class="bg-white p-6 rounded-xl shadow min-h-[200px]">
+      <h3 class="text-xl font-semibold mb-4 text-gray-800">Recent Transactions</h3>
+      <ul class="space-y-4" id="transactionList">
+        <!-- Transactions will appear here -->
+      </ul>
+    </section>
   </main>
 
-  <div id="notifyToast">Payment verified successfully, Your account has been funded!</div>
-  <audio id="notifySound" src="https://actions.google.com/sounds/v1/alarms/digital_watch_alarm_long.ogg" preload="auto"></audio>
-
-  <!-- Modal -->
-  <div id="verificationModal" class="modal">
-    <div class="modal-content">
-      <h2 class="text-lg font-semibold mb-4">Enter Verification Code</h2>
-      <input id="verificationInput" type="text" placeholder="Code" class="w-full px-3 py-2 mb-4 border rounded" />
-      <div class="flex justify-end space-x-2">
-        <button onclick="closeModal()" class="bg-gray-400 text-white px-4 py-2 rounded">Cancel</button>
-        <button onclick="confirmVerification()" class="bg-green-600 text-white px-4 py-2 rounded">Confirm</button>
+ <footer class="bg-white border-t mt-12">
+    <footer class="fixed bottom-0 left-0 w-full bg-white text-center py-4 text-gray-500 text-sm z-50 shadow">
+      <p>&copy; 2025 Nova Prime. All rights reserved.</p>
+      <div class="space-x-4">
+        <a href="privacy.html" class="hover:text-green-600">Privacy</a>
+        <a href="terms.html" class="hover:text-green-600">Terms</a>
+        <a href="help.html" class="hover:text-green-600">Help</a>
       </div>
-    </div>
-  </div>
-
-  <script>
-    const verificationCode = '1234';
-    let selectedBidIndex = null;
-
-    let bids = JSON.parse(localStorage.getItem('bids') || '[]');
-    const bidsContainer = document.getElementById('bidsContainer');
-    const notifyToast = document.getElementById('notifyToast');
-    const notifySound = document.getElementById('notifySound');
-
-    const modal = document.getElementById('verificationModal');
-    const verificationInput = document.getElementById('verificationInput');
-
-    function openModal(index) {
-      selectedBidIndex = index;
-      verificationInput.value = '';
-      modal.style.display = 'block';
-    }
-
-    function closeModal() {
-      modal.style.display = 'none';
-      selectedBidIndex = null;
-    }
-
-    function confirmVerification() {
-      const input = verificationInput.value.trim();
-      if (input === verificationCode && selectedBidIndex !== null) {
-        let bid = bids[selectedBidIndex];
-        if (bid.status === 'Paid') return;
-
-        bids[selectedBidIndex].status = 'Paid';
-        let balance = parseFloat(localStorage.getItem('balance') || '0');
-        balance += parseFloat(bid.amount);
-        localStorage.setItem('balance', balance.toFixed(2));
-
-        const transactions = JSON.parse(localStorage.getItem('transactions') || '[]');
-        transactions.unshift({
-          id: bid.taskId,
-          type: 'Task Payment',
-          amount: bid.amount,
-          date: bid.date,
-          time: bid.time,
-          status: 'Paid'
-        });
-        localStorage.setItem('transactions', JSON.stringify(transactions));
-
-        const paidTasks = JSON.parse(localStorage.getItem('paidTasks') || '[]');
-        if (!paidTasks.some(t => t.id === bid.taskId)) {
-          paidTasks.push({
-            id: bid.taskId,
-            amount: bid.amount,
-            date: bid.date,
-            time: bid.time
-          });
-          localStorage.setItem('paidTasks', JSON.stringify(paidTasks));
-        }
-
-        localStorage.setItem('bids', JSON.stringify(bids));
-        renderBids();
-        closeModal();
-        showNotification('Payment verified successfully, Your account has been funded!');
-        setTimeout(() => window.location.href = 'account.html', 1500);
-      } else {
-        verificationInput.classList.add('border-red-500');
-      }
-    }
-
-    function formatDateTime(dateStr, timeStr) {
-      return `${dateStr} ${timeStr}`;
-    }
-
-    function showNotification(message) {
-      notifyToast.textContent = message;
-      notifyToast.style.display = 'block';
-      notifySound.play();
-      setTimeout(() => {
-        notifyToast.style.display = 'none';
-      }, 4000);
-    }
-
-    function renderBids() {
-      bidsContainer.innerHTML = '';
-      if (bids.length === 0) {
-        bidsContainer.innerHTML = '<p class="text-gray-500">No bids placed yet.</p>';
-        return;
-      }
-
-      bids.sort((a, b) => (a.status === 'Paid') - (b.status === 'Paid'));
-
-      bids.forEach((bid, index) => {
-        const statusColor = bid.status === 'Paid' ? 'text-green-600' : 'text-red-600';
-        const statusText = bid.status;
-
-        const bidEl = document.createElement('div');
-        bidEl.className = 'flex justify-between items-center border rounded p-4 bg-gray-50 shadow-sm';
-
-        bidEl.innerHTML = `
-          <div class="flex-1">
-            <p><span class="font-semibold">Task ID:</span> ${bid.taskId}</p>
-            <p><span class="font-semibold">Amount:</span> $${bid.amount}</p>
-            <p><span class="font-semibold">Date & Time:</span> ${formatDateTime(bid.date, bid.time)}</p>
-            <p><span class="font-semibold">Status:</span> <span class="${statusColor}">${statusText}</span></p>
-          </div>
-          <div class="ml-4">
-            ${bid.status === 'Paid' ? '' : `
-              <button 
-                class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded"
-                onclick="openModal(${index})"
-              >Verify</button>
-            `}
-          </div>
-        `;
-
-        bidsContainer.appendChild(bidEl);
-      });
-    }
-
-    renderBids();
-  </script>
-
-  <!-- Footer -->
-  <footer class="fixed bottom-0 left-0 w-full bg-white text-center py-4 text-gray-500 text-sm z-50 shadow">
-    <p>&copy; 2025 Nova Prime. All rights reserved.</p>
-    <div class="space-x-4">
-      <a href="privacy.html" class="hover:text-green-600">Privacy</a>
-      <a href="terms.html" class="hover:text-green-600">Terms</a>
-      <a href="help.html" class="hover:text-green-600">Help</a>
     </div>
   </footer>
 
+  <!-- Script -->
+  <script>
+    const fullName = localStorage.getItem('fullName') || 'User';
+    const mobileNumber = localStorage.getItem('mobileNumber') || '0000000000';
+    let balance = parseFloat(localStorage.getItem('balance') || '0');
+    const credits = parseFloat(localStorage.getItem('credits') || '0');
+    let transactions = JSON.parse(localStorage.getItem('transactions') || '[]');
+    const paidTasks = JSON.parse(localStorage.getItem('paidTasks') || '[]');
+    let newPaymentAdded = false;
+
+    // Add new task payments to transactions if not already logged
+    paidTasks.forEach(task => {
+      const alreadyLogged = transactions.some(tx => tx.id === task.id);
+      if (!alreadyLogged) {
+        const tx = {
+          id: task.id,
+          type: 'Task Payment',
+          amount: task.amount,
+          date: task.date,
+          time: task.time,
+          status: 'Paid'
+        };
+        transactions.push(tx);
+        balance += parseFloat(task.amount);
+        newPaymentAdded = true;
+      }
+    });
+
+    // Save updated transactions and balance
+    localStorage.setItem('transactions', JSON.stringify(transactions));
+    localStorage.setItem('balance', balance.toFixed(2));
+
+    if (newPaymentAdded) {
+      const audio = new Audio('https://notificationsounds.com/storage/sounds/file-sounds-1150-pristine.mp3');
+      audio.play();
+    }
+
+    // Display user info and balances
+    document.getElementById('welcomeName').textContent = fullName;
+    document.getElementById('userId').textContent = mobileNumber;
+    document.getElementById('totalBalance').textContent = `$${(balance + credits).toFixed(2)}`;
+    document.getElementById('availableBalance').textContent = `$${balance.toFixed(2)}`;
+    document.getElementById('creditBalance').textContent = `$${credits.toFixed(2)}`;
+
+    // Sort transactions by date and time descending (newest first)
+    transactions.sort((a, b) => {
+      const aDate = new Date(`${a.date} ${a.time}`);
+      const bDate = new Date(`${b.date} ${b.time}`);
+      return bDate - aDate;  // newest first
+    });
+
+    const transactionList = document.getElementById('transactionList');
+    if (transactions.length === 0) {
+      transactionList.innerHTML = '<li class="text-gray-400 text-sm">No transactions yet.</li>';
+    } else {
+      transactionList.innerHTML = ''; // clear before adding
+      transactions.forEach(tx => {
+        const li = document.createElement('li');
+        const isDeposit = tx.type === 'Deposit' || tx.type === 'Task Payment';
+        const isTransfer = tx.type === 'Transfer';
+        li.className = `p-4 rounded-lg shadow border-l-4 ${
+          isTransfer ? 'border-black bg-gray-50' : (isDeposit ? 'border-green-500 bg-green-50' : 'border-blue-500 bg-blue-50')
+        }`;
+        li.innerHTML = `
+          <div class="flex justify-between items-center">
+            <div>
+              <p class="font-semibold text-gray-800">${tx.type}</p>
+              <p class="text-xs text-gray-500">${tx.date} at ${tx.time}</p>
+            </div>
+            <div class="text-right">
+              <p class="text-lg font-bold ${
+                isTransfer ? 'text-black' : (isDeposit ? 'text-green-600' : 'text-blue-600')
+              }">
+                ${isTransfer ? '-' : (isDeposit ? '+' : '-')} $${parseFloat(tx.amount).toFixed(2)}
+              </p>
+              <p class="text-xs text-gray-400 mt-1">${tx.status || 'Completed'}</p>
+            </div>
+          </div>
+        `;
+        transactionList.appendChild(li);
+      });
+    }
+  </script>
 </body>
 </html>
