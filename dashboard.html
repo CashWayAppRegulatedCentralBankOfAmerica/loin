@@ -35,31 +35,21 @@
         resultContainer.appendChild(resultItem);
       });
     }
-</script>
-<!-- Navigation Bar -->
-<header class="bg-white shadow p-4">
-  <div class="flex items-center justify-between">
-    <!-- Left: Brand -->
-    <div class="text-2xl font-bold text-green-600">Nova Prime</div>
-
-    <!-- Right: Nav Links (wrap prevented, aligned right) -->
-    <nav class="hidden sm:flex space-x-4 text-sm ml-auto">
-      <a href="talent.html" class="hover:text-green-600">Find Talent</a>
-      <a href="task.html" class="hover:text-green-600">Find Work</a>
-      <a href="project.html" class="hover:text-green-600">My Projects</a>
-      <a href="account.html" class="hover:text-green-600">My Account</a>
-    </nav>
-  </div>
-
-  <!-- Small screen fallback (shown only on mobile) -->
-  <div class="flex sm:hidden flex-col mt-4 space-y-2 text-sm text-right">
-    <a href="talent.html" class="hover:text-green-600">Find Talent</a>
-    <a href="task.html" class="hover:text-green-600">Find Work</a>
-    <a href="project.html" class="hover:text-green-600">My Projects</a>
-    <a href="account.html" class="hover:text-green-600">My Account</a>
-  </div>
-</header>
-
+ </script>
+</head>
+<body class="bg-gray-50 text-gray-800">
+  <!-- Navigation Bar -->
+  <header class="bg-white shadow">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center flex-wrap">
+      <h1 class="text-2xl font-bold text-green-600">Nova Prime</h1>
+      <nav class="space-x-4 text-sm mt-2 sm:mt-0">
+        <a href="talent.html" class="hover:text-green-600">Find Talent</a>
+        <a href="task.html" class="hover:text-green-600">Find Work</a>
+        <a href="project.html" class="hover:text-green-600">My Projects</a>
+        <a href="account.html" class="hover:text-green-600">My Account</a> <!-- Changed to My Account -->
+      </nav>
+    </div>
+  </header>
   
   <!-- Hero Section -->
   <section class="py-12 sm:py-16">
