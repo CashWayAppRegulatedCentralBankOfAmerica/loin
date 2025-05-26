@@ -147,6 +147,18 @@
       <p class="text-sm mt-4 text-center">Don't have an account? <button onclick="toggleForm()" class="text-green-600 hover:underline">Sign up</button></p>
     </div>
 
+   <div id="novaModal" class="modal-overlay" style="display: none;">
+  <div class="modal-box">
+    <h2>Welcome to Nova Prime Inc</h2>
+    <p>
+      Nova Prime is a global freelancing marketplace headquartered in Amsterdam, United States.
+      Your location, provided during registration, determines services like payment methods.
+      Please enter accurate details for proper regional support.
+    </p>
+    <button onclick="closeModal()">Got it</button>
+  </div>
+</div>
+
     <div id="signup-form" class="bg-white p-8 shadow-md rounded-lg hidden">
       <h2 class="text-2xl font-bold text-green-600 mb-4">Create a Nova Prime Account</h2>
       <form class="space-y-4" onsubmit="handleSignup(event)">
@@ -183,6 +195,19 @@
       </div>
     </div>
   </footer>
+
+      <script>
+  // Show modal on page load
+  window.onload = function () {
+    document.getElementById("novaModal").style.display = "flex";
+  };
+
+  // Close modal
+  function closeModal() {
+    document.getElementById("novaModal").style.display = "none";
+  }
+</script>
+
       
 </body>
 </html>
