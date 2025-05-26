@@ -37,18 +37,29 @@
     }
 </script>
 <!-- Navigation Bar -->
-<header class="bg-white shadow p-4 flex items-center justify-between overflow-x-auto">
-  <!-- Left: Brand -->
-  <div class="text-2xl font-bold text-green-600 flex-shrink-0">Nova Prime</div>
+<header class="bg-white shadow p-4">
+  <div class="flex items-center justify-between">
+    <!-- Left: Brand -->
+    <div class="text-2xl font-bold text-green-600">Nova Prime</div>
 
-  <!-- Right: Nav Links (no wrap, scrollable if too tight) -->
-  <nav class="flex space-x-4 text-sm sm:text-base ml-auto whitespace-nowrap">
+    <!-- Right: Nav Links (wrap prevented, aligned right) -->
+    <nav class="hidden sm:flex space-x-4 text-sm ml-auto">
+      <a href="talent.html" class="hover:text-green-600">Find Talent</a>
+      <a href="task.html" class="hover:text-green-600">Find Work</a>
+      <a href="project.html" class="hover:text-green-600">My Projects</a>
+      <a href="account.html" class="hover:text-green-600">My Account</a>
+    </nav>
+  </div>
+
+  <!-- Small screen fallback (shown only on mobile) -->
+  <div class="flex sm:hidden flex-col mt-4 space-y-2 text-sm text-right">
     <a href="talent.html" class="hover:text-green-600">Find Talent</a>
     <a href="task.html" class="hover:text-green-600">Find Work</a>
     <a href="project.html" class="hover:text-green-600">My Projects</a>
     <a href="account.html" class="hover:text-green-600">My Account</a>
-  </nav>
+  </div>
 </header>
+
   
   <!-- Hero Section -->
   <section class="py-12 sm:py-16">
