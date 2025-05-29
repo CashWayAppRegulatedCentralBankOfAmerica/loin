@@ -2,468 +2,157 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Nova Prime | Login & Signup</title>
-  <link rel="icon" type="image/png" href="nova_favicon.png" />
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
-  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Nova Prime - Signup/Login</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/emailjs-com@2/dist/email.min.js"></script>
   <script>
-    document.addEventListener("DOMContentLoaded", function () {
-      emailjs.init("0ockMZ07aVnggqzsD");
-      loadRegisteredUsers();
-
-      // Add 5 example users if not already present
-      const exampleUsers = {
-        "alice@example.com": "AlicePass1!",
-        "bob@example.com": "BobPass2@",
-        "carol@example.com": "CarolPass3#",
-        "josphat@gmail.com": "1234",
-        "eve@example.com": "EvePass5%"
-      };
-
-      // Normalize all keys to lowercase, then add examples if missing
-      for (const [email, pass] of Object.entries(exampleUsers)) {
-        const normalizedEmail = email.toLowerCase();
-        if (!registeredUsers[normalizedEmail]) {
-          registeredUsers[normalizedEmail] = pass;
-        }
-      }
-      saveRegisteredUsers();
-
-      // If user already logged in, redirect (optional)
-      const loggedInUser = localStorage.getItem('loggedInUser');
-      if (loggedInUser) {
-        window.location.href = "dashboard.html";
-      }
-    });
-
-    const suspendedUsers = ["JACKREALKENYA@GMAIL.com", "suspended1@example.com", "blockeduser@example.com"];
-    let registeredUsers = {};
-
-    function loadRegisteredUsers() {
-      const users = localStorage.getItem("registeredUsers");
-      if (users) {
-        registeredUsers = JSON.parse(users);
-      }
-    }
-
-    function saveRegisteredUsers() {
-      localStorage.setItem("registeredUsers", JSON.stringify(registeredUsers));
-    }
-
-    function toggleForm() {
-      document.getElementById('login-form').classList.toggle('hidden');
-      document.getElementById('signup-form').classList.toggle('hidden');
-      document.getElementById('modal').classList.add('hidden');
-    }
-
-    function showModal(message, redirectToLogin = false) {
-      const modal = document.getElementById('modal');
-      document.getElementById('modal-message').innerText = message;
-      modal.classList.remove('hidden');
-      if (redirectToLogin) {
-        document.getElementById('modal-ok-btn').onclick = () => {
-          modal.classList.add('hidden');
-          document.getElementById('signup-form').classList.add('hidden');
-          document.getElementById('login-form').classList.remove('hidden');
-        };
-      } else {
-        document.getElementById('modal-ok-btn').onclick = () => modal.classList.add('hidden');
-      }
-    }
-
-    function handleLogin(event) {
-      event.preventDefault();
-      const email = document.getElementById('login-email').value.trim().toLowerCase();
-      const password = document.getElementById('login-password').value.trim();
-
-      const isSuspended = suspendedUsers.some(user => user.toLowerCase() === email);
-      if (isSuspended) {
-        showModal("Your account has been suspended. Please contact support.");
-        return;
-      }
-
-      if (registeredUsers[email] === password) {
-        localStorage.setItem('loggedInUser', email);
-        showModal("Login successful! Redirecting...");
-        setTimeout(() => {
-          window.location.href = "dashboard.html";
-        }, 1500);
-      } else {
-        showModal("Login failed. Please check your credentials.");
-      }
-    }
-
-    function handleSignup(event) {
-      event.preventDefault();
-      const name = document.getElementById('signup-name').value.trim();
-      const email = document.getElementById('signup-email').value.trim().toLowerCase();
-      const password = document.getElementById('signup-password').value.trim();
-      const confirm = document.getElementById('signup-confirm-password').value.trim();
-      const phone = document.getElementById('signup-phone').value.trim();
-      const code = document.getElementById('signup-code').value;
-      const nationality = document.getElementById('signup-nationality').value;
-      const county = document.getElementById('signup-county').value.trim();
-      const postal = document.getElementById('signup-postal').value.trim();
-      const gender = document.getElementById('signup-gender').value;
-      const agree = document.getElementById('signup-terms').checked;
-
-      if (!agree) {
-        showModal("You must agree to the terms and conditions.");
-        return;
-      }
-
-      if (password !== confirm) {
-        showModal("Passwords do not match.");
-        return;
-      }
-
-      if (registeredUsers[email]) {
-        showModal("This email is already registered.");
-        return;
-      }
-
-      registeredUsers[email] = password;
-      saveRegisteredUsers();
-
-      // Initialize user-specific data
-      localStorage.setItem(`balance_${email}`, JSON.stringify({ main: 0, credit: 0 }));
-      localStorage.setItem(`transactions_${email}`, JSON.stringify([]));
-
-      localStorage.setItem('fullName', name);
-      localStorage.setItem('mobileNumber', `${code} ${phone}`);
-
-      const templateParams = {
-        name,
-        email,
-        password,
-        phone: `${code} ${phone}`,
-        nationality,
-        county,
-        postal,
-        gender
-      };
-
-      emailjs.send("service_g5v9kbm", "template_eelornk", templateParams)
-        .then(() => {
-          showModal("Registration successful! Please wait for approval.", true);
-        })
-        .catch(() => {
-          showModal("Error submitting registration. Please try again.");
-        });
-    }
+    (function () {
+      emailjs.init("R9-YZk_5v47lLEFLX");
+    })();
   </script>
 </head>
-<body class="bg-gray-100 text-gray-800 min-h-screen flex items-center justify-center">
-  <div class="container mx-auto px-4 py-12 max-w-md">
-    <div id="login-form" class="bg-white p-8 shadow-md rounded-lg">
-      <h2 class="text-2xl font-bold text-green-600 mb-4">Login to Nova Prime</h2>
-      <form class="space-y-4" onsubmit="handleLogin(event)">
-        <div>
-          <label class="block text-sm font-medium">Email</label>
-          <input id="login-email" type="email" class="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-green-500" required />
-        </div>
-        <div>
-          <label class="block text-sm font-medium">Password</label>
-          <input id="login-password" type="password" class="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-green-500" required />
-        </div>
-        <button type="submit" class="w-full bg-green-600 text-white py-2 rounded hover:bg-green-700 transition">Login</button>
-      </form>
-      <p class="text-sm mt-4 text-center">
-        Don't have an account? <button onclick="toggleForm()" class="text-green-600 hover:underline">Sign up</button>
-      </p>
-    </div>
+<body class="bg-white text-gray-900 font-sans">
 
-    <div id="signup-form" class="bg-white p-8 shadow-md rounded-lg hidden">
-      <h2 class="text-2xl font-bold text-green-600 mb-4">Create a Nova Prime Account</h2>
-      <form class="space-y-4" onsubmit="handleSignup(event)">
-        <div>
-          <label class="block text-sm font-medium">Full Name</label>
-          <input id="signup-name" type="text" class="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-green-500" required />
-        </div>
-        <div>
-          <label class="block text-sm font-medium">Email</label>
-          <input id="signup-email" type="email" class="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-green-500" required />
-        </div>
-        <div>
-          <label class="block text-sm font-medium">Password</label>
-          <input id="signup-password" type="password" class="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-green-500" required />
-        </div>
-        <div>
-          <label class="block text-sm font-medium">Confirm Password</label>
-          <input id="signup-confirm-password" type="password" class="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-green-500" required />
-        </div>
-        <div>
-  <label class="block font-semibold mb-1">Country</label>
-  <select id="countrySelect" class="w-full border rounded-lg px-4 py-2" required></select>
-</div>
-        <div>
-  <label class="block font-semibold mb-1">Phone Number</label>
-  <div class="flex">
-    <input id="phoneCode" type="text" class="w-24 border rounded-l-lg px-3 py-2 bg-gray-100" readonly>
-    <input id="phoneNumber" type="tel" class="flex-1 border-t border-b border-r rounded-r-lg px-4 py-2" required>
-  </div>
-</div>
-        <div>
-          <label class="block text-sm font-medium">County</label>
-          <input id="signup-county" type="text" class="w-full px-4 py-2 border rounded" required />
-        </div>
-        <div>
-          <label class="block text-sm font-medium">Postal Address</label>
-          <input id="signup-postal" type="text" class="w-full px-4 py-2 border rounded" required />
-        </div>
-        <div>
-          <label class="block text-sm font-medium">Sex</label>
-          <select id="signup-gender" class="w-full px-4 py-2 border rounded">
-            <option value="Male">Male</option>
-            <option value="Female">Female</option>
-          </select>
-        </div>
-        <div>
-          <label class="inline-flex items-center"
-            ><input
-              type="checkbox"
-              id="signup-terms"
-              class="form-checkbox text-green-600 mr-2"
-              required
-            /><span class="text-sm">I agree to the terms and conditions</span></label
-          >
-        </div>
-        <button
-          type="submit"
-          class="w-full bg-green-600 text-white py-2 rounded hover:bg-green-700 transition"
-        >
-          Sign Up
-        </button>
-      </form>
-      <p class="text-sm mt-4 text-center">
-        Already have an account? <button onclick="toggleForm()" class="text-green-600 hover:underline">Sign in</button>
-      </p>
-    </div>
+  <div class="min-h-screen flex items-center justify-center">
+    <div class="w-full max-w-4xl grid grid-cols-1 md:grid-cols-2 gap-4 p-4">
+      
+      <!-- Signup Card -->
+      <div class="border rounded-2xl shadow-lg p-6">
+        <h2 class="text-xl font-bold mb-4 text-green-700">Create Account</h2>
+        <form id="signup-form" class="space-y-4">
+          <div>
+            <label class="block text-sm font-medium">Full Name</label>
+            <input type="text" id="signup-name" class="w-full px-4 py-2 border rounded" required />
+          </div>
+          <div>
+            <label class="block text-sm font-medium">Email</label>
+            <input type="email" id="signup-email" class="w-full px-4 py-2 border rounded" required />
+          </div>
+          <div>
+            <label class="block text-sm font-medium">Country</label>
+            <select id="signup-country" class="w-full px-4 py-2 border rounded" onchange="updatePhoneCode()" required>
+              <option value="Kenya">Kenya</option>
+              <option value="Nigeria">Nigeria</option>
+              <option value="United States">United States</option>
+              <option value="United Kingdom">United Kingdom</option>
+              <option value="India">India</option>
+            </select>
+          </div>
+          <div class="flex space-x-2">
+            <input type="text" id="signup-code" class="w-1/3 px-4 py-2 border rounded" placeholder="+254" readonly />
+            <input type="text" id="signup-phone" class="w-2/3 px-4 py-2 border rounded" placeholder="712345678" required />
+          </div>
+          <div>
+            <label class="block text-sm font-medium">Password</label>
+            <input type="password" id="signup-password" class="w-full px-4 py-2 border rounded" required />
+          </div>
+          <button type="submit" class="w-full bg-green-600 hover:bg-green-700 text-white py-2 rounded">
+            Sign Up
+          </button>
+        </form>
+      </div>
 
-    <div
-      id="modal"
-      class="hidden fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center z-50"
-    >
-      <div class="bg-white rounded-lg p-6 shadow-lg max-w-sm text-center">
-        <p id="modal-message" class="text-gray-800 mb-4"></p>
-        <button
-          id="modal-ok-btn"
-          class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition"
-        >
-          OK
-        </button>
+      <!-- Login Card -->
+      <div class="border rounded-2xl shadow-lg p-6">
+        <h2 class="text-xl font-bold mb-4 text-green-700">Login</h2>
+        <form id="login-form" class="space-y-4">
+          <div>
+            <label class="block text-sm font-medium">Email</label>
+            <input type="email" id="login-email" class="w-full px-4 py-2 border rounded" required />
+          </div>
+          <div>
+            <label class="block text-sm font-medium">Password</label>
+            <input type="password" id="login-password" class="w-full px-4 py-2 border rounded" required />
+          </div>
+          <button type="submit" class="w-full bg-green-600 hover:bg-green-700 text-white py-2 rounded">
+            Login
+          </button>
+        </form>
       </div>
     </div>
   </div>
 
-  <footer class="bg-white border-t mt-12">
-    <footer
-      class="fixed bottom-0 left-0 w-full bg-white text-center py-4 text-gray-500 text-sm z-50 shadow"
-    >
-      <p>&copy; 2025 Nova Prime Inc. All rights reserved.</p>
-      <div class="space-x-4">
-        <a href="privacy.html" class="hover:text-green-600">Privacy</a>
-        <a href="terms.html" class="hover:text-green-600">Terms</a>
-        <a href="help.html" class="hover:text-green-600">Help</a>
-      </div>
-    </footer>
-  </footer>
+  <!-- Modal -->
+  <div id="modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
+    <div class="bg-white p-6 rounded shadow-lg text-center">
+      <p id="modal-message" class="text-lg font-medium"></p>
+      <button onclick="closeModal()" class="mt-4 px-4 py-2 bg-green-600 text-white rounded">Close</button>
+    </div>
+  </div>
+
   <script>
-const countryData = [
-  { name: "Afghanistan", code: "+93" },
-  { name: "Albania", code: "+355" },
-  { name: "Algeria", code: "+213" },
-  { name: "Andorra", code: "+376" },
-  { name: "Angola", code: "+244" },
-  { name: "Argentina", code: "+54" },
-  { name: "Armenia", code: "+374" },
-  { name: "Australia", code: "+61" },
-  { name: "Austria", code: "+43" },
-  { name: "Azerbaijan", code: "+994" },
-  { name: "Bahamas", code: "+1-242" },
-  { name: "Bahrain", code: "+973" },
-  { name: "Bangladesh", code: "+880" },
-  { name: "Barbados", code: "+1-246" },
-  { name: "Belarus", code: "+375" },
-  { name: "Belgium", code: "+32" },
-  { name: "Belize", code: "+501" },
-  { name: "Benin", code: "+229" },
-  { name: "Bhutan", code: "+975" },
-  { name: "Bolivia", code: "+591" },
-  { name: "Bosnia and Herzegovina", code: "+387" },
-  { name: "Botswana", code: "+267" },
-  { name: "Brazil", code: "+55" },
-  { name: "Brunei", code: "+673" },
-  { name: "Bulgaria", code: "+359" },
-  { name: "Burkina Faso", code: "+226" },
-  { name: "Burundi", code: "+257" },
-  { name: "Cambodia", code: "+855" },
-  { name: "Cameroon", code: "+237" },
-  { name: "Canada", code: "+1" },
-  { name: "Cape Verde", code: "+238" },
-  { name: "Central African Republic", code: "+236" },
-  { name: "Chad", code: "+235" },
-  { name: "Chile", code: "+56" },
-  { name: "China", code: "+86" },
-  { name: "Colombia", code: "+57" },
-  { name: "Comoros", code: "+269" },
-  { name: "Congo", code: "+242" },
-  { name: "Costa Rica", code: "+506" },
-  { name: "Croatia", code: "+385" },
-  { name: "Cuba", code: "+53" },
-  { name: "Cyprus", code: "+357" },
-  { name: "Czech Republic", code: "+420" },
-  { name: "Denmark", code: "+45" },
-  { name: "Djibouti", code: "+253" },
-  { name: "Dominica", code: "+1-767" },
-  { name: "Dominican Republic", code: "+1-809" },
-  { name: "DR Congo", code: "+243" },
-  { name: "Ecuador", code: "+593" },
-  { name: "Egypt", code: "+20" },
-  { name: "El Salvador", code: "+503" },
-  { name: "Equatorial Guinea", code: "+240" },
-  { name: "Eritrea", code: "+291" },
-  { name: "Estonia", code: "+372" },
-  { name: "Eswatini", code: "+268" },
-  { name: "Ethiopia", code: "+251" },
-  { name: "Fiji", code: "+679" },
-  { name: "Finland", code: "+358" },
-  { name: "France", code: "+33" },
-  { name: "Gabon", code: "+241" },
-  { name: "Gambia", code: "+220" },
-  { name: "Georgia", code: "+995" },
-  { name: "Germany", code: "+49" },
-  { name: "Ghana", code: "+233" },
-  { name: "Greece", code: "+30" },
-  { name: "Grenada", code: "+1-473" },
-  { name: "Guatemala", code: "+502" },
-  { name: "Guinea", code: "+224" },
-  { name: "Guyana", code: "+592" },
-  { name: "Haiti", code: "+509" },
-  { name: "Honduras", code: "+504" },
-  { name: "Hungary", code: "+36" },
-  { name: "Iceland", code: "+354" },
-  { name: "India", code: "+91" },
-  { name: "Indonesia", code: "+62" },
-  { name: "Iran", code: "+98" },
-  { name: "Iraq", code: "+964" },
-  { name: "Ireland", code: "+353" },
-  { name: "Israel", code: "+972" },
-  { name: "Italy", code: "+39" },
-  { name: "Jamaica", code: "+1-876" },
-  { name: "Japan", code: "+81" },
-  { name: "Jordan", code: "+962" },
-  { name: "Kazakhstan", code: "+7" },
-  { name: "Kenya", code: "+254" },
-  { name: "Kuwait", code: "+965" },
-  { name: "Kyrgyzstan", code: "+996" },
-  { name: "Laos", code: "+856" },
-  { name: "Latvia", code: "+371" },
-  { name: "Lebanon", code: "+961" },
-  { name: "Lesotho", code: "+266" },
-  { name: "Liberia", code: "+231" },
-  { name: "Libya", code: "+218" },
-  { name: "Lithuania", code: "+370" },
-  { name: "Luxembourg", code: "+352" },
-  { name: "Madagascar", code: "+261" },
-  { name: "Malawi", code: "+265" },
-  { name: "Malaysia", code: "+60" },
-  { name: "Maldives", code: "+960" },
-  { name: "Mali", code: "+223" },
-  { name: "Malta", code: "+356" },
-  { name: "Mauritania", code: "+222" },
-  { name: "Mauritius", code: "+230" },
-  { name: "Mexico", code: "+52" },
-  { name: "Moldova", code: "+373" },
-  { name: "Monaco", code: "+377" },
-  { name: "Mongolia", code: "+976" },
-  { name: "Montenegro", code: "+382" },
-  { name: "Morocco", code: "+212" },
-  { name: "Mozambique", code: "+258" },
-  { name: "Myanmar", code: "+95" },
-  { name: "Namibia", code: "+264" },
-  { name: "Nepal", code: "+977" },
-  { name: "Netherlands", code: "+31" },
-  { name: "New Zealand", code: "+64" },
-  { name: "Nicaragua", code: "+505" },
-  { name: "Niger", code: "+227" },
-  { name: "Nigeria", code: "+234" },
-  { name: "North Korea", code: "+850" },
-  { name: "North Macedonia", code: "+389" },
-  { name: "Norway", code: "+47" },
-  { name: "Oman", code: "+968" },
-  { name: "Pakistan", code: "+92" },
-  { name: "Palestine", code: "+970" },
-  { name: "Panama", code: "+507" },
-  { name: "Papua New Guinea", code: "+675" },
-  { name: "Paraguay", code: "+595" },
-  { name: "Peru", code: "+51" },
-  { name: "Philippines", code: "+63" },
-  { name: "Poland", code: "+48" },
-  { name: "Portugal", code: "+351" },
-  { name: "Qatar", code: "+974" },
-  { name: "Romania", code: "+40" },
-  { name: "Russia", code: "+7" },
-  { name: "Rwanda", code: "+250" },
-  { name: "Saudi Arabia", code: "+966" },
-  { name: "Senegal", code: "+221" },
-  { name: "Serbia", code: "+381" },
-  { name: "Seychelles", code: "+248" },
-  { name: "Sierra Leone", code: "+232" },
-  { name: "Singapore", code: "+65" },
-  { name: "Slovakia", code: "+421" },
-  { name: "Slovenia", code: "+386" },
-  { name: "Somalia", code: "+252" },
-  { name: "South Africa", code: "+27" },
-  { name: "South Korea", code: "+82" },
-  { name: "South Sudan", code: "+211" },
-  { name: "Spain", code: "+34" },
-  { name: "Sri Lanka", code: "+94" },
-  { name: "Sudan", code: "+249" },
-  { name: "Suriname", code: "+597" },
-  { name: "Sweden", code: "+46" },
-  { name: "Switzerland", code: "+41" },
-  { name: "Syria", code: "+963" },
-  { name: "Taiwan", code: "+886" },
-  { name: "Tajikistan", code: "+992" },
-  { name: "Tanzania", code: "+255" },
-  { name: "Thailand", code: "+66" },
-  { name: "Togo", code: "+228" },
-  { name: "Trinidad and Tobago", code: "+1-868" },
-  { name: "Tunisia", code: "+216" },
-  { name: "Turkey", code: "+90" },
-  { name: "Turkmenistan", code: "+993" },
-  { name: "Uganda", code: "+256" },
-  { name: "Ukraine", code: "+380" },
-  { name: "United Arab Emirates", code: "+971" },
-  { name: "United Kingdom", code: "+44" },
-  { name: "United States", code: "+1" },
-  { name: "Uruguay", code: "+598" },
-  { name: "Uzbekistan", code: "+998" },
-  { name: "Vanuatu", code: "+678" },
-  { name: "Vatican City", code: "+379" },
-  { name: "Venezuela", code: "+58" },
-  { name: "Vietnam", code: "+84" },
-  { name: "Yemen", code: "+967" },
-  { name: "Zambia", code: "+260" },
-  { name: "Zimbabwe", code: "+263" }
-];
+    const countryPhoneCodes = {
+      "Kenya": "+254",
+      "Nigeria": "+234",
+      "United States": "+1",
+      "United Kingdom": "+44",
+      "India": "+91"
+    };
 
-const select = document.getElementById("countrySelect");
-const phoneCode = document.getElementById("phoneCode");
+    function updatePhoneCode() {
+      const country = document.getElementById("signup-country").value;
+      const code = countryPhoneCodes[country] || "";
+      document.getElementById("signup-code").value = code;
+    }
 
-countryData.forEach(c => {
-  const opt = document.createElement("option");
-  opt.value = c.code;
-  opt.textContent = c.name;
-  select.appendChild(opt);
-});
+    document.addEventListener("DOMContentLoaded", function () {
+      // Modal Functions
+      function showModal(message) {
+        document.getElementById("modal-message").textContent = message;
+        document.getElementById("modal").classList.remove("hidden");
+      }
 
-select.addEventListener("change", () => {
-  phoneCode.value = select.value;
-});
-</script>
+      window.closeModal = function () {
+        document.getElementById("modal").classList.add("hidden");
+      };
+
+      // Signup Form
+      document.getElementById("signup-form").addEventListener("submit", function (e) {
+        e.preventDefault();
+
+        const name = document.getElementById("signup-name").value;
+        const email = document.getElementById("signup-email").value;
+        const country = document.getElementById("signup-country").value;
+        const phone = document.getElementById("signup-code").value + document.getElementById("signup-phone").value;
+        const password = document.getElementById("signup-password").value;
+
+        const user = { name, email, country, phone, password };
+        localStorage.setItem("novaUser:" + email, JSON.stringify(user));
+
+        const templateParams = {
+          name,
+          email,
+          country,
+          phone,
+          password
+        };
+
+        emailjs.send("service_0gqbgjq", "template_lf4mxxn", templateParams)
+          .then(() => {
+            showModal("Signup successful! Welcome to Nova Prime.");
+            document.getElementById("signup-form").reset();
+          }, () => {
+            showModal("Signup successful (email not sent). Welcome to Nova Prime.");
+          });
+      });
+
+      // Login Form
+      document.getElementById("login-form").addEventListener("submit", function (e) {
+        e.preventDefault();
+
+        const email = document.getElementById("login-email").value;
+        const password = document.getElementById("login-password").value;
+        const storedUser = JSON.parse(localStorage.getItem("novaUser:" + email));
+
+        if (storedUser && storedUser.password === password) {
+          showModal("Login successful. Welcome back to Nova Prime!");
+        } else {
+          showModal("Invalid email or password.");
+        }
+      });
+    });
+  </script>
 
 </body>
 </html>
