@@ -9,25 +9,19 @@
   <script>
     // Mock function to simulate search result fetching
     function searchItems(query) {
-      // Normally here we would fetch from a database or API
       const items = [
         { name: 'UI/UX Designer', link: 'task.html' },
         { name: 'Web Developer', link: 'task.html' },
         { name: 'Content Writer', link: 'task.html' }
       ];
-      
       return items.filter(item => item.name.toLowerCase().includes(query.toLowerCase()));
     }
 
-    // Function to handle search
     function handleSearch() {
       const searchQuery = document.getElementById('search-input').value;
       const results = searchItems(searchQuery);
-      
-      // Display results - here you can modify it to show results dynamically
       const resultContainer = document.getElementById('search-results');
-      resultContainer.innerHTML = ''; // Clear previous results
-
+      resultContainer.innerHTML = '';
       results.forEach(item => {
         const resultItem = document.createElement('div');
         resultItem.classList.add('bg-white', 'shadow', 'p-4', 'rounded', 'text-center', 'mb-4');
@@ -35,117 +29,101 @@
         resultContainer.appendChild(resultItem);
       });
     }
- </script>
-<header class="fixed top-0 left-0 w-full z-50 bg-white shadow">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center flex-wrap">
-    <h1 class="text-2xl font-bold text-green-600">Nova Prime</h1>
-    <nav class="space-x-4 text-sm mt-2 sm:mt-0">
-      <a href="client.html" class="hover:text-green-600">Find Talent</a>
-      <a href="task.html" class="hover:text-green-600">Find Work</a>
-      <a href="project.html" class="hover:text-green-600">My Projects</a>
-      <a href="account.html" class="hover:text-green-600">My Account</a>
-    </nav>
-  </div>
-</header>
+  </script>
+</head>
+<body class="bg-gray-50 text-gray-800">
+  <!-- Navigation Bar -->
+  <header class="fixed top-0 left-0 w-full z-50 bg-white shadow">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center flex-wrap">
+      <h1 class="text-2xl font-bold text-green-600">Nova Prime</h1>
+      <nav class="space-x-4 text-sm mt-2 sm:mt-0">
+        <a href="client.html" class="hover:text-green-600">Find Talent</a>
+        <a href="task.html" class="hover:text-green-600">Find Work</a>
+        <a href="project.html" class="hover:text-green-600">My Projects</a>
+        <a href="account.html" class="hover:text-green-600">My Account</a>
+      </nav>
+    </div>
+  </header>
 
-  
   <!-- Hero Section -->
-  <main class="pt-20"
-  <section class="py-12 sm:py-16">
-    <div class="bg-green-100 rounded-xl max-w-6xl mx-auto px-4 sm:px-8 py-12 text-center">
-      <h2 class="text-3xl sm:text-4xl font-bold mb-4">Hire Freelancers or Find Work Easily</h2>
-      <p class="mb-6 sm:mb-8 text-base sm:text-lg">Work with the best talent. Anytime. Anywhere.</p>
+  <main class="pt-24">
+    <section class="py-12 sm:py-16">
+      <div class="bg-green-100 rounded-xl max-w-6xl mx-auto px-4 sm:px-8 py-12 text-center">
+        <h2 class="text-3xl sm:text-4xl font-bold mb-4">Hire Freelancers or Find Work Easily</h2>
+        <p class="mb-6 sm:mb-8 text-base sm:text-lg">Work with the best talent. Anytime. Anywhere.</p>
 
-      <!-- Responsive search row -->
-      <div class="flex w-full max-w-2xl mx-auto">
-        <input 
-          type="text" 
-          id="search-input"
-          placeholder="Search for jobs or talent..."
-          class="flex-grow px-4 py-2 border border-gray-300 rounded-l focus:outline-none" />
-        <button 
-          onclick="handleSearch()"
-          class="px-6 py-2 bg-green-600 text-white font-semibold rounded-r hover:bg-green-700">
-          Search
-        </button>
+        <div class="flex w-full max-w-2xl mx-auto">
+          <input 
+            type="text" 
+            id="search-input"
+            placeholder="Search for jobs or talent..."
+            class="flex-grow px-4 py-2 border border-gray-300 rounded-l focus:outline-none" />
+          <button 
+            onclick="handleSearch()"
+            class="px-6 py-2 bg-green-600 text-white font-semibold rounded-r hover:bg-green-700">
+            Search
+          </button>
+        </div>
+        <div id="search-results" class="mt-4"></div>
       </div>
-      <div id="search-results" class="mt-4">
-        <!-- Search results will appear here dynamically -->
+    </section>
+
+    <!-- Categories -->
+    <section class="py-12 sm:py-16">
+      <div class="max-w-6xl mx-auto px-4 sm:px-6">
+        <h3 class="text-xl sm:text-2xl font-semibold mb-6">Popular Categories</h3>
+        <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6">
+          <a href="academic.html" class="bg-white shadow p-4 rounded text-center transition cursor-pointer block">  
+            <p class="font-bold">Academic Writing</p>
+          </a>
+          <a href="content.html" class="bg-white shadow p-4 rounded text-center transition cursor-pointer block">
+            <p class="font-bold">Content Writing</p>
+          </a>
+          <a href="transcription.html" class="bg-white shadow p-4 rounded text-center transition cursor-pointer block">
+            <p class="font-bold">Transcription and Translation</p>
+          </a>
+          <a href="proofreading.html" class="bg-white shadow p-4 rounded text-center transition cursor-pointer block">
+            <p class="font-bold">Proofreading and Editing</p>
+          </a>
+        </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- Categories -->
-<section class="py-12 sm:py-16">
-  <div class="max-w-6xl mx-auto px-4 sm:px-6">
-    <h3 class="text-xl sm:text-2xl font-semibold mb-6">Popular Categories</h3>
-    <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6">
-      
-      <a href="academic.html" class="bg-white shadow p-4 rounded text-center transition cursor-pointer block">  
-      <p class="font-bold">Academic Writing</p>
-      </a>
-
-      <a href="content.html" class="bg-white shadow p-4 rounded text-center transition cursor-pointer block">
-        <p class="font-bold">Content Writing</p>
-      </a>
-
-      <a href="transcription.html" class="bg-white shadow p-4 rounded text-center transition cursor-pointer block">
-        <p class="font-bold">Transcription and Translation</p>
-      </a>
-
-      <a href="proofreading.html" class="bg-white shadow p-4 rounded text-center transition cursor-pointer block">
-        <p class="font-bold">Proofreading and Editing</p>
-      </a>
-
-    </div>
-  </div>
-</section>
-
-  <!-- Freelancer Cards -->
-<section class="py-12 sm:py-16 bg-gray-100">
-  <div class="max-w-6xl mx-auto px-4 sm:px-6">
-    <h3 class="text-xl sm:text-2xl font-semibold mb-6">Top Freelancers</h3>
-    
-    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6">
-
-      <!-- Freelancer 1 -->
-      <a href="alberto.html" class="block bg-white p-6 shadow rounded focus:outline-none cursor-pointer">
-        <h4 class="text-lg font-bold mb-2">Alberto James</h4>
-        <p class="text-sm text-gray-600 mb-2">UI/UX Designer</p>
-        <p class="text-sm">"Great to work with! Delivered beyond expectations."</p>
-      </a>
-
-      <!-- Freelancer 2 -->
-      <a href="radebe.html" class="block bg-white p-6 shadow rounded focus:outline-none cursor-pointer">
-        <h4 class="text-lg font-bold mb-2">Rosemary Wapnick Radebe</h4>
-        <p class="text-sm text-gray-600 mb-2">Web Developer</p>
-        <p class="text-sm">"Excellent communication and quality work."</p>
-      </a>
-
-      <!-- Freelancer 3 -->
-      <a href="brennie.html" class="block bg-white p-6 shadow rounded focus:outline-none cursor-pointer">
-        <h4 class="text-lg font-bold mb-2">Brennie Joy</h4>
-        <p class="text-sm text-gray-600 mb-2">Content Writer</p>
-        <p class="text-sm">"Very creative and fast turnaround."</p>
-      </a>
-
-    </div>
-  </div>
-</section>
-     </main>
-
-  <footer class="bg-white border-t mt-12">
-    <footer class="fixed bottom-0 left-0 w-full bg-white text-center py-4 text-gray-500 text-sm z-50 shadow">
-      <p>&copy; 2025 Nova Prime Inc. All rights reserved.</p>
-      <div class="space-x-4">
-        <a href="privacy.html" class="hover:text-green-600">Privacy</a>
-        <a href="terms.html" class="hover:text-green-600">Terms</a>
-        <a href="help.html" class="hover:text-green-600">Help</a>
+    <!-- Freelancer Cards -->
+    <section class="py-12 sm:py-16 bg-gray-100">
+      <div class="max-w-6xl mx-auto px-4 sm:px-6">
+        <h3 class="text-xl sm:text-2xl font-semibold mb-6">Top Freelancers</h3>
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6">
+          <a href="alberto.html" class="block bg-white p-6 shadow rounded focus:outline-none cursor-pointer">
+            <h4 class="text-lg font-bold mb-2">Alberto James</h4>
+            <p class="text-sm text-gray-600 mb-2">UI/UX Designer</p>
+            <p class="text-sm">"Great to work with! Delivered beyond expectations."</p>
+          </a>
+          <a href="radebe.html" class="block bg-white p-6 shadow rounded focus:outline-none cursor-pointer">
+            <h4 class="text-lg font-bold mb-2">Rosemary Wapnick Radebe</h4>
+            <p class="text-sm text-gray-600 mb-2">Web Developer</p>
+            <p class="text-sm">"Excellent communication and quality work."</p>
+          </a>
+          <a href="brennie.html" class="block bg-white p-6 shadow rounded focus:outline-none cursor-pointer">
+            <h4 class="text-lg font-bold mb-2">Brennie Joy</h4>
+            <p class="text-sm text-gray-600 mb-2">Content Writer</p>
+            <p class="text-sm">"Very creative and fast turnaround."</p>
+          </a>
+        </div>
       </div>
+    </section>
+  </main>
+
+  <footer class="fixed bottom-0 left-0 w-full bg-white text-center py-4 text-gray-500 text-sm z-50 shadow">
+    <p>&copy; 2025 Nova Prime Inc. All rights reserved.</p>
+    <div class="space-x-4">
+      <a href="privacy.html" class="hover:text-green-600">Privacy</a>
+      <a href="terms.html" class="hover:text-green-600">Terms</a>
+      <a href="help.html" class="hover:text-green-600">Help</a>
     </div>
   </footer>
-<script>
-    // Save balance data to localStorage if not already saved
+
+  <script>
     window.onload = function() {
       let userBalance = localStorage.getItem("balance");
       if (userBalance === null) {
@@ -153,54 +131,44 @@
       }
     }
   </script>
-   <script>
-  // Sample mock data (simulate fetched records)
-  const mockData = [
-    { id: 'T344', type: 'task', title: 'Build a React Dashboard', link: 'task.html' },
-    { id: 'T483', type: 'task', title: 'Fix Tailwind CSS Bugs', link: 'task.html' },
-    { id: 'U301', type: 'talent', title: 'Jane Mick - Frontend Developer', link: 'talent.html' },
-    { id: 'U3032', type: 'talent', title: 'John Smith - UX Designer', link: 'talent.html' },
-    { id: 'T343', type: 'task', title: 'Create Marketing Landing Page', link: 'task.html' },
-    { id: 'U303', type: 'talent', title: 'Ali Khan - Backend Engineer', link: 'talent.html' }
-  ];
+  <script>
+    const mockData = [
+      { id: 'T344', type: 'task', title: 'Build a React Dashboard', link: 'task.html' },
+      { id: 'T483', type: 'task', title: 'Fix Tailwind CSS Bugs', link: 'task.html' },
+      { id: 'U301', type: 'talent', title: 'Jane Mick - Frontend Developer', link: 'talent.html' },
+      { id: 'U3032', type: 'talent', title: 'John Smith - UX Designer', link: 'talent.html' },
+      { id: 'T343', type: 'task', title: 'Create Marketing Landing Page', link: 'task.html' },
+      { id: 'U303', type: 'talent', title: 'Ali Khan - Backend Engineer', link: 'talent.html' }
+    ];
 
-  // Live search function triggered on every keystroke
-  function handleSearch() {
-    const query = document.getElementById('search-input').value.trim().toLowerCase();
-    const resultsContainer = document.getElementById('search-results');
-    resultsContainer.innerHTML = ''; // Clear previous results
-
-    if (!query) return; // If input is empty, do nothing
-
-    // Filter data by ID or title
-    const matches = mockData.filter(item =>
-      item.title.toLowerCase().includes(query) || item.id.toLowerCase().includes(query)
-    );
-
-    if (matches.length === 0) {
-      resultsContainer.innerHTML = '<p class="text-gray-500">No results found.</p>';
-      return;
+    function handleSearch() {
+      const query = document.getElementById('search-input').value.trim().toLowerCase();
+      const resultsContainer = document.getElementById('search-results');
+      resultsContainer.innerHTML = '';
+      if (!query) return;
+      const matches = mockData.filter(item =>
+        item.title.toLowerCase().includes(query) || item.id.toLowerCase().includes(query)
+      );
+      if (matches.length === 0) {
+        resultsContainer.innerHTML = '<p class="text-gray-500">No results found.</p>';
+        return;
+      }
+      matches.forEach(match => {
+        const div = document.createElement('div');
+        div.innerHTML = `
+          <a href="${match.link}" class="block bg-white p-3 rounded shadow hover:bg-green-50 transition">
+            <strong>${match.title}</strong><br />
+            <span class="text-sm text-gray-500">${match.type.toUpperCase()} • ID: ${match.id}</span>
+          </a>
+        `;
+        resultsContainer.appendChild(div);
+      });
     }
 
-    // Render clickable results
-    matches.forEach(match => {
-      const div = document.createElement('div');
-      div.innerHTML = `
-        <a href="${match.link}" class="block bg-white p-3 rounded shadow hover:bg-green-50 transition">
-          <strong>${match.title}</strong><br />
-          <span class="text-sm text-gray-500">${match.type.toUpperCase()} • ID: ${match.id}</span>
-        </a>
-      `;
-      resultsContainer.appendChild(div);
+    document.addEventListener('DOMContentLoaded', () => {
+      const input = document.getElementById('search-input');
+      input.addEventListener('input', handleSearch);
     });
-  }
-
-  // Attach input listener once DOM is fully loaded
-  document.addEventListener('DOMContentLoaded', () => {
-    const input = document.getElementById('search-input');
-    input.addEventListener('input', handleSearch); // Instant search on typing
-  });
-</script>
- 
+  </script>
 </body>
 </html>
