@@ -35,11 +35,15 @@
           <label class="block font-semibold mb-1">Number of Freelancers Needed</label>
           <input type="number" min="1" class="w-full border rounded-lg px-4 py-2" required>
         </div>
-        <div>
-          <label class="block font-semibold mb-1">Amount to Pay per Freelancer (USD)</label>
-          <input type="number" min="0" step="0.01" class="w-full border rounded-lg px-4 py-2" required>
-        </div>
-      </div>
+       <form id="jobForm" class="space-y-6">
+  ...
+  <div>
+    <label class="block font-semibold mb-1">Amount to Pay per Freelancer (USD)</label>
+    <input id="amountInput" type="number" min="15" step="0.01" class="w-full border rounded-lg px-4 py-2" required>
+  </div>
+  ...
+  <button type="submit" class="...">Post Task</button>
+</form>
 
       <!-- Client Info -->
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -322,6 +326,19 @@ countryData.forEach(c => {
 select.addEventListener("change", () => {
   phoneCode.value = select.value;
 });
+</script>
+<script>
+  const form = document.getElementById('jobForm');
+  const amountInput = document.getElementById('amountInput');
+
+  form.addEventListener('submit', function(event) {
+    const amount = parseFloat(amountInput.value);
+    if (amount < 15) {
+      event.preventDefault();
+      alert('The minimum amount to pay per freelancer is $15.');
+      amountInput.focus();
+    }
+  });
 </script>
 
 </body>
