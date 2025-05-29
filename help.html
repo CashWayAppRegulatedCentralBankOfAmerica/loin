@@ -15,12 +15,18 @@
       line-height: 1.6;
     }
 
+    /* Fixed header */
     header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
       background-color: #fff;
       padding: 1rem 2rem;
       box-shadow: 0 2px 4px rgba(0,0,0,0.05);
       display: flex;
       align-items: center;
+      z-index: 1001;
     }
 
     header h1 {
@@ -30,9 +36,10 @@
       font-weight: bold;
     }
 
+    /* Main content padding to avoid header overlap */
     main {
       max-width: 900px;
-      margin: 2rem auto;
+      margin: 4.5rem auto 2rem; /* Push down for fixed header */
       background: #fff;
       padding: 2rem;
       border-radius: 8px;
@@ -56,6 +63,7 @@
       text-align: justify;
     }
 
+    /* Fixed footer */
     footer {
       position: fixed;
       bottom: 0;
@@ -71,15 +79,15 @@
       z-index: 1000;
     }
 
-   footer a {
-  margin: 0 12px;
-  color: #777;
-  text-decoration: none;
-}
+    footer a {
+      margin: 0 12px;
+      color: #777;
+      text-decoration: none;
+    }
 
-footer a:hover {
-  color: #16a34a; /* Tailwind green-600 */
-}
+    footer a:hover {
+      color: #16a34a; /* Tailwind green-600 */
+    }
   </style>
 </head>
 <body>
@@ -89,7 +97,7 @@ footer a:hover {
 
   <main>
     <h2>Help & Support</h2>
-
+    
     <h3>1. Getting Started</h3>
     <p>Welcome to Nova Prime Writers, a dedicated platform for freelance writers and clients to connect and collaborate seamlessly. Whether you’re new to freelancing or hiring, this guide helps you begin smoothly. First, create an account by providing your details and verifying your email. After registration, complete your profile with relevant skills, experience, and samples to attract clients or freelancers. Explore the dashboard to familiarize yourself with job postings, messages, and project statuses. Nova Prime Writers provides tutorials and FAQs for additional help. You can browse available jobs or post projects immediately after setup. Our support team is available 24/7 for any assistance you need. Starting strong ensures you make the most of our marketplace’s opportunities. Take your first step toward success today!</p>
 
