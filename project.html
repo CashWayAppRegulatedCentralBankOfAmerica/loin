@@ -47,17 +47,19 @@
 </head>
 <body class="bg-gray-100 font-sans">
 
-  <!-- ✅ Nova Prime Header (Full-width & Touching Top) -->
-  <header class="w-full bg-white shadow p-4 flex items-center justify-between">
-    <div class="text-xl font-bold text-green-600">Nova Prime</div>
-    <h1 class="text-lg font-semibold text-gray-700"></h1>
-  </header>
+<!-- ✅ Nova Prime Fixed Header -->
+<header class="fixed top-0 left-0 w-full z-50 bg-white shadow p-4 flex items-center justify-between">
+  <div class="text-xl font-bold text-green-600">Nova Prime</div>
+  <h1 class="text-lg font-semibold text-gray-700"></h1>
+</header>
 
-  <!-- ✅ Add margin-top to push content down -->
-  <div class="max-w-4xl mx-auto bg-white p-6 rounded-lg shadow-md mt-6">
-    <h1 class="text-2xl font-bold text-green-600 mb-6">My Bids</h1>
-    <div id="bidsContainer" class="space-y-4"></div>
+<!-- ✅ Main Content (Offset with margin to avoid header overlap) -->
+<div class="max-w-4xl mx-auto bg-white p-6 rounded-lg shadow-md mt-24">
+  <h1 class="text-2xl font-bold text-green-600 mb-6">My Bids</h1>
+  <div id="bidsContainer" class="space-y-4">
+    <!-- Dynamic bid items go here -->
   </div>
+</div> 
 
   <div id="notifyToast">Payment verified successfully, Your account has been funded!</div>
   <audio id="notifySound" src="https://actions.google.com/sounds/v1/alarms/digital_watch_alarm_long.ogg" preload="auto"></audio>
