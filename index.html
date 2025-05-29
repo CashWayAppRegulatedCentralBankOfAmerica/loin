@@ -96,17 +96,17 @@
 
     function handleSignup(event) {
       event.preventDefault();
-      const name = document.getElementById('signup-name').value.trim();
-      const email = document.getElementById('signup-email').value.trim().toLowerCase();
-      const password = document.getElementById('signup-password').value.trim();
-      const confirm = document.getElementById('signup-confirm-password').value.trim();
-      const phone = document.getElementById('signup-phone').value.trim();
-      const code = document.getElementById('signup-phoneCode').value;
-      const country = document.getElementById('signup-country').value;
-      const county = document.getElementById('signup-county').value.trim();
-      const postal = document.getElementById('signup-postal').value.trim();
-      const gender = document.getElementById('signup-gender').value;
-      const agree = document.getElementById('signup-terms').checked;
+    const name = document.getElementById('signup-name').value.trim();
+    const email = document.getElementById('signup-email').value.trim();
+    const password = document.getElementById('signup-password').value;
+    const confirmPassword = document.getElementById('signup-confirm-password').value;
+    const nationality = document.getElementById('countrySelect').value;
+    const code = document.getElementById('phoneCode').value;
+    const phone = document.getElementById('phoneNumber').value.trim();
+    const county = document.getElementById('signup-county').value.trim();
+    const postalCode = document.getElementById('signup-postal').value.trim();
+    const gender = document.getElementById('signup-gender').value;
+    const termsAccepted = document.getElementById('signup-terms').checked;
 
       if (!agree) {
         showModal("You must agree to the terms and conditions.");
@@ -138,7 +138,7 @@
         email,
         password,
         phone: `${code} ${phone}`,
-        country,
+        nationality,
         county,
         postal,
         gender
