@@ -449,20 +449,6 @@ const countryData = [
   { name: "Zambia", code: "+260" },
   { name: "Zimbabwe", code: "+263" }
 ];
-
-const select = document.getElementById("countrySelect");
-const phoneCode = document.getElementById("phoneCode");
-
-countryData.forEach(c => {
-  const opt = document.createElement("option");
-  opt.value = c.code;
-  opt.textContent = c.name;
-  select.appendChild(opt);
-});
-
-select.addEventListener("change", () => {
-  phoneCode.value = select.value;
-});
 </script>
 
 </body>
