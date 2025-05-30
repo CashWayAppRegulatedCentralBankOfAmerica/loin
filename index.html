@@ -4,6 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Nova Prime | Login & Signup</title>
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#16a34a" />
   <link rel="icon" type="image/png" href="nova_favicon.png" />
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
   <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
@@ -279,5 +281,17 @@
       </div>
     </footer>
   </footer>
+  <script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/service-worker.js').then(registration => {
+        console.log('Service Worker registered:', registration);
+      }).catch(error => {
+        console.log('Service Worker registration failed:', error);
+      });
+    });
+  }
+</script>
+
 </body>
 </html>
