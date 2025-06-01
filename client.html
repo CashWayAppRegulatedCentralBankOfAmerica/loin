@@ -10,19 +10,44 @@
 <body class="bg-gray-100 font-sans">
 
   <!-- Header -->
-  <header class="bg-white shadow p-4 flex justify-between items-center">
-    <h1 class="text-2xl font-bold text-green-600">Nova Prime</h1>
-  </header>
+  <!-- Header -->
+<header class="fixed top-0 left-0 w-full z-50 bg-white shadow p-4 flex justify-between items-center">
+  <h1 class="text-2xl font-bold text-green-600">Nova Prime</h1>
+</header>
 
   <!-- Main Form -->
-  <main class="max-w-4xl mx-auto p-6 bg-white mt-6 rounded-lg shadow pb-32">
+  <main class="pt-20 max-w-4xl mx-auto p-6 bg-white mt-6 rounded-lg shadow pb-32">
     <h2 class="text-2xl font-semibold text-green-600 mb-6">Find Talent - Post a Job</h2>
     <form class="space-y-6">
 
+     <!-- Client Info -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <label class="block font-semibold mb-1">Your Full Name</label>
+          <input type="text" class="w-full border rounded-lg px-4 py-2" required>
+        </div>
+        <div>
+  <label class="block font-semibold mb-1">Country</label>
+  <select id="countrySelect" class="w-full border rounded-lg px-4 py-2" required></select>
+</div>
+      <div>
+  <label class="block font-semibold mb-1">Phone Number</label>
+  <div class="flex">
+    <input id="phoneCode" type="text" class="w-24 border rounded-l-lg px-3 py-2 bg-gray-100" readonly>
+    <input id="phoneNumber" type="tel" class="flex-1 border-t border-b border-r rounded-r-lg px-4 py-2" required>
+  </div>   
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <label class="block font-semibold mb-1">Email</label>
+          <input type="email" class="w-full border rounded-lg px-4 py-2" required>
+        </div>
+       </div>
+        
       <!-- Job Details -->
       <div>
         <label class="block font-semibold mb-1">Job Title</label>
-        <input type="text" class="w-full border rounded-lg px-4 py-2" required>
+        <input type="text" class="w-full border rounded-lg px-4 py-2" placeholder="e.g. Content Writing, Editing, Reserch" required>
       </div>
 
       <div>
@@ -39,30 +64,6 @@
 <div>
   <label class="block font-semibold mb-1">Amount to Pay per Freelancer (USD)</label>
   <input type="number" min="15" step="0.01" class="w-full border rounded-lg px-4 py-2" required>
-</div>
-         
-      <!-- Client Info -->
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div>
-          <label class="block font-semibold mb-1">Your Full Name</label>
-          <input type="text" class="w-full border rounded-lg px-4 py-2" required>
-        </div>
-        <div>
-  <label class="block font-semibold mb-1">Country</label>
-  <select id="countrySelect" class="w-full border rounded-lg px-4 py-2" required></select>
-</div>
-
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div>
-          <label class="block font-semibold mb-1">Email</label>
-          <input type="email" class="w-full border rounded-lg px-4 py-2" required>
-        </div>
-       <div>
-  <label class="block font-semibold mb-1">Phone Number</label>
-  <div class="flex">
-    <input id="phoneCode" type="text" class="w-24 border rounded-l-lg px-3 py-2 bg-gray-100" readonly>
-    <input id="phoneNumber" type="tel" class="flex-1 border-t border-b border-r rounded-r-lg px-4 py-2" required>
-  </div>
 </div>
 
 
@@ -88,7 +89,7 @@
       <div>
         <label class="block font-semibold mb-1">Category (Optional)</label>
         <select class="w-full border rounded-lg px-4 py-2">
-          <option value="">-- Select a Category --</option>
+          <option value="">   Select a Category  </option>
           <option>Web Development</option>
           <option>Mobile App Development</option>
           <option>UI/UX Design</option>
