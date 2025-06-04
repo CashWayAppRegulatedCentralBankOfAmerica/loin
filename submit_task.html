@@ -65,7 +65,7 @@
 <main class="max-w-3xl mx-auto bg-white p-6 rounded-lg shadow-md">
   <h1 class="text-2xl font-bold text-green-600 mb-6">Submit Task</h1>
 
-  <form id="submitTaskForm" onsubmit="return false;" class="space-y-4">
+  <form id="submitTaskForm" class="space-y-4">
 
     <div>
       <label for="taskId" class="block font-semibold mb-1">Task ID</label>
@@ -123,13 +123,11 @@
 </footer>
 
 <script>
-  // Read query params from URL
   const params = new URLSearchParams(window.location.search);
   const taskId = params.get('taskId') || '';
   const amount = params.get('amount') || '';
   const index = params.get('index');
 
-  // Fill readonly inputs
   document.getElementById('taskId').value = taskId;
   document.getElementById('amount').value = amount;
 
@@ -137,31 +135,34 @@
   const modal = document.getElementById('submitModal');
   const modalOkBtn = document.getElementById('modalOkBtn');
 
-  // Submit handler
-  form.addEventListener('submit', () => {
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+
     const taskContent = form.taskContent.value.trim();
     if (!taskContent) {
       alert('Please paste your task content.');
       return;
     }
 
-    // Save the submission info in localStorage (or send to backend)
+    // Load bids
     let bids = JSON.parse(localStorage.getItem('bids') || '[]');
     if (index !== null && bids[index]) {
       bids[index].submitted = true;
       bids[index].submission = {
         content: taskContent,
-        fileName: form.taskFile.files[0]?.name || '',
-        // For file upload, you might want to save file data differently (not implemented here)
+        fileName: form.taskFile.files[0]?.name || ''
+        // File data saving is not implemented here
       };
       localStorage.setItem('bids', JSON.stringify(bids));
+    } else {
+      alert('Invalid task index.');
+      return;
     }
 
     // Show modal confirmation
     modal.classList.add('active');
   });
 
-  // When OK on modal clicked, redirect back to project.html with submittedIndex param
   modalOkBtn.addEventListener('click', () => {
     modal.classList.remove('active');
     window.location.href = `project.html?submittedIndex=${index}`;
