@@ -1,54 +1,128 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Submit Task</title>
+  <link rel="icon" type="image/png" href="nova_favicon.png">
   <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="bg-gray-100 min-h-screen p-6">
-  <div class="max-w-xl mx-auto bg-white rounded shadow p-6">
-    <h1 class="text-2xl font-bold text-green-600 mb-4">Task Submission</h1>
-
-    <p><strong>Task ID:</strong> <span id="taskIdText"></span></p>
-    <p><strong>Amount:</strong> $<span id="amountText"></span></p>
-
-    <textarea id="taskContent" placeholder="Paste your completed task here..." class="w-full mt-4 p-3 border rounded h-40"></textarea>
-
-    <input type="file" id="taskFile" accept=".pdf,.doc,.docx,.txt" class="mt-4" />
-
-    <button onclick="submitTask()" class="mt-6 bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700">Submit</button>
-  </div>
-
-  <script>
-    const urlParams = new URLSearchParams(window.location.search);
-    const taskId = urlParams.get('taskId');
-    const amount = urlParams.get('amount');
-    const index = urlParams.get('index');
-
-    document.getElementById('taskIdText').textContent = taskId;
-    document.getElementById('amountText').textContent = amount;
-
-    function submitTask() {
-      const text = document.getElementById('taskContent').value.trim();
-      const file = document.getElementById('taskFile').files[0];
-
-      if (!text && !file) {
-        alert('Please provide either text content or upload a file.');
-        return;
-      }
-
-      let bids = JSON.parse(localStorage.getItem('bids') || '[]');
-      if (bids[index]) {
-        bids[index].submitted = true;
-        bids[index].submissionText = text;
-        if (file) {
-          bids[index].submittedFileName = file.name;
-        }
-        localStorage.setItem('bids', JSON.stringify(bids));
-        alert('Task submitted successfully!');
-        window.location.href = 'my_bids.html'; // Change to your My Bids page path
-      }
+  <style>
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 9999;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
     }
-  </script>
+
+    .modal-content {
+      background-color: white;
+      margin: 15% auto;
+      padding: 2rem;
+      width: 90%;
+      max-width: 400px;
+      border-radius: 0.5rem;
+      text-align: center;
+    }
+  </style>
+</head>
+<body class="bg-gray-100 font-sans">
+
+<!-- ✅ Fixed Header -->
+<header class="fixed top-0 left-0 w-full z-50 bg-white shadow p-4 flex items-center justify-between">
+  <div class="text-xl font-bold text-green-600">Nova Prime</div>
+  <h1 class="text-lg font-semibold text-gray-700">Submit Task</h1>
+</header>
+
+<!-- ✅ Main Content -->
+<div class="max-w-2xl mx-auto bg-white p-6 rounded-lg shadow-md mt-24 mb-20">
+  <form id="submitForm" class="space-y-6">
+    <div>
+      <label class="block text-gray-700 font-medium mb-1">Task ID</label>
+      <input id="taskIdInput" type="text" readonly class="w-full border rounded px-3 py-2 bg-gray-100" />
+    </div>
+
+    <div>
+      <label class="block text-gray-700 font-medium mb-1">Amount</label>
+      <input id="amountInput" type="text" readonly class="w-full border rounded px-3 py-2 bg-gray-100" />
+    </div>
+
+    <div>
+      <label class="block text-gray-700 font-medium mb-1">Paste Your Work</label>
+      <textarea id="taskText" class="w-full border rounded px-3 py-2" rows="6" placeholder="Paste your task here..."></textarea>
+    </div>
+
+    <div>
+      <label class="block text-gray-700 font-medium mb-1">Upload Supporting File (PDF, DOCX, etc.)</label>
+      <input type="file" id="taskFile" class="w-full" />
+    </div>
+
+    <div class="text-right">
+      <button type="submit" class="bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700">Submit</button>
+    </div>
+  </form>
+</div>
+
+<!-- ✅ Modal Popup -->
+<div id="successModal" class="modal">
+  <div class="modal-content">
+    <p class="text-green-700 font-semibold text-lg mb-4">Task submitted successfully!</p>
+    <button onclick="goBack()" class="bg-green-600 text-white px-4 py-2 rounded">OK</button>
+  </div>
+</div>
+
+<!-- ✅ Fixed Footer -->
+<footer class="fixed bottom-0 left-0 w-full bg-white text-center py-4 text-gray-500 text-sm z-50 shadow">
+  <p>&copy; 2025 Nova Prime Inc. All rights reserved.</p>
+  <div class="space-x-4">
+    <a href="privacy.html" class="hover:text-green-600">Privacy</a>
+    <a href="terms.html" class="hover:text-green-600">Terms</a>
+    <a href="help.html" class="hover:text-green-600">Help</a>
+  </div>
+</footer>
+
+<script>
+  const taskIdInput = document.getElementById('taskIdInput');
+  const amountInput = document.getElementById('amountInput');
+  const submitForm = document.getElementById('submitForm');
+  const successModal = document.getElementById('successModal');
+
+  const params = new URLSearchParams(window.location.search);
+  const taskId = params.get('taskId');
+  const amount = params.get('amount');
+  const index = params.get('index');
+
+  taskIdInput.value = taskId || '';
+  amountInput.value = amount || '';
+
+  submitForm.addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    const text = document.getElementById('taskText').value.trim();
+    const file = document.getElementById('taskFile').files[0];
+
+    if (!text && !file) {
+      alert("Please paste your work or upload a file.");
+      return;
+    }
+
+    let bids = JSON.parse(localStorage.getItem('bids') || '[]');
+    if (index !== null && bids[index]) {
+      bids[index].submitted = true;
+      localStorage.setItem('bids', JSON.stringify(bids));
+    }
+
+    // Show modal
+    successModal.style.display = 'block';
+  });
+
+  function goBack() {
+    window.location.href = 'my_bids.html';
+  }
+</script>
+
 </body>
 </html>
