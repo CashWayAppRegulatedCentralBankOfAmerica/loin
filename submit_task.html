@@ -173,11 +173,10 @@
       localStorage.setItem('removedBids', JSON.stringify(removedBids));
     }
 
-    // Redirect back to project.html
-    window.location.href = 'project.html';
+    // Redirect back to mybids.html with the submittedIndex query param
+    window.location.href = `mybids.html?submittedIndex=${index}`;
   });
 </script>
-
 
 </body>
 </html>
