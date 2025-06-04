@@ -165,9 +165,19 @@
 
   modalOkBtn.addEventListener('click', () => {
     modal.classList.remove('active');
-    window.location.href = `project.html?submittedIndex=${index}`;
+
+    // Add this taskId to removedBids in localStorage
+    let removedBids = JSON.parse(localStorage.getItem('removedBids') || '[]');
+    if (!removedBids.includes(taskId)) {
+      removedBids.push(taskId);
+      localStorage.setItem('removedBids', JSON.stringify(removedBids));
+    }
+
+    // Redirect back to project.html
+    window.location.href = 'project.html';
   });
 </script>
+
 
 </body>
 </html>
