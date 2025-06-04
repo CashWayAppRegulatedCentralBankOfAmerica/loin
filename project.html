@@ -106,6 +106,7 @@
       if (bid.status === 'Paid') return;
 
       bids[selectedBidIndex].status = 'Paid';
+
       let balance = parseFloat(localStorage.getItem('balance') || '0');
       balance += parseFloat(bid.amount);
       localStorage.setItem('balance', balance.toFixed(2));
@@ -178,7 +179,7 @@
       const statusColor = bid.status === 'Paid' ? 'text-green-600' : 'text-red-600';
       let statusText = bid.status;
 
-      if (bid.status === 'Paid') {
+      if (bid.status === 'Unpaid') {
         if (bid.submitted) {
           statusText += ' <span class="text-blue-600 ml-2 font-medium">Submitted</span>';
         } else {
@@ -197,12 +198,12 @@
           <p><span class="font-semibold">Status:</span> <span class="${statusColor}">${statusText}</span></p>
         </div>
         <div class="ml-4">
-          ${bid.status === 'Paid' ? '' : `
+          ${bid.status === 'Unpaid' ? `
             <button 
               class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded"
               onclick="openModal(${index})"
             >Verify</button>
-          `}
+          ` : ''}
         </div>
       `;
 
