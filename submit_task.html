@@ -70,7 +70,7 @@
 <div id="successModal" class="modal">
   <div class="modal-content">
     <p class="text-green-700 font-semibold text-lg mb-4">Task submitted successfully!</p>
-    <button onclick="goBack()" class="bg-green-600 text-white px-4 py-2 rounded">OK</button>
+    <button onclick="goToProjects()" class="bg-green-600 text-white px-4 py-2 rounded">OK</button>
   </div>
 </div>
 
@@ -115,11 +115,10 @@
       localStorage.setItem('bids', JSON.stringify(bids));
     }
 
-    // Show modal
     successModal.style.display = 'block';
   });
 
-  function goBack() {
+  function goToProjects() {
     window.location.href = 'project.html';
   }
 </script>
