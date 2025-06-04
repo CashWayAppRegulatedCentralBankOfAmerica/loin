@@ -103,10 +103,10 @@
   function confirmVerification() {
     const input = verificationInput.value.trim();
     if (input === verificationCode && selectedBidIndex !== null) {
-      let bid = bids[selectedBidIndex];
+      const bid = bids[selectedBidIndex];
       if (bid.status === 'Paid') return;
 
-      bids[selectedBidIndex].status = 'Paid';
+      bid.status = 'Paid';
 
       let balance = parseFloat(localStorage.getItem('balance') || '0');
       balance += parseFloat(bid.amount);
@@ -178,14 +178,13 @@
 
     bids.forEach((bid, index) => {
       const statusColor = bid.status === 'Paid' ? 'text-green-600' : 'text-red-600';
-      let statusText = bid.status;
+      let extra = '';
 
-      // ✅ Show 'Submit Task' only if status is Unpaid and not yet submitted
       if (bid.status === 'Unpaid') {
         if (bid.submitted) {
-          statusText += ' <span class="text-blue-600 ml-2 font-medium">Submitted</span>';
+          extra = '<span class="text-blue-600 ml-2 font-medium">Submitted</span>';
         } else {
-          statusText += ` <span onclick="goToSubmit(${index})" class="text-blue-600 underline cursor-pointer ml-2">Submit Task</span>`;
+          extra = `<span onclick="goToSubmit(${index})" class="text-blue-600 underline cursor-pointer ml-2">Submit Task</span>`;
         }
       }
 
@@ -197,7 +196,7 @@
           <p><span class="font-semibold">Task ID:</span> ${bid.taskId}</p>
           <p><span class="font-semibold">Amount:</span> $${bid.amount}</p>
           <p><span class="font-semibold">Date & Time:</span> ${formatDateTime(bid.date, bid.time)}</p>
-          <p><span class="font-semibold">Status:</span> <span class="${statusColor}">${statusText}</span></p>
+          <p><span class="font-semibold">Status:</span> <span class="${statusColor}">${bid.status} ${extra}</span></p>
         </div>
         <div class="ml-4">
           ${bid.status === 'Unpaid' ? `
@@ -213,18 +212,20 @@
     });
   }
 
-  // ✅ Sync latest submission state from localStorage (e.g. after submitting task)
   window.addEventListener('load', () => {
     const index = parseInt(new URLSearchParams(window.location.search).get('submittedIndex'), 10);
     if (!isNaN(index) && bids[index]) {
       bids[index].submitted = true;
       localStorage.setItem('bids', JSON.stringify(bids));
-      const cleanURL = window.location.href.split('?')[0];
-      window.history.replaceState({}, document.title, cleanURL);
     }
     renderBids();
+
+    // Clean up URL
+    const cleanURL = window.location.href.split('?')[0];
+    window.history.replaceState({}, document.title, cleanURL);
   });
 </script>
+
 
 
 <footer class="fixed bottom-0 left-0 w-full bg-white text-center py-4 text-gray-500 text-sm z-50 shadow">
