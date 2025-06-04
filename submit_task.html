@@ -3,124 +3,152 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Submit Task</title>
-  <link rel="icon" type="image/png" href="nova_favicon.png">
+  <title>Nova Prime | Submit Task</title>
+  <link rel="icon" type="image/png" href="nova_favicon.png" />
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
+    /* Fixed header and footer styling */
+    header, footer {
+      position: fixed;
+      left: 0;
+      width: 100%;
+      background: white;
+      box-shadow: 0 2px 6px rgb(0 0 0 / 0.1);
+      z-index: 50;
+      padding: 1rem 1.5rem;
+    }
+    header { top: 0; }
+    footer { bottom: 0; text-align: center; font-size: 0.875rem; color: #6b7280; }
+    main {
+      max-width: 600px;
+      margin: 5rem auto 4rem;
+      padding: 1rem;
+      background: white;
+      border-radius: 0.5rem;
+      box-shadow: 0 4px 12px rgb(0 0 0 / 0.05);
+    }
     .modal {
       display: none;
       position: fixed;
       z-index: 9999;
-      left: 0;
-      top: 0;
-      width: 100%;
-      height: 100%;
-      background-color: rgba(0, 0, 0, 0.5);
+      left: 0; top: 0;
+      width: 100%; height: 100%;
+      background-color: rgba(0,0,0,0.4);
     }
-
     .modal-content {
-      background-color: white;
+      background-color: #fff;
       margin: 15% auto;
       padding: 2rem;
-      width: 90%;
-      max-width: 400px;
       border-radius: 0.5rem;
+      max-width: 400px;
       text-align: center;
     }
   </style>
 </head>
 <body class="bg-gray-100 font-sans">
 
-<!-- ✅ Fixed Header -->
-<header class="fixed top-0 left-0 w-full z-50 bg-white shadow p-4 flex items-center justify-between">
+<header class="flex justify-between items-center">
   <div class="text-xl font-bold text-green-600">Nova Prime</div>
   <h1 class="text-lg font-semibold text-gray-700">Submit Task</h1>
 </header>
 
-<!-- ✅ Main Content -->
-<div class="max-w-2xl mx-auto bg-white p-6 rounded-lg shadow-md mt-24 mb-20">
-  <form id="submitForm" class="space-y-6">
-    <div>
-      <label class="block text-gray-700 font-medium mb-1">Task ID</label>
-      <input id="taskIdInput" type="text" readonly class="w-full border rounded px-3 py-2 bg-gray-100" />
+<main>
+  <form id="submitForm">
+    <div class="mb-4">
+      <label class="block font-semibold mb-1">Task ID:</label>
+      <input id="taskId" type="text" readonly class="w-full border rounded px-3 py-2 bg-gray-100 cursor-not-allowed" />
     </div>
-
-    <div>
-      <label class="block text-gray-700 font-medium mb-1">Amount</label>
-      <input id="amountInput" type="text" readonly class="w-full border rounded px-3 py-2 bg-gray-100" />
+    <div class="mb-4">
+      <label class="block font-semibold mb-1">Amount:</label>
+      <input id="amount" type="text" readonly class="w-full border rounded px-3 py-2 bg-gray-100 cursor-not-allowed" />
     </div>
-
-    <div>
-      <label class="block text-gray-700 font-medium mb-1">Paste Your Work</label>
-      <textarea id="taskText" class="w-full border rounded px-3 py-2" rows="6" placeholder="Paste your task here..."></textarea>
+    <div class="mb-4">
+      <label for="taskText" class="block font-semibold mb-1">Paste your task details here:</label>
+      <textarea id="taskText" rows="6" placeholder="Paste your task details here..." class="w-full border rounded px-3 py-2" required></textarea>
     </div>
-
-    <div>
-      <label class="block text-gray-700 font-medium mb-1">Upload Supporting File (PDF, DOCX, etc.)</label>
-      <input type="file" id="taskFile" class="w-full" />
+    <div class="mb-4">
+      <label for="taskFile" class="block font-semibold mb-1">Upload file (optional, PDF or others):</label>
+      <input id="taskFile" type="file" accept=".pdf,application/pdf,image/*,text/plain" class="w-full" />
     </div>
-
-    <div class="text-right">
-      <button type="submit" class="bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700">Submit</button>
-    </div>
+    <button type="submit" class="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded font-semibold">Submit</button>
   </form>
-</div>
+</main>
 
-<!-- ✅ Modal Popup -->
-<div id="successModal" class="modal">
-  <div class="modal-content">
-    <p class="text-green-700 font-semibold text-lg mb-4">Task submitted successfully!</p>
-    <button onclick="goToProjects()" class="bg-green-600 text-white px-4 py-2 rounded">OK</button>
-  </div>
-</div>
-
-<!-- ✅ Fixed Footer -->
-<footer class="fixed bottom-0 left-0 w-full bg-white text-center py-4 text-gray-500 text-sm z-50 shadow">
-  <p>&copy; 2025 Nova Prime Inc. All rights reserved.</p>
-  <div class="space-x-4">
-    <a href="privacy.html" class="hover:text-green-600">Privacy</a>
-    <a href="terms.html" class="hover:text-green-600">Terms</a>
-    <a href="help.html" class="hover:text-green-600">Help</a>
-  </div>
+<footer>
+  &copy; 2025 Nova Prime Inc. All rights reserved.
 </footer>
 
+<!-- Modal -->
+<div id="successModal" class="modal">
+  <div class="modal-content">
+    <h2 class="text-lg font-semibold mb-4">Task submitted successfully!</h2>
+    <button id="modalOkBtn" class="bg-green-600 text-white px-4 py-2 rounded">OK</button>
+  </div>
+</div>
+
 <script>
-  const taskIdInput = document.getElementById('taskIdInput');
-  const amountInput = document.getElementById('amountInput');
+  // Parse taskId and amount from URL
+  const params = new URLSearchParams(window.location.search);
+  const taskId = params.get('taskId') || '';
+  const amount = params.get('amount') || '';
+  const bidIndex = parseInt(params.get('index'), 10);
+
+  // Fill inputs
+  document.getElementById('taskId').value = taskId;
+  document.getElementById('amount').value = amount;
+
   const submitForm = document.getElementById('submitForm');
   const successModal = document.getElementById('successModal');
+  const modalOkBtn = document.getElementById('modalOkBtn');
 
-  const params = new URLSearchParams(window.location.search);
-  const taskId = params.get('taskId');
-  const amount = params.get('amount');
-  const index = params.get('index');
-
-  taskIdInput.value = taskId || '';
-  amountInput.value = amount || '';
-
-  submitForm.addEventListener('submit', function(e) {
+  submitForm.addEventListener('submit', (e) => {
     e.preventDefault();
 
-    const text = document.getElementById('taskText').value.trim();
-    const file = document.getElementById('taskFile').files[0];
-
-    if (!text && !file) {
-      alert("Please paste your work or upload a file.");
+    // Basic validation for textarea
+    if (!document.getElementById('taskText').value.trim()) {
+      alert('Please enter your task details.');
       return;
     }
 
+    // Save submission info in localStorage bids array
     let bids = JSON.parse(localStorage.getItem('bids') || '[]');
-    if (index !== null && bids[index]) {
-      bids[index].submitted = true;
-      localStorage.setItem('bids', JSON.stringify(bids));
+
+    if (!bids[bidIndex]) {
+      alert('Invalid task submission index.');
+      return;
     }
 
+    // Mark the bid as submitted and store submitted text and filename (if any)
+    bids[bidIndex].submitted = true;
+    bids[bidIndex].submissionText = document.getElementById('taskText').value.trim();
+
+    const fileInput = document.getElementById('taskFile');
+    if (fileInput.files.length > 0) {
+      const file = fileInput.files[0];
+      bids[bidIndex].submissionFileName = file.name;
+      // Optional: save file data as Base64 or just file name (for simplicity saving name only here)
+    } else {
+      bids[bidIndex].submissionFileName = null;
+    }
+
+    localStorage.setItem('bids', JSON.stringify(bids));
+
+    // Show modal instead of alert
     successModal.style.display = 'block';
   });
 
-  function goToProjects() {
-    window.location.href = 'project.html';
-  }
+  modalOkBtn.addEventListener('click', () => {
+    successModal.style.display = 'none';
+    // Redirect back to project.html with submittedIndex so it can hide "Submit Task"
+    window.location.href = 'project.html?submittedIndex=' + bidIndex;
+  });
+
+  // Close modal if clicked outside content
+  successModal.addEventListener('click', (e) => {
+    if (e.target === successModal) {
+      successModal.style.display = 'none';
+    }
+  });
 </script>
 
 </body>
