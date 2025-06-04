@@ -65,17 +65,16 @@
 <audio id="notifySound" src="https://actions.google.com/sounds/v1/alarms/digital_watch_alarm_long.ogg" preload="auto"></audio>
 
 <!-- Modal -->
-<div id="verificationModal" class="modal">
+<div id="verificationModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="verificationModalTitle">
   <div class="modal-content">
-    <h2 class="text-lg font-semibold mb-4">Enter Verification Code</h2>
-    <input id="verificationInput" type="text" placeholder="Code" class="w-full px-3 py-2 mb-4 border rounded" />
+    <h2 id="verificationModalTitle" class="text-lg font-semibold mb-4">Enter Verification Code</h2>
+    <input id="verificationInput" type="text" placeholder="Code" class="w-full px-3 py-2 mb-4 border rounded" aria-describedby="verificationHelp" />
     <div class="flex justify-end space-x-2">
       <button onclick="closeModal()" class="bg-gray-400 text-white px-4 py-2 rounded">Cancel</button>
-      <button onclick="confirmVerification()" class="bg-green-600 text-white px-4 py-2 rounded">Confirm</button>
+      <button id="confirmBtn" onclick="confirmVerification()" class="bg-green-600 text-white px-4 py-2 rounded">Confirm</button>
     </div>
   </div>
 </div>
-<!-- ✨ CHANGES ONLY IN SCRIPT BELOW, REST UNTOUCHED -->
 
 <script>
   const verificationCode = '1234';
@@ -88,11 +87,15 @@
 
   const modal = document.getElementById('verificationModal');
   const verificationInput = document.getElementById('verificationInput');
+  const confirmBtn = document.getElementById('confirmBtn');
 
   function openModal(index) {
     selectedBidIndex = index;
     verificationInput.value = '';
+    verificationInput.classList.remove('border-red-500');
+    confirmBtn.disabled = false;
     modal.style.display = 'block';
+    verificationInput.focus();
   }
 
   function closeModal() {
@@ -103,6 +106,8 @@
   function confirmVerification() {
     const input = verificationInput.value.trim();
     if (input === verificationCode && selectedBidIndex !== null) {
+      confirmBtn.disabled = true;
+
       const bid = bids[selectedBidIndex];
       if (bid.status === 'Paid') return;
 
@@ -141,8 +146,13 @@
       setTimeout(() => window.location.href = 'account.html', 1500);
     } else {
       verificationInput.classList.add('border-red-500');
+      confirmBtn.disabled = false;
     }
   }
+
+  verificationInput.addEventListener('input', () => {
+    verificationInput.classList.remove('border-red-500');
+  });
 
   function showNotification(message) {
     notifyToast.textContent = message;
@@ -174,7 +184,8 @@
       return;
     }
 
-    bids.sort((a, b) => (a.status === 'Paid') - (b.status === 'Paid'));
+    // Sort bids: Paid first
+    bids.sort((a, b) => (b.status === 'Paid') - (a.status === 'Paid'));
 
     bids.forEach((bid, index) => {
       const statusColor = bid.status === 'Paid' ? 'text-green-600' : 'text-red-600';
@@ -201,6 +212,7 @@
         <div class="ml-4">
           ${bid.status === 'Unpaid' ? `
             <button 
+              aria-label="Verify payment for task ${bid.taskId}"
               class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded"
               onclick="openModal(${index})"
             >Verify</button>
@@ -210,6 +222,13 @@
 
       bidsContainer.appendChild(bidEl);
     });
+  }
+
+  // Close modal if click outside modal content
+  window.onclick = function(event) {
+    if (event.target == modal) {
+      closeModal();
+    }
   }
 
   window.addEventListener('load', () => {
@@ -225,8 +244,6 @@
     window.history.replaceState({}, document.title, cleanURL);
   });
 </script>
-
-
 
 <footer class="fixed bottom-0 left-0 w-full bg-white text-center py-4 text-gray-500 text-sm z-50 shadow">
   <p>&copy; 2025 Nova Prime Inc. All rights reserved.</p>
