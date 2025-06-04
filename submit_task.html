@@ -144,14 +144,15 @@
       return;
     }
 
-    // Load bids
+    // Load bids from localStorage
     let bids = JSON.parse(localStorage.getItem('bids') || '[]');
+
     if (index !== null && bids[index]) {
       bids[index].submitted = true;
       bids[index].submission = {
         content: taskContent,
         fileName: form.taskFile.files[0]?.name || ''
-        // File data saving is not implemented here
+        // Note: File content is not saved in localStorage
       };
       localStorage.setItem('bids', JSON.stringify(bids));
     } else {
