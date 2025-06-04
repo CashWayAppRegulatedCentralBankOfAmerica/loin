@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Submit Task</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen p-6">
+  <div class="max-w-xl mx-auto bg-white rounded shadow p-6">
+    <h1 class="text-2xl font-bold text-green-600 mb-4">Task Submission</h1>
+
+    <p><strong>Task ID:</strong> <span id="taskIdText"></span></p>
+    <p><strong>Amount:</strong> $<span id="amountText"></span></p>
+
+    <textarea id="taskContent" placeholder="Paste your completed task here..." class="w-full mt-4 p-3 border rounded h-40"></textarea>
+
+    <input type="file" id="taskFile" accept=".pdf,.doc,.docx,.txt" class="mt-4" />
+
+    <button onclick="submitTask()" class="mt-6 bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700">Submit</button>
+  </div>
+
+  <script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const taskId = urlParams.get('taskId');
+    const amount = urlParams.get('amount');
+    const index = urlParams.get('index');
+
+    document.getElementById('taskIdText').textContent = taskId;
+    document.getElementById('amountText').textContent = amount;
+
+    function submitTask() {
+      const text = document.getElementById('taskContent').value.trim();
+      const file = document.getElementById('taskFile').files[0];
+
+      if (!text && !file) {
+        alert('Please provide either text content or upload a file.');
+        return;
+      }
+
+      let bids = JSON.parse(localStorage.getItem('bids') || '[]');
+      if (bids[index]) {
+        bids[index].submitted = true;
+        bids[index].submissionText = text;
+        if (file) {
+          bids[index].submittedFileName = file.name;
+        }
+        localStorage.setItem('bids', JSON.stringify(bids));
+        alert('Task submitted successfully!');
+        window.location.href = 'my_bids.html'; // Change to your My Bids page path
+      }
+    }
+  </script>
+</body>
+</html>
