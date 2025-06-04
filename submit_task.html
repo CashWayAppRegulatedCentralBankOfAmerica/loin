@@ -7,147 +7,164 @@
   <link rel="icon" type="image/png" href="nova_favicon.png" />
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    /* Fixed header and footer styling */
+    body {
+      background-color: #f3f4f6;
+      font-family: sans-serif;
+      padding-top: 64px; /* header height */
+      padding-bottom: 64px; /* footer height */
+    }
     header, footer {
       position: fixed;
-      left: 0;
       width: 100%;
+      left: 0;
       background: white;
-      box-shadow: 0 2px 6px rgb(0 0 0 / 0.1);
+      box-shadow: 0 1px 4px rgb(0 0 0 / 0.1);
       z-index: 50;
       padding: 1rem 1.5rem;
     }
-    header { top: 0; }
-    footer { bottom: 0; text-align: center; font-size: 0.875rem; color: #6b7280; }
-    main {
-      max-width: 600px;
-      margin: 5rem auto 4rem;
-      padding: 1rem;
-      background: white;
-      border-radius: 0.5rem;
-      box-shadow: 0 4px 12px rgb(0 0 0 / 0.05);
+    header {
+      top: 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    footer {
+      bottom: 0;
+      text-align: center;
+      font-size: 0.875rem;
+      color: #6b7280;
     }
     .modal {
       display: none;
       position: fixed;
       z-index: 9999;
-      left: 0; top: 0;
-      width: 100%; height: 100%;
-      background-color: rgba(0,0,0,0.4);
+      inset: 0;
+      background: rgba(0,0,0,0.5);
+      justify-content: center;
+      align-items: center;
+    }
+    .modal.active {
+      display: flex;
     }
     .modal-content {
-      background-color: #fff;
-      margin: 15% auto;
-      padding: 2rem;
+      background: white;
+      padding: 1.5rem 2rem;
       border-radius: 0.5rem;
       max-width: 400px;
       text-align: center;
+      box-shadow: 0 4px 8px rgb(0 0 0 / 0.15);
     }
   </style>
 </head>
-<body class="bg-gray-100 font-sans">
+<body>
 
-<header class="flex justify-between items-center">
+<header>
   <div class="text-xl font-bold text-green-600">Nova Prime</div>
-  <h1 class="text-lg font-semibold text-gray-700">Submit Task</h1>
 </header>
 
-<main>
-  <form id="submitForm">
-    <div class="mb-4">
-      <label class="block font-semibold mb-1">Task ID:</label>
-      <input id="taskId" type="text" readonly class="w-full border rounded px-3 py-2 bg-gray-100 cursor-not-allowed" />
+<main class="max-w-3xl mx-auto bg-white p-6 rounded-lg shadow-md">
+  <h1 class="text-2xl font-bold text-green-600 mb-6">Submit Task</h1>
+
+  <form id="submitTaskForm" onsubmit="return false;" class="space-y-4">
+
+    <div>
+      <label for="taskId" class="block font-semibold mb-1">Task ID</label>
+      <input type="text" id="taskId" name="taskId" readonly class="w-full border rounded px-3 py-2 bg-gray-100" />
     </div>
-    <div class="mb-4">
-      <label class="block font-semibold mb-1">Amount:</label>
-      <input id="amount" type="text" readonly class="w-full border rounded px-3 py-2 bg-gray-100 cursor-not-allowed" />
+
+    <div>
+      <label for="amount" class="block font-semibold mb-1">Amount</label>
+      <input type="text" id="amount" name="amount" readonly class="w-full border rounded px-3 py-2 bg-gray-100" />
     </div>
-    <div class="mb-4">
-      <label for="taskText" class="block font-semibold mb-1">Paste your task details here:</label>
-      <textarea id="taskText" rows="6" placeholder="Paste your task details here..." class="w-full border rounded px-3 py-2" required></textarea>
+
+    <div>
+      <label for="taskContent" class="block font-semibold mb-1">Paste Your Task Here</label>
+      <textarea id="taskContent" name="taskContent" rows="8" placeholder="Paste your completed task..." required
+        class="w-full border rounded px-3 py-2"></textarea>
     </div>
-    <div class="mb-4">
-      <label for="taskFile" class="block font-semibold mb-1">Upload file (optional, PDF or others):</label>
-      <input id="taskFile" type="file" accept=".pdf,application/pdf,image/*,text/plain" class="w-full" />
+
+    <div>
+      <label for="taskFile" class="block font-semibold mb-1">Upload File (PDF, DOCX, etc.)</label>
+      <input type="file" id="taskFile" name="taskFile" accept=".pdf,.doc,.docx,.txt" class="w-full" />
     </div>
-    <button type="submit" class="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded font-semibold">Submit</button>
+
+    <div>
+      <button
+        id="submitBtn"
+        type="submit"
+        class="bg-green-600 hover:bg-green-700 text-white font-semibold px-6 py-2 rounded"
+      >
+        Submit
+      </button>
+    </div>
   </form>
 </main>
 
-<footer>
-  &copy; 2025 Nova Prime Inc. All rights reserved.
-</footer>
-
 <!-- Modal -->
-<div id="successModal" class="modal">
+<div id="submitModal" class="modal">
   <div class="modal-content">
-    <h2 class="text-lg font-semibold mb-4">Task submitted successfully!</h2>
-    <button id="modalOkBtn" class="bg-green-600 text-white px-4 py-2 rounded">OK</button>
+    <p class="mb-4">Task submitted successfully!</p>
+    <button
+      id="modalOkBtn"
+      class="bg-green-600 hover:bg-green-700 text-white font-semibold px-4 py-2 rounded"
+    >
+      OK
+    </button>
   </div>
 </div>
 
+<footer>
+  <p>&copy; 2025 Nova Prime Inc. All rights reserved.</p>
+  <div class="space-x-4 mt-1">
+    <a href="privacy.html" class="hover:text-green-600">Privacy</a>
+    <a href="terms.html" class="hover:text-green-600">Terms</a>
+    <a href="help.html" class="hover:text-green-600">Help</a>
+  </div>
+</footer>
+
 <script>
-  // Parse taskId and amount from URL
+  // Read query params from URL
   const params = new URLSearchParams(window.location.search);
   const taskId = params.get('taskId') || '';
   const amount = params.get('amount') || '';
-  const bidIndex = parseInt(params.get('index'), 10);
+  const index = params.get('index');
 
-  // Fill inputs
+  // Fill readonly inputs
   document.getElementById('taskId').value = taskId;
   document.getElementById('amount').value = amount;
 
-  const submitForm = document.getElementById('submitForm');
-  const successModal = document.getElementById('successModal');
+  const form = document.getElementById('submitTaskForm');
+  const modal = document.getElementById('submitModal');
   const modalOkBtn = document.getElementById('modalOkBtn');
 
-  submitForm.addEventListener('submit', (e) => {
-    e.preventDefault();
-
-    // Basic validation for textarea
-    if (!document.getElementById('taskText').value.trim()) {
-      alert('Please enter your task details.');
+  // Submit handler
+  form.addEventListener('submit', () => {
+    const taskContent = form.taskContent.value.trim();
+    if (!taskContent) {
+      alert('Please paste your task content.');
       return;
     }
 
-    // Save submission info in localStorage bids array
+    // Save the submission info in localStorage (or send to backend)
     let bids = JSON.parse(localStorage.getItem('bids') || '[]');
-
-    if (!bids[bidIndex]) {
-      alert('Invalid task submission index.');
-      return;
+    if (index !== null && bids[index]) {
+      bids[index].submitted = true;
+      bids[index].submission = {
+        content: taskContent,
+        fileName: form.taskFile.files[0]?.name || '',
+        // For file upload, you might want to save file data differently (not implemented here)
+      };
+      localStorage.setItem('bids', JSON.stringify(bids));
     }
 
-    // Mark the bid as submitted and store submitted text and filename (if any)
-    bids[bidIndex].submitted = true;
-    bids[bidIndex].submissionText = document.getElementById('taskText').value.trim();
-
-    const fileInput = document.getElementById('taskFile');
-    if (fileInput.files.length > 0) {
-      const file = fileInput.files[0];
-      bids[bidIndex].submissionFileName = file.name;
-      // Optional: save file data as Base64 or just file name (for simplicity saving name only here)
-    } else {
-      bids[bidIndex].submissionFileName = null;
-    }
-
-    localStorage.setItem('bids', JSON.stringify(bids));
-
-    // Show modal instead of alert
-    successModal.style.display = 'block';
+    // Show modal confirmation
+    modal.classList.add('active');
   });
 
+  // When OK on modal clicked, redirect back to project.html with submittedIndex param
   modalOkBtn.addEventListener('click', () => {
-    successModal.style.display = 'none';
-    // Redirect back to project.html with submittedIndex so it can hide "Submit Task"
-    window.location.href = 'project.html?submittedIndex=' + bidIndex;
-  });
-
-  // Close modal if clicked outside content
-  successModal.addEventListener('click', (e) => {
-    if (e.target === successModal) {
-      successModal.style.display = 'none';
-    }
+    modal.classList.remove('active');
+    window.location.href = `project.html?submittedIndex=${index}`;
   });
 </script>
 
