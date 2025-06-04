@@ -75,6 +75,7 @@
     </div>
   </div>
 </div>
+<!-- ✨ CHANGES ONLY IN SCRIPT BELOW, REST UNTOUCHED -->
 
 <script>
   const verificationCode = '1234';
@@ -179,6 +180,7 @@
       const statusColor = bid.status === 'Paid' ? 'text-green-600' : 'text-red-600';
       let statusText = bid.status;
 
+      // ✅ Show 'Submit Task' only if status is Unpaid and not yet submitted
       if (bid.status === 'Unpaid') {
         if (bid.submitted) {
           statusText += ' <span class="text-blue-600 ml-2 font-medium">Submitted</span>';
@@ -211,8 +213,19 @@
     });
   }
 
-  renderBids();
+  // ✅ Sync latest submission state from localStorage (e.g. after submitting task)
+  window.addEventListener('load', () => {
+    const index = parseInt(new URLSearchParams(window.location.search).get('submittedIndex'), 10);
+    if (!isNaN(index) && bids[index]) {
+      bids[index].submitted = true;
+      localStorage.setItem('bids', JSON.stringify(bids));
+      const cleanURL = window.location.href.split('?')[0];
+      window.history.replaceState({}, document.title, cleanURL);
+    }
+    renderBids();
+  });
 </script>
+
 
 <footer class="fixed bottom-0 left-0 w-full bg-white text-center py-4 text-gray-500 text-sm z-50 shadow">
   <p>&copy; 2025 Nova Prime Inc. All rights reserved.</p>
