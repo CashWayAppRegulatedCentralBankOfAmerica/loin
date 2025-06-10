@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nova Prime | Login & Signup</title>
+  <link rel="icon" type="image/png" href="nova_favicon.png" />
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      emailjs.init("0ockMZ07aVnggqzsD");
+      loadRegisteredUsers();
+
+      // Add 5 example users if not already present
+      const exampleUsers = {
+        "alice@example.com": "AlicePass1!",
+        "bob@example.com": "BobPass2@",
+        "carol@example.com": "CarolPass3#",
+        "josphat@gmail.com": "1234",
+        "eve@example.com": "EvePass5%"
+      };
+
+      // Normalize all keys to lowercase, then add examples if missing
+      for (const [email, pass] of Object.entries(exampleUsers)) {
+        const normalizedEmail = email.toLowerCase();
+        if (!registeredUsers[normalizedEmail]) {
+          registeredUsers[normalizedEmail] = pass;
+        }
+      }
+      saveRegisteredUsers();
+
+      // If user already logged in, redirect (optional)
+      const loggedInUser = localStorage.getItem('loggedInUser');
+      if (loggedInUser) {
+        window.location.href = "dashboard";
+      }
+    });
+
+    const suspendedUsers = ["JACKREALKENYA@GMAIL.com", "suspended1@example.com", "blockeduser@example.com"];
+    let registeredUsers = {};
+
+    function loadRegisteredUsers() {
+      const users = localStorage.getItem("registeredUsers");
+      if (users) {
+        registeredUsers = JSON.parse(users);
+      }
+    }
+
+    function saveRegisteredUsers() {
+      localStorage.setItem("registeredUsers", JSON.stringify(registeredUsers));
+    }
+
+    function toggleForm() {
+      document.getElementById('login-form').classList.toggle('hidden');
+      document.getElementById('signup-form').classList.toggle('hidden');
+      document.getElementById('modal').classList.add('hidden');
+    }
+
+    function showModal(message, redirectToLogin = false) {
+      const modal = document.getElementById('modal');
+      document.getElementById('modal-message').innerText = message;
+      modal.classList.remove('hidden');
+      if (redirectToLogin) {
+        document.getElementById('modal-ok-btn').onclick = () => {
+          modal.classList.add('hidden');
+          document.getElementById('signup-form').classList.add('hidden');
+          document.getElementById('login-form').classList.remove('hidden');
+        };
+      } else {
+        document.getElementById('modal-ok-btn').onclick = () => modal.classList.add('hidden');
+      }
+    }
+
+    function handleLogin(event) {
+      event.preventDefault();
+      const email = document.getElementById('login-email').value.trim().toLowerCase();
+      const password = document.getElementById('login-password').value.trim();
+
+      const isSuspended = suspendedUsers.some(user => user.toLowerCase() === email);
+      if (isSuspended) {
+        showModal("Your account has been suspended. Please contact support.");
+        return;
+      }
+
+      if (registeredUsers[email] === password) {
+        localStorage.setItem('loggedInUser', email);
+            localStorage.setItem("loggedInEmail", email); // <-- added line
+        showModal("Login successful! Redirecting...");
+        setTimeout(() => {
+          window.location.href = "dashboard";
+        }, 1500);
+      } else {
+        showModal("Login failed. Please check your credentials.");
+      }
+    }
+
+    function handleSignup(event) {
+      event.preventDefault();
+      const name = document.getElementById('signup-name').value.trim();
+      const email = document.getElementById('signup-email').value.trim().toLowerCase();
+      const password = document.getElementById('signup-password').value.trim();
+      const confirm = document.getElementById('signup-confirm-password').value.trim();
+      const phone = document.getElementById('signup-phone').value.trim();
+      const code = document.getElementById('signup-code').value;
+      const nationality = document.getElementById('signup-nationality').value;
+      const county = document.getElementById('signup-county').value.trim();
+      const postal = document.getElementById('signup-postal').value.trim();
+      const gender = document.getElementById('signup-gender').value;
+      const agree = document.getElementById('signup-terms').checked;
+
+      if (!agree) {
+        showModal("You must agree to the terms and conditions.");
+        return;
+      }
+
+      if (password !== confirm) {
+        showModal("Passwords do not match.");
+        return;
+      }
+
+      if (registeredUsers[email]) {
+        showModal("This email is already registered.");
+        return;
+      }
+
+      registeredUsers[email] = password;
+      saveRegisteredUsers();
+
+      // Initialize user-specific data
+      localStorage.setItem(`balance_${email}`, JSON.stringify({ main: 0, credit: 0 }));
+      localStorage.setItem(`transactions_${email}`, JSON.stringify([]));
+
+      localStorage.setItem('fullName', name);
+      localStorage.setItem('mobileNumber', `${code} ${phone}`);
+
+      const templateParams = {
+        name,
+        email,
+        password,
+        phone: `${code} ${phone}`,
+        nationality,
+        county,
+        postal,
+        gender
+      };
+
+      emailjs.send("service_g5v9kbm", "template_eelornk", templateParams)
+        .then(() => {
+          showModal("Registration successful! You can now log in.", true);
+        })
+        .catch(() => {
+          showModal("Error submitting registration. Please try again.");
+        });
+    }
+  </script>
+</head>
+<body class="bg-gray-100 text-gray-800 min-h-screen flex items-center justify-center">
+  <div class="container mx-auto px-4 py-12 max-w-md">
+    <div id="login-form" class="bg-white p-8 shadow-md rounded-lg">
+      <h2 class="text-2xl font-bold text-green-600 mb-4">Login to Nova Prime</h2>
+      <form class="space-y-4" onsubmit="handleLogin(event)">
+        <div>
+          <label class="block text-sm font-medium">Email</label>
+          <input id="login-email" type="email" class="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-green-500" required />
+        </div>
+        <div>
+          <label class="block text-sm font-medium">Password</label>
+          <input id="login-password" type="password" class="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-green-500" required />
+        </div>
+        <button type="submit" class="w-full bg-green-600 text-white py-2 rounded hover:bg-green-700 transition">Login</button>
+      </form>
+      <p class="text-sm mt-4 text-center">
+        Don't have an account? <button onclick="toggleForm()" class="text-green-600 hover:underline">Sign up</button>
+      </p>
+    </div>
+
+    <div id="signup-form" class="bg-white p-8 shadow-md rounded-lg hidden">
+      <h2 class="text-2xl font-bold text-green-600 mb-4">Create a Nova Prime Account</h2>
+      <form class="space-y-4" onsubmit="handleSignup(event)">
+        <div>
+          <label class="block text-sm font-medium">Full Name</label>
+          <input id="signup-name" type="text" class="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-green-500" required />
+        </div>
+        <div>
+          <label class="block text-sm font-medium">Email</label>
+          <input id="signup-email" type="email" class="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-green-500" required />
+        </div>
+        <div>
+          <label class="block text-sm font-medium">Password</label>
+          <input id="signup-password" type="password" class="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-green-500" required />
+        </div>
+        <div>
+          <label class="block text-sm font-medium">Confirm Password</label>
+          <input id="signup-confirm-password" type="password" class="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-green-500" required />
+        </div>
+        <div>
+          <label class="block text-sm font-medium">Mobile Number</label>
+          <div class="flex space-x-2">
+            <select id="signup-code" class="w-1/3 px-2 py-2 border rounded">
+<option value="+1">+1</option>       <!-- American, Canadian, Jamaican -->
+<option value="+7">+7</option>       <!-- Russian -->
+<option value="+20">+20</option>     <!-- Egyptian -->
+<option value="+27">+27</option>     <!-- South African -->
+<option value="+30">+30</option>     <!-- Greek -->
+<option value="+31">+31</option>     <!-- Dutch -->
+<option value="+33">+33</option>     <!-- French -->
+<option value="+34">+34</option>     <!-- Spanish -->
+<option value="+39">+39</option>     <!-- Italian -->
+<option value="+44">+44</option>     <!-- British -->
+<option value="+46">+46</option>     <!-- Swedish -->
+<option value="+49">+49</option>     <!-- German -->
+<option value="+52">+52</option>     <!-- Mexican -->
+<option value="+53">+53</option>     <!-- Cuban -->
+<option value="+54">+54</option>     <!-- Argentine -->
+<option value="+55">+55</option>     <!-- Brazilian -->
+<option value="+56">+56</option>     <!-- Chilean -->
+<option value="+57">+57</option>     <!-- Colombian -->
+<option value="+58">+58</option>     <!-- Venezuelan -->
+<option value="+91">+91</option>     <!-- [Example you gave – not used] -->
+<option value="+212">+212</option>   <!-- Moroccan -->
+<option value="+213">+213</option>   <!-- Algerian -->
+<option value="+221">+221</option>   <!-- Senegalese -->
+<option value="+233">+233</option>   <!-- Ghanaian -->
+<option value="+234">+234</option>   <!-- Nigerian -->
+<option value="+254">+254</option>   <!-- Kenyan -->
+<option value="+255">+255</option>   <!-- Tanzanian -->
+<option value="+256">+256</option>   <!-- Ugandan -->
+<option value="+353">+353</option>   <!-- Irish -->
+            </select>
+            <input id="signup-phone" type="text" class="w-2/3 px-4 py-2 border rounded" required />
+          </div>
+        </div>
+        <div>
+          <label class="block text-sm font-medium">Nationality</label>
+          <select id="signup-nationality" class="w-full px-4 py-2 border rounded">
+<option value="American">American</option>
+<option value="Argentine">Argentine</option>
+<option value="Brazilian">Brazilian</option>
+<option value="British">British</option>
+<option value="Canadian">Canadian</option>
+<option value="Chilean">Chilean</option>
+<option value="Colombian">Colombian</option>
+<option value="Cuban">Cuban</option>
+<option value="Dutch">Dutch</option>
+<option value="Egyptian">Egyptian</option>
+<option value="French">French</option>
+<option value="German">German</option>
+<option value="Ghanaian">Ghanaian</option>
+<option value="Greek">Greek</option>
+<option value="Irish">Irish</option>
+<option value="Italian">Italian</option>
+<option value="Jamaican">Jamaican</option>
+<option value="Kenyan">Kenyan</option>
+<option value="Mexican">Mexican</option>
+<option value="Moroccan">Moroccan</option>
+<option value="Nigerian">Nigerian</option>
+<option value="Russian">Russian</option>
+<option value="Senegalese">Senegalese</option>
+<option value="South African">South African</option>
+<option value="Spanish">Spanish</option>
+<option value="Swedish">Swedish</option>
+<option value="Tanzanian">Tanzanian</option>
+<option value="Ugandan">Ugandan</option>
+<option value="Venezuelan">Venezuelan</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-sm font-medium">County</label>
+          <input id="signup-county" type="text" class="w-full px-4 py-2 border rounded" required />
+        </div>
+        <div>
+          <label class="block text-sm font-medium">Postal Address</label>
+          <input id="signup-postal" type="text" class="w-full px-4 py-2 border rounded" required />
+        </div>
+        <div>
+          <label class="block text-sm font-medium">Sex</label>
+          <select id="signup-gender" class="w-full px-4 py-2 border rounded">
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+          </select>
+        </div>
+        <div>
+          <label class="inline-flex items-center"
+            ><input
+              type="checkbox"
+              id="signup-terms"
+              class="form-checkbox text-green-600 mr-2"
+              required
+            /><span class="text-sm">I agree to the terms and conditions</span></label
+          >
+        </div>
+        <button
+          type="submit"
+          class="w-full bg-green-600 text-white py-2 rounded hover:bg-green-700 transition"
+        >
+          Sign Up
+        </button>
+      </form>
+      <p class="text-sm mt-4 text-center">
+        Already have an account? <button onclick="toggleForm()" class="text-green-600 hover:underline">Sign in</button>
+      </p>
+    </div>
+
+    <div
+      id="modal"
+      class="hidden fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center z-50"
+    >
+      <div class="bg-white rounded-lg p-6 shadow-lg max-w-sm text-center">
+        <p id="modal-message" class="text-gray-800 mb-4"></p>
+        <button
+          id="modal-ok-btn"
+          class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition"
+        >
+          OK
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <footer class="bg-white border-t mt-12">
+    <footer
+      class="fixed bottom-0 left-0 w-full bg-white text-center py-4 text-gray-500 text-sm z-50 shadow"
+    >
+      <p>&copy; 2025 Nova Prime Inc. All rights reserved.</p>
+      <div class="space-x-4">
+        <a href="privacy" class="hover:text-green-600">Privacy</a>
+        <a href="terms" class="hover:text-green-600">Terms</a>
+        <a href="help" class="hover:text-green-600">Help</a>
+      </div>
+    </footer>
+  </footer>
+</body>
+</html>
