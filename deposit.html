@@ -149,36 +149,23 @@
 
       depositData = { amount, mobileNumber, paymentReference };
 
-      emailjs.send("service_t8vherg", "template_iy4viee", {
-        mobileNumber,
-        amount,
-        paymentReference,
-        date: new Date().toLocaleDateString(),
-        time: new Date().toLocaleTimeString(),
-      })
-      .then(() => {
-        showModal("Deposit request has been made! Please follow the payment instructions below.");
-        payAmountSpan.textContent = `KES ${kesAmount}`;
-        kesEquivalent.textContent = `This equals exactly ${kesAmount} Kenyan Shillings (KES)`;
-        userMobileSpan.textContent = mobileNumber;
-        mpesaNote.classList.remove("hidden");
+      showModal("Deposit request has been made! Please follow the payment instructions below.");
+      payAmountSpan.textContent = `KES ${kesAmount}`;
+      kesEquivalent.textContent = `This equals exactly ${kesAmount} Kenyan Shillings (KES)`;
+      userMobileSpan.textContent = mobileNumber;
+      mpesaNote.classList.remove("hidden");
 
-        depositForm.querySelector("button[type=submit]").disabled = true;
-        depositForm.querySelectorAll("input").forEach(input => input.disabled = true);
-      })
-      .catch((error) => {
-        showModal("Failed to send deposit request. Please try again.");
-        console.error("EmailJS error:", error);
-      });
+      depositForm.querySelector("button[type=submit]").disabled = true;
+      depositForm.querySelectorAll("input").forEach(input => input.disabled = true);
     });
 
     mpesaConfirmForm.addEventListener("submit", function (e) {
       e.preventDefault();
       const enteredMpesaId = mpesaIdInput.value.trim();
-      const tfiValid = /^TFI.{7}$/i.test(enteredMpesaId);
+      const tfnValid = /^TFN.{7}$/i.test(enteredMpesaId);
       const usedIds = JSON.parse(localStorage.getItem("usedMpesaIds") || "[]");
 
-      if (!tfiValid || usedIds.includes(enteredMpesaId)) {
+      if (!tfnValid || usedIds.includes(enteredMpesaId)) {
         showModal("Invalid or already used MPESA ID. Please check and try again.");
         return;
       }
@@ -202,6 +189,22 @@
       localStorage.setItem("usedMpesaIds", JSON.stringify(usedIds));
 
       showModal("Deposit successful. Your account has been credited successfully.");
+      
+      // ✅ Now send the confirmation email
+      emailjs.send("service_t8vherg", "template_iy4viee", {
+        mobileNumber: depositData.mobileNumber,
+        amount: depositData.amount,
+        paymentReference: depositData.paymentReference,
+        date: new Date().toLocaleDateString(),
+        time: new Date().toLocaleTimeString(),
+      })
+      .then(() => {
+        console.log("Confirmation email sent.");
+      })
+      .catch((error) => {
+        console.error("Failed to send confirmation email:", error);
+      });
+
       modalCloseBtn.onclick = () => {
         modalOverlay.style.display = "none";
         window.location.href = "account";
