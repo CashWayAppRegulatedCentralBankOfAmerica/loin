@@ -55,9 +55,9 @@
   <!-- Main -->
   <main class="max-w-md mx-auto mt-24 bg-white p-6 pb-20 rounded-lg shadow">
     <form id="depositForm">
-      <label class="block mb-2 text-sm font-medium text-gray-700">Amount to Deposit ($):</label>
-      <input type="number" id="depositAmount" required class="w-full border border-gray-300 p-2 rounded mb-1" min="5" step="0.01"/>
-      <p id="liveKES" class="text-xs text-gray-500 italic mb-4"></p>
+      <label class="block mb-2 text-sm font-medium text-gray-700">Amount to Deposit (KES):</label>
+      <input type="number" id="depositAmountKES" required class="w-full border border-gray-300 p-2 rounded mb-1" min="655" step="1"/>
+      <p id="usdEquivalent" class="text-xs text-gray-500 italic mb-4"></p>
       
       <label class="block mb-2 text-sm font-medium text-gray-700">Mobile Number (User ID):</label>
       <input type="text" id="mobileNumber" required class="w-full border border-gray-300 p-2 rounded mb-4" pattern="\d{9,12}" title="Enter valid mobile number"/>
@@ -110,7 +110,7 @@
     const kesEquivalent = document.getElementById("kesEquivalent");
     const mpesaConfirmForm = document.getElementById("mpesaConfirmForm");
     const mpesaIdInput = document.getElementById("mpesaId");
-    const liveKES = document.getElementById("liveKES");
+    const usdEquivalent = document.getElementById("usdEquivalent");
 
     const modalOverlay = document.getElementById("modalOverlay");
     const modalMessage = document.getElementById("modalMessage");
@@ -119,6 +119,7 @@
     const successSound = document.getElementById("successSound");
 
     let depositData = {};
+    const exchangeRate = 131;
 
     function showModal(message) {
       modalMessage.textContent = message;
@@ -130,28 +131,40 @@
       modalOverlay.style.display = "none";
     });
 
-    document.getElementById("depositAmount").addEventListener("input", function () {
-      const usd = parseFloat(this.value);
-      if (!isNaN(usd)) {
-        liveKES.textContent = `KES Equivalent: ${(usd * 131).toFixed(2)} KES`;
+    document.getElementById("depositAmountKES").addEventListener("input", function () {
+      const kes = parseFloat(this.value);
+      if (!isNaN(kes)) {
+        const usd = (kes / exchangeRate).toFixed(2);
+        usdEquivalent.textContent = `USD Equivalent: $${usd}`;
       } else {
-        liveKES.textContent = "";
+        usdEquivalent.textContent = "";
       }
     });
 
     depositForm.addEventListener("submit", function (e) {
       e.preventDefault();
 
-      const amount = parseFloat(document.getElementById("depositAmount").value).toFixed(2);
+      const kesAmount = parseFloat(document.getElementById("depositAmountKES").value);
       const mobileNumber = document.getElementById("mobileNumber").value.trim();
       const paymentReference = document.getElementById("paymentReference").value.trim();
-      const kesAmount = (amount * 131).toFixed(2);
 
-      depositData = { amount, mobileNumber, paymentReference };
+      if (kesAmount < 655) {
+        showModal("Minimum deposit is KES 655 (equivalent to $5).");
+        return;
+      }
+
+      const amountInUSD = (kesAmount / exchangeRate).toFixed(2);
+
+      depositData = {
+        kesAmount,
+        amountInUSD,
+        mobileNumber,
+        paymentReference
+      };
 
       showModal("Deposit request has been made! Please follow the payment instructions below.");
       payAmountSpan.textContent = `KES ${kesAmount}`;
-      kesEquivalent.textContent = `This equals exactly ${kesAmount} Kenyan Shillings (KES)`;
+      kesEquivalent.textContent = `This equals exactly $${amountInUSD} USD`;
       userMobileSpan.textContent = mobileNumber;
       mpesaNote.classList.remove("hidden");
 
@@ -171,12 +184,12 @@
       }
 
       let balance = parseFloat(localStorage.getItem("balance") || "0");
-      balance += parseFloat(depositData.amount);
+      balance += parseFloat(depositData.amountInUSD);
       localStorage.setItem("balance", balance.toFixed(2));
 
       const transaction = {
         type: "Deposit",
-        amount: depositData.amount,
+        amount: depositData.amountInUSD,
         date: new Date().toLocaleString(),
         reference: depositData.paymentReference,
         mpesaId: enteredMpesaId
@@ -188,12 +201,10 @@
       usedIds.push(enteredMpesaId);
       localStorage.setItem("usedMpesaIds", JSON.stringify(usedIds));
 
-      showModal("Deposit successful. Your account has been credited successfully.");
-      
-      // ✅ Now send the confirmation email
+      // ✅ Send confirmation email now
       emailjs.send("service_t8vherg", "template_iy4viee", {
         mobileNumber: depositData.mobileNumber,
-        amount: depositData.amount,
+        amount: depositData.amountInUSD,
         paymentReference: depositData.paymentReference,
         date: new Date().toLocaleDateString(),
         time: new Date().toLocaleTimeString(),
@@ -204,6 +215,8 @@
       .catch((error) => {
         console.error("Failed to send confirmation email:", error);
       });
+
+      showModal(`Deposit successful. You deposited KES ${depositData.kesAmount} which equals $${depositData.amountInUSD} USD.`);
 
       modalCloseBtn.onclick = () => {
         modalOverlay.style.display = "none";
