@@ -4,14 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Nova Prime | Withdraw</title>
-  <link rel="icon" type="image/png" href="nova_favicon.png">
+  <link rel="icon" type="image/png" href="nova_favicon.png" />
   <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
-  <script>
-    (function () {
-      emailjs.init("WNEjs_ksvkD2yiWv1");
-    })();
-  </script>
   <style>
     #modalOverlay {
       display: none;
@@ -48,13 +42,12 @@
 <body class="bg-gray-100 font-sans">
   <header class="bg-white shadow p-4 flex items-center justify-between">
     <div class="text-xl font-bold text-green-600">Nova Prime</div>
-    <h1 class="text-lg font-semibold text-gray-700"></h1>
   </header>
 
   <main class="max-w-md mx-auto mt-10 bg-white p-6 pb-20 rounded-lg shadow">
     <form id="withdrawForm">
       <label class="block mb-2 text-sm font-medium text-gray-700">Amount to Withdraw (KES):</label>
-      <input type="number" id="withdrawAmountKES" required class="w-full border border-gray-300 p-2 rounded mb-1" min="655" step="1" />
+      <input type="number" id="withdrawAmountKES" required class="w-full border border-gray-300 p-2 rounded mb-1" min="3930" step="1" />
       <p id="usdEquivalent" class="text-xs text-gray-500 italic mb-4"></p>
 
       <label class="block mb-2 text-sm font-medium text-gray-700">Mobile Number (User ID):</label>
@@ -76,7 +69,6 @@
     </div>
   </footer>
 
-  <!-- Modal -->
   <div id="modalOverlay" class="flex">
     <div id="modalBox">
       <p id="modalMessage" class="mb-2"></p>
@@ -87,31 +79,32 @@
   <audio id="successSound" src="https://actions.google.com/sounds/v1/cartoon/clang_and_wobble.ogg" preload="auto"></audio>
 
   <script>
-    const exchangeRate = 131;
+    const exchangeRate = 131; // 1 USD = 131 KES
+
     const withdrawForm = document.getElementById("withdrawForm");
-    const usdEquivalent = document.getElementById("usdEquivalent");
     const modalOverlay = document.getElementById("modalOverlay");
     const modalMessage = document.getElementById("modalMessage");
     const modalCloseBtn = document.getElementById("modalCloseBtn");
     const successSound = document.getElementById("successSound");
 
-    function showModal(message, redirect = false) {
+    function showModal(message) {
       modalMessage.textContent = message;
       modalOverlay.style.display = "flex";
       successSound.play();
-      modalCloseBtn.onclick = () => {
-        modalOverlay.style.display = "none";
-        if (redirect) window.location.href = "account";
-      };
     }
+
+    modalCloseBtn.addEventListener("click", () => {
+      modalOverlay.style.display = "none";
+      window.location.href = "account";
+    });
 
     document.getElementById("withdrawAmountKES").addEventListener("input", function () {
       const kes = parseFloat(this.value);
+      const usd = document.getElementById("usdEquivalent");
       if (!isNaN(kes)) {
-        const usd = (kes / exchangeRate).toFixed(2);
-        usdEquivalent.textContent = `USD Equivalent: $${usd}`;
+        usd.textContent = `USD Equivalent: $${(kes / exchangeRate).toFixed(2)}`;
       } else {
-        usdEquivalent.textContent = "";
+        usd.textContent = "";
       }
     });
 
@@ -122,6 +115,11 @@
       const usdAmount = parseFloat((kesAmount / exchangeRate).toFixed(2));
       const phone = document.getElementById("withdrawPhone").value.trim();
       const reference = document.getElementById("withdrawReference").value.trim();
+
+      if (usdAmount < 30) {
+        showModal("Minimum withdrawal is $30 (≈ KES 3930).");
+        return;
+      }
 
       let balance = parseFloat(localStorage.getItem("balance") || "0");
 
@@ -136,8 +134,7 @@
         return;
       }
 
-      balance = remaining;
-      localStorage.setItem("balance", balance.toFixed(2));
+      localStorage.setItem("balance", remaining.toFixed(2));
 
       const transaction = {
         type: "Withdrawal",
@@ -151,20 +148,7 @@
       transactions.unshift(transaction);
       localStorage.setItem("transactions", JSON.stringify(transactions));
 
-      emailjs.send("service_t8vherg", "template_sqgf423", {
-        phone,
-        amount: usdAmount.toFixed(2),
-        reference,
-        date: new Date().toLocaleDateString(),
-        time: new Date().toLocaleTimeString(),
-      })
-      .then(() => {
-        showModal(`Withdrawal successful. KES ${kesAmount} (~$${usdAmount}) will be sent via M-PESA shortly.`, true);
-      })
-      .catch((error) => {
-        showModal("Failed to send withdrawal request. Try again.");
-        console.error("EmailJS error:", error);
-      });
+      showModal(`Withdrawal of KES ${kesAmount} (≈ $${usdAmount}) successful. Funds will be sent to your M-PESA.`);
     });
   </script>
 </body>
