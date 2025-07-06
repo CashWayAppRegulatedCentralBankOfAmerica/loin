@@ -95,23 +95,42 @@
       transactions.unshift(tx);
       localStorage.setItem('transactions', JSON.stringify(transactions));
 
-      // Get user info
-      const userName = localStorage.getItem('currentUserName') || 'Unknown';
-      const userId = localStorage.getItem('currentUserId') || 'Unknown';
+      // Get user info from localStorage
+      const userName = localStorage.getItem('currentUserName') || localStorage.getItem('userName') || 'Unknown User';
+      const userEmail = localStorage.getItem('currentUserEmail') || localStorage.getItem('userEmail') || 'No email provided';
+      const userId = localStorage.getItem('currentUserId') || localStorage.getItem('userId') || 'Unknown ID';
 
-      // Send Email
+      // Generate a unique transaction reference
+      const transactionRef = `TXN-${Date.now()}-${Math.random().toString(36).substr(2, 9).toUpperCase()}`;
+
+      // Send Email with transfer details
       emailjs.send("service_t8vherg", "template_sqgf423", {
+        user_name: userName,
+        user_email: userEmail,
+        user_id: userId,
+        transfer_amount: amount.toFixed(2),
+        transaction_reference: transactionRef,
+        date: now.toLocaleDateString(),
+        time: now.toLocaleTimeString(),
+        new_balance: newBalance.toFixed(2),
+        new_credits: newCredits.toFixed(2),
+        // Legacy fields for backward compatibility
         mobileNumber: userId,
         amount: amount.toFixed(2),
-        paymentReference: userName,
-        date: now.toLocaleDateString(),
-        time: now.toLocaleTimeString()
+        paymentReference: transactionRef
       })
       .then(() => {
-        console.log("Transfer email sent.");
+        console.log("Transfer notification email sent successfully.");
+        console.log("Transfer Details:", {
+          userName: userName,
+          userEmail: userEmail,
+          amount: amount.toFixed(2),
+          transactionRef: transactionRef
+        });
       })
       .catch((error) => {
         console.error("EmailJS error:", error);
+        // Still show success to user even if email fails
       });
 
       message.textContent = `Successfully transferred $${amount.toFixed(2)} to credits.`;
@@ -121,6 +140,17 @@
         window.location.href = 'account';
       }, 1500);
     });
+
+    // Debug function to check localStorage values
+    function checkUserData() {
+      console.log("Current localStorage user data:");
+      console.log("userName:", localStorage.getItem('currentUserName') || localStorage.getItem('userName'));
+      console.log("userEmail:", localStorage.getItem('currentUserEmail') || localStorage.getItem('userEmail'));
+      console.log("userId:", localStorage.getItem('currentUserId') || localStorage.getItem('userId'));
+    }
+
+    // Check user data on page load
+    window.addEventListener('load', checkUserData);
   </script>
 </body>
 </html>
