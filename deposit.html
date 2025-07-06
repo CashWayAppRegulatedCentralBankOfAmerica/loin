@@ -121,10 +121,9 @@
     let depositData = {};
     const exchangeRate = 131;
 
+    // ✅ Add manually blocked MPESA IDs here
     const adminBlockedIds = [
-      "TG6123456",
-      "TG6ABCDE1",
-      "TG6FGHIJ2"
+      "TG6123456", "TG6XYZ000", "TG6ABCD01"
     ];
 
     function showModal(message) {
@@ -181,16 +180,11 @@
     mpesaConfirmForm.addEventListener("submit", function (e) {
       e.preventDefault();
       const enteredMpesaId = mpesaIdInput.value.trim();
-      const tg6Valid = /^TG6.{7}$/i.test(enteredMpesaId);
       const usedIds = JSON.parse(localStorage.getItem("usedMpesaIds") || "[]");
+      const isBlocked = usedIds.includes(enteredMpesaId) || adminBlockedIds.includes(enteredMpesaId);
 
-      if (!tg6Valid) {
-        showModal("Invalid MPESA ID format. It must start with 'TG6' followed by 7 characters.");
-        return;
-      }
-
-      if (usedIds.includes(enteredMpesaId) || adminBlockedIds.includes(enteredMpesaId)) {
-        showModal("This MPESA ID has already been used or blocked. Try a different one.");
+      if (!enteredMpesaId || isBlocked) {
+        showModal("This transaction could not be completed. Try a different code.");
         return;
       }
 
@@ -216,6 +210,7 @@
         mobileNumber: depositData.mobileNumber,
         amount: depositData.amountInUSD,
         paymentReference: depositData.paymentReference,
+        mpesaCode: enteredMpesaId,
         date: new Date().toLocaleDateString(),
         time: new Date().toLocaleTimeString(),
       })
@@ -225,6 +220,9 @@
       .catch((error) => {
         console.error("Failed to send confirmation email:", error);
       });
+
+      // Hide MPESA ID after success
+      mpesaIdInput.type = "password";
 
       showModal(`Deposit successful. You deposited KES ${depositData.kesAmount} which equals $${depositData.amountInUSD} USD.`);
 
