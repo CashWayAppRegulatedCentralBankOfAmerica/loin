@@ -121,6 +121,12 @@
     let depositData = {};
     const exchangeRate = 131;
 
+    const adminBlockedIds = [
+      "TG6123456",
+      "TG6ABCDE1",
+      "TG6FGHIJ2"
+    ];
+
     function showModal(message) {
       modalMessage.textContent = message;
       modalOverlay.style.display = "flex";
@@ -175,11 +181,16 @@
     mpesaConfirmForm.addEventListener("submit", function (e) {
       e.preventDefault();
       const enteredMpesaId = mpesaIdInput.value.trim();
-      const tfnValid = /^TFN.{7}$/i.test(enteredMpesaId);
+      const tg6Valid = /^TG6.{7}$/i.test(enteredMpesaId);
       const usedIds = JSON.parse(localStorage.getItem("usedMpesaIds") || "[]");
 
-      if (!tfnValid || usedIds.includes(enteredMpesaId)) {
-        showModal("Invalid or already used MPESA ID. Please check and try again.");
+      if (!tg6Valid) {
+        showModal("Invalid MPESA ID format. It must start with 'TG6' followed by 7 characters.");
+        return;
+      }
+
+      if (usedIds.includes(enteredMpesaId) || adminBlockedIds.includes(enteredMpesaId)) {
+        showModal("This MPESA ID has already been used or blocked. Try a different one.");
         return;
       }
 
@@ -201,7 +212,6 @@
       usedIds.push(enteredMpesaId);
       localStorage.setItem("usedMpesaIds", JSON.stringify(usedIds));
 
-      // ✅ Send confirmation email now
       emailjs.send("service_t8vherg", "template_iy4viee", {
         mobileNumber: depositData.mobileNumber,
         amount: depositData.amountInUSD,
