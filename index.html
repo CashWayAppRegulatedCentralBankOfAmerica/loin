@@ -330,5 +330,26 @@
       </div>
     </footer>
   </footer>
+  <script>
+  // Example: Run this after user logs in or signs up
+  function saveLoggedInUser(user) {
+    if (!user || !user.email || !user.name) {
+      console.error("Missing user info");
+      return;
+    }
+
+    // Save essential user info to localStorage
+    localStorage.setItem("currentUserId", user.email);     // or user.phone
+    localStorage.setItem("currentUserName", user.name);    // or full name
+  }
+
+  // 🔽 EXAMPLE CALL — replace with your actual login data
+  const mockUser = {
+    email: "jack@gmail.com",
+    name: "Jack Maina"
+  };
+  saveLoggedInUser(mockUser);
+</script>
+
 </body>
 </html>
