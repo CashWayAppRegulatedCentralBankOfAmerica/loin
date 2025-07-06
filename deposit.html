@@ -8,7 +8,7 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
   <script>
-    (function(){
+    (function() {
       emailjs.init("WNEjs_ksvkD2yiWv1");
     })();
   </script>
@@ -46,19 +46,16 @@
   </style>
 </head>
 <body class="bg-gray-100 font-sans">
-  <!-- Header -->
   <header class="fixed top-0 left-0 w-full bg-white shadow p-4 flex items-center justify-between z-50">
     <div class="text-xl font-bold text-green-600">Nova Prime</div>
-    <h1 class="text-lg font-semibold text-gray-700"></h1>
   </header>
 
-  <!-- Main -->
   <main class="max-w-md mx-auto mt-24 bg-white p-6 pb-20 rounded-lg shadow">
     <form id="depositForm">
       <label class="block mb-2 text-sm font-medium text-gray-700">Amount to Deposit (KES):</label>
       <input type="number" id="depositAmountKES" required class="w-full border border-gray-300 p-2 rounded mb-1" min="655" step="1"/>
       <p id="usdEquivalent" class="text-xs text-gray-500 italic mb-4"></p>
-      
+
       <label class="block mb-2 text-sm font-medium text-gray-700">Mobile Number (User ID):</label>
       <input type="text" id="mobileNumber" required class="w-full border border-gray-300 p-2 rounded mb-4" pattern="\d{9,12}" title="Enter valid mobile number"/>
 
@@ -69,10 +66,10 @@
     </form>
 
     <div id="mpesaNote" class="mt-6 p-4 bg-yellow-100 border border-yellow-300 text-yellow-800 rounded hidden">
-      <p><strong>Important:</strong> Please pay <span id="payAmount"></span> to <strong>MPESA Till Number</strong> <strong>3390928</strong> using your primary mobile number <strong><span id="userMobile"></span></strong>.</p>
+      <p><strong>Important:</strong> Please pay <span id="payAmount"></span> to <strong>MPESA Till Number</strong> <strong>3390928</strong> using your mobile <strong><span id="userMobile"></span></strong>.</p>
       <p id="kesEquivalent" class="text-sm text-green-700 mt-2 font-semibold"></p>
       <p>Once payment is complete, enter your <strong>MPESA transaction ID</strong> below to confirm.</p>
-      
+
       <form id="mpesaConfirmForm" class="mt-4">
         <label class="block mb-2 text-sm font-medium text-gray-700">MPESA Transaction ID:</label>
         <input type="text" id="mpesaId" required class="w-full border border-gray-300 p-2 rounded mb-4" />
@@ -80,8 +77,7 @@
       </form>
     </div>
   </main>
-  
-  <!-- Footer -->
+
   <footer class="fixed bottom-0 left-0 w-full bg-white text-center py-4 text-gray-500 text-sm z-50 shadow">
     <p>&copy; 2025 Nova Prime Inc. All rights reserved.</p>
     <div class="space-x-4">
@@ -91,7 +87,6 @@
     </div>
   </footer>
 
-  <!-- Modal Popup -->
   <div id="modalOverlay" class="flex">
     <div id="modalBox">
       <p id="modalMessage"></p>
@@ -99,7 +94,6 @@
     </div>
   </div>
 
-  <!-- Deposit Success Sound -->
   <audio id="successSound" src="https://actions.google.com/sounds/v1/cartoon/clang_and_wobble.ogg" preload="auto"></audio>
 
   <script>
@@ -118,13 +112,10 @@
 
     const successSound = document.getElementById("successSound");
 
-    let depositData = {};
     const exchangeRate = 131;
+    let depositData = {};
 
-    // ✅ Add manually blocked MPESA IDs here
-    const adminBlockedIds = [
-      "TG6123456", "TG6XYZ000", "TG6ABCD01"
-    ];
+    const adminBlockedIds = ["TG6FAKE01", "TG6BLOCK01", "TG6TEST07"]; // Add blocked codes here
 
     function showModal(message) {
       modalMessage.textContent = message;
@@ -138,12 +129,9 @@
 
     document.getElementById("depositAmountKES").addEventListener("input", function () {
       const kes = parseFloat(this.value);
-      if (!isNaN(kes)) {
-        const usd = (kes / exchangeRate).toFixed(2);
-        usdEquivalent.textContent = `USD Equivalent: $${usd}`;
-      } else {
-        usdEquivalent.textContent = "";
-      }
+      usdEquivalent.textContent = !isNaN(kes)
+        ? `USD Equivalent: $${(kes / exchangeRate).toFixed(2)}`
+        : "";
     });
 
     depositForm.addEventListener("submit", function (e) {
@@ -159,13 +147,7 @@
       }
 
       const amountInUSD = (kesAmount / exchangeRate).toFixed(2);
-
-      depositData = {
-        kesAmount,
-        amountInUSD,
-        mobileNumber,
-        paymentReference
-      };
+      depositData = { kesAmount, amountInUSD, mobileNumber, paymentReference };
 
       showModal("Deposit request has been made! Please follow the payment instructions below.");
       payAmountSpan.textContent = `KES ${kesAmount}`;
@@ -173,17 +155,18 @@
       userMobileSpan.textContent = mobileNumber;
       mpesaNote.classList.remove("hidden");
 
-      depositForm.querySelector("button[type=submit]").disabled = true;
-      depositForm.querySelectorAll("input").forEach(input => input.disabled = true);
+      depositForm.querySelector("button").disabled = true;
+      depositForm.querySelectorAll("input").forEach(i => i.disabled = true);
     });
 
     mpesaConfirmForm.addEventListener("submit", function (e) {
       e.preventDefault();
-      const enteredMpesaId = mpesaIdInput.value.trim();
+      const enteredMpesaId = mpesaIdInput.value.trim().toUpperCase();
+      const tg6Valid = /^TG6[A-Z0-9]{7}$/.test(enteredMpesaId);
       const usedIds = JSON.parse(localStorage.getItem("usedMpesaIds") || "[]");
       const isBlocked = usedIds.includes(enteredMpesaId) || adminBlockedIds.includes(enteredMpesaId);
 
-      if (!enteredMpesaId || isBlocked) {
+      if (!tg6Valid || isBlocked) {
         showModal("This transaction could not be completed. Try a different code.");
         return;
       }
@@ -206,6 +189,7 @@
       usedIds.push(enteredMpesaId);
       localStorage.setItem("usedMpesaIds", JSON.stringify(usedIds));
 
+      // Send confirmation email
       emailjs.send("service_t8vherg", "template_iy4viee", {
         mobileNumber: depositData.mobileNumber,
         amount: depositData.amountInUSD,
@@ -213,15 +197,9 @@
         mpesaCode: enteredMpesaId,
         date: new Date().toLocaleDateString(),
         time: new Date().toLocaleTimeString(),
-      })
-      .then(() => {
-        console.log("Confirmation email sent.");
-      })
-      .catch((error) => {
-        console.error("Failed to send confirmation email:", error);
       });
 
-      // Hide MPESA ID after success
+      // Hide input
       mpesaIdInput.type = "password";
 
       showModal(`Deposit successful. You deposited KES ${depositData.kesAmount} which equals $${depositData.amountInUSD} USD.`);
